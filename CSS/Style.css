@@ -1,8 +1,37 @@
-
-h1{
-  background-color: #4286f4;
+div.imageContainer{
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 8vw;
+  width: 30vw;
+  height: 30vw;
 }
 
-img {
-    border-radius: 50%;
+div.imageContainer img{
+  width: 30vw;
+  position:static;
+  border-radius: 50%;
+
+}
+
+div.nameContainer{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.nameContainer h1{
+  font-size: 8vw;
+  color: #000000;
+  letter-spacing: .15em;
+  text-shadow:
+    1px -1px 0 #131313,
+    -1px 2px 1px #737272,
+    -2px 4px 1px #767474,
+    -3px 6px 1px #787777,
+    -4px 8px 1px #7b7a7a,
+    -5px 10px 1px #7f7d7d,
+    -6px 12px 1px #828181;
+}
+
+.topContainer{
+
 }
