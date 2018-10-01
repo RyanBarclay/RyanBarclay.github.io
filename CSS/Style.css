@@ -1,37 +1,56 @@
 div.imageContainer{
+  ;This contains my profile picture to restrict it to an object
   margin-left: auto;
   margin-right: auto;
-  padding-top: 8vw;
-  width: 30vw;
-  height: 30vw;
+  margin-top: auto;
 }
 
 div.imageContainer img{
-  width: 30vw;
-  position:static;
+  ;this configures my profile picture so it will sit in the middle
+  vertical-align: middle;
   border-radius: 50%;
-
+  width: 20vw;
+  height: 20vw;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 div.nameContainer{
+  text-align: center;
   margin-left: auto;
   margin-right: auto;
 }
 
 div.nameContainer h1{
-  font-size: 8vw;
-  color: #000000;
-  letter-spacing: .15em;
+  font-size: 5vw;
+  font-family: Futura,Trebuchet MS,Arial,sans-serif;
+  color: #FFFFFF;
   text-shadow:
-    1px -1px 0 #131313,
-    -1px 2px 1px #737272,
-    -2px 4px 1px #767474,
-    -3px 6px 1px #787777,
-    -4px 8px 1px #7b7a7a,
-    -5px 10px 1px #7f7d7d,
-    -6px 12px 1px #828181;
+    -1px 0 black,
+    0 1px black,
+    1px 0 black,
+    0 -1px black;
+  line-height: 5vw;
+  padding: 1vw
+}
+
+div.nameContainer h2{
+  font-size: 4vw;
+  font-family: Futura,Trebuchet MS,Arial,sans-serif;
+  color: #FFFFFF;
+  text-shadow:
+    -1px 0 black,
+    0 1px black,
+    1px 0 black,
+    0 -1px black;
+  line-height: 2vw;
 }
 
 .topContainer{
+  ;this contains my name and my profile picture
+  margin-top: auto;
+  margin-bottom: auto;
+  background: #F0F0D0;
 
 }
