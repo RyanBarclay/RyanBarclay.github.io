@@ -1,8 +1,10 @@
 div.imageContainer{
   ;This contains my profile picture to restrict it to an object
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  width: 40vw;
+  height: 28vh;
+  float: left;
 }
 
 div.imageContainer img{
@@ -12,18 +14,21 @@ div.imageContainer img{
   width: 20vw;
   height: 20vw;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
+
 }
 
 div.nameContainer{
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+  width: 35vw;
+  height: 30vh;
+  float: right;
 }
 
 div.nameContainer h1{
-  font-size: 5vw;
+  width: 35vw;
+  height: 10vw;
+  font-size: 8vw;
+  text-align: center;
   font-family: Futura,Trebuchet MS,Arial,sans-serif;
   color: #FFFFFF;
   text-shadow:
@@ -31,12 +36,14 @@ div.nameContainer h1{
     0 1px black,
     1px 0 black,
     0 -1px black;
-  line-height: 5vw;
-  padding: 1vw
+  margin: auto;
 }
 
 div.nameContainer h2{
-  font-size: 4vw;
+  width: 35vw;
+  height: 5vw;
+  font-size: 5vw;
+  text-align: left;
   font-family: Futura,Trebuchet MS,Arial,sans-serif;
   color: #FFFFFF;
   text-shadow:
@@ -44,13 +51,20 @@ div.nameContainer h2{
     0 1px black,
     1px 0 black,
     0 -1px black;
-  line-height: 2vw;
+  margin: auto;
 }
 
 .topContainer{
   ;this contains my name and my profile picture
-  margin-top: auto;
-  margin-bottom: auto;
-  background: #F0F0D0;
+  width: 100vw;
+  height: 30vh;
+  margin: auto;
+  padding-left: 10vw;
+  padding-right: 10vw;
 
+}
+
+div.buffer{
+  height: 10vw;
+  width: 100vw;
 }
