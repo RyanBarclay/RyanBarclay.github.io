@@ -1,12 +1,20 @@
+div.topContainer{
+  ;this contains my name and my profile picture
+  width: 100vw;
+  height: 22vw;
+  margin: auto;
+  padding-left: 10vw;
+  padding-right: 10vw;
+  background-color:
+}
 div.imageContainer{
   ;This contains my profile picture to restrict it to an object
   padding-top: 1vh;
   padding-bottom: 1vh;
   width: 40vw;
-  height: 28vh;
+  height: 20vw;
   float: left;
 }
-
 div.imageContainer img{
   ;this configures my profile picture so it will sit in the middle
   vertical-align: middle;
@@ -15,18 +23,17 @@ div.imageContainer img{
   height: 20vw;
   display: block;
   margin: auto;
+  border: 0.3vw solid black;
 
 }
-
 div.nameContainer{
   width: 35vw;
-  height: 30vh;
+  height: 20vw;
   float: right;
 }
-
 div.nameContainer h1{
   width: 35vw;
-  height: 10vw;
+  height: 12vw;
   font-size: 8vw;
   text-align: center;
   font-family: Futura,Trebuchet MS,Arial,sans-serif;
@@ -35,13 +42,13 @@ div.nameContainer h1{
     -1px 0 black,
     0 1px black,
     1px 0 black,
-    0 -1px black;
+    0 -1px black,
+    -0.7vw 0.5vw black;
   margin: auto;
 }
-
 div.nameContainer h2{
   width: 35vw;
-  height: 5vw;
+  height: 8vw;
   font-size: 5vw;
   text-align: left;
   font-family: Futura,Trebuchet MS,Arial,sans-serif;
@@ -50,21 +57,38 @@ div.nameContainer h2{
     -1px 0 black,
     0 1px black,
     1px 0 black,
-    0 -1px black;
+    0 -1px black,
+    -0.7vw 0.5vw black;
   margin: auto;
 }
 
-.topContainer{
-  ;this contains my name and my profile picture
+div.links{
   width: 100vw;
-  height: 30vh;
-  margin: auto;
-  padding-left: 10vw;
-  padding-right: 10vw;
+  height: 10vh;
+}
+div.VSCO{
+  width: 25vw;
+  height: 10vh;
+  float: left;
+  text-align: center;
 
 }
+div.Instagram{
+  width: 25vw;
+  height: 10vh;
+  float: left;
+  text-align: center;
+}
+div.Linkedin{
+  width: 25vw;
+  height: 10vh;
+  float: left;
+  text-align: center;
 
-div.buffer{
-  height: 10vw;
-  width: 100vw;
+}
+div.Github{
+  width: 25vw;
+  height: 10vh;
+  float: left;
+  text-align: center;
 }
