@@ -8,16 +8,30 @@ div.topContainer{
   ;this contains my name and my profile picture
   width: 100%;
   height: 22vw;
-  padding-left: 10vw;
-  padding-right: 10vw;
   /* background-color: #F2BDC4; */
+}
+div.nameContainer{
+  width: 33.33%;
+  height: 20vw;
+  float: left;
+  text-align: center;
+  padding-top: 5vw;
+}
+div.nameContainer h1{
+
+  font-size: 5vw;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #F58894;
+  vertical-align: middle;
+  -webkit-transition-duration: 0.2s; /* Safari */
+  transition-duration: 0.2s;
 }
 div.imageContainer{
   ;This contains my profile picture to restrict it to an object
   vertical-align: center;
   padding-top: 1vw;
   padding-bottom: 1vw;
-  width: 40vw;
+  width: 33.33%;
   height: 20vw;
   float: left;
 }
@@ -32,82 +46,73 @@ div.imageContainer img{
   -webkit-transition-duration: 0.2s; /* Safari */
   transition-duration: 0.2s;
 }
-div.nameContainer{
-  width: 35vw;
+div.nameContainer2{
+  width: 33.33%;
   height: 20vw;
-  float: right;
-}
-div.nameContainer h1{
-  width: 35vw;
-  height: 12vw;
-  font-size: 8vw;
+  float: left;
   text-align: center;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #F58894;
-  margin: auto;
-  -webkit-transition-duration: 0.2s; /* Safari */
-  transition-duration: 0.2s;
+  padding-top: 5vw;
 }
-div.nameContainer h2{
-  width: 35vw;
-  height: 8vw;
+div.nameContainer2 h1{
   font-size: 5vw;
-  text-align: left;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #F58894;
-  margin: auto;
+  vertical-align: middle;
   -webkit-transition-duration: 0.2s; /* Safari */
   transition-duration: 0.2s;
 }
 
 div.links{
   width: 100vw;
-  height: 22vw;
-  margin-bottom: auto;
   padding-top: 10vh;
+  display: flex;
+  flex-wrap: wrap;
+  vertical-align: center;
+  padding-left: 10vw;
+  padding-right: 10vw;
 }
 div.links button{
   /* background-color: #F2BDC4; */
   background-color: transparent;
   border: 0.5vw solid #F58894;
   color: #F58894;
-  font-size: 4vw;
+  width: 12vw;
+  font-size: 2vw;
   text-align: center;
   font-family: "Times New Roman", Times, serif;
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
+  vertical-align: center;
 }
 div.links button:hover{
   background-color: #F58894;
   border: 1vw solid #F58894;
   color: #F2BDC4;
-  font-size: 3vw;
+  font-size: 2vw;
   text-align: center;
   font-family: "Times New Roman", Times, serif;
+  vertical-align: center;
 }
+
+
 div.VSCO{
-  width: 25vw;
-  height: 10vh;
+  width: 20vw;
   float: left;
   text-align: center;
-
 }
 div.Instagram{
-  width: 25vw;
-  height: 10vh;
+  width: 20vw;
   float: left;
   text-align: center;
 }
 div.Linkedin{
-  width: 25vw;
-  height: 10vh;
+  width: 20vw;
   float: left;
   text-align: center;
 
 }
 div.Github{
-  width: 25vw;
-  height: 10vh;
+  width: 20vw;
   float: left;
   text-align: center;
 }
