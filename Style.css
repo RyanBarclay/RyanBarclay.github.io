@@ -19,7 +19,7 @@ div.nameContainer{
 }
 div.nameContainer h1{
 
-  font-size: 5vw;
+  font-size: 6vw;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #F58894;
   vertical-align: middle;
@@ -54,7 +54,7 @@ div.nameContainer2{
   padding-top: 5vw;
 }
 div.nameContainer2 h1{
-  font-size: 5vw;
+  font-size: 6vw;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #F58894;
   vertical-align: middle;
@@ -62,57 +62,64 @@ div.nameContainer2 h1{
   transition-duration: 0.2s;
 }
 
+
 div.links{
   width: 100vw;
   padding-top: 10vh;
-  display: flex;
+  -webkit-display: inline-flex; /*Safari */
+  display: inline-flex;
   flex-wrap: wrap;
-  vertical-align: center;
-  padding-left: 10vw;
-  padding-right: 10vw;
+  text-align: center;
+  justify-content: center;
+  /* padding-left: 10vw;
+  padding-right: 10vw; */
 }
 div.links button{
   /* background-color: #F2BDC4; */
   background-color: transparent;
-  border: 0.5vw solid #F58894;
+  border: 0.7vw solid #F58894;
   color: #F58894;
-  width: 12vw;
-  font-size: 2vw;
+  font-size: 5ex;
   text-align: center;
   font-family: "Times New Roman", Times, serif;
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
   vertical-align: center;
+  min-width: 2.937cm;
 }
 div.links button:hover{
   background-color: #F58894;
   border: 1vw solid #F58894;
   color: #F2BDC4;
-  font-size: 2vw;
+  font-size: 5ex;
   text-align: center;
   font-family: "Times New Roman", Times, serif;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
   vertical-align: center;
+  min-width: 4.937 cm;f
 }
 
 
 div.VSCO{
-  width: 20vw;
+  width: auto;
   float: left;
   text-align: center;
+  display: inline-flex;
 }
 div.Instagram{
-  width: 20vw;
+  width: auto;
   float: left;
   text-align: center;
 }
 div.Linkedin{
-  width: 20vw;
+  width: auto;
   float: left;
   text-align: center;
 
 }
 div.Github{
-  width: 20vw;
+  width: auto;
   float: left;
   text-align: center;
 }
