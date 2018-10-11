@@ -71,7 +71,7 @@ div.links button{
   background-color: transparent;
   border: none;
   color: #F58894;
-  font-size: 2vw;
+  font-size: 4vw;
   text-align: center;
   font-family: "Times New Roman", Times, serif;
   -webkit-transition-duration: 0.4s; /* Safari */
@@ -81,7 +81,7 @@ div.links button:hover{
   background-color: #F58894;
   border: none;
   color: #F2BDC4;
-  font-size: 2vw;
+  font-size: 3vw;
   text-align: center;
   font-family: "Times New Roman", Times, serif;
 }
