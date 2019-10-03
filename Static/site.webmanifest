@@ -1,19 +1,19 @@
 {
-    "name": "Ryan Barclay",
-    "short_name": "Ryan Barclay",
+    "name": "",
+    "short_name": "",
     "icons": [
         {
-            "src": "/Static/android-chrome-192x192.png",
+            "src": "/Static/android-chrome-192x192.png?v=oLJyr06g0k",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/Static/android-chrome-512x512.png",
-            "sizes": "512x512",
+            "src": "/Static/android-chrome-256x256.png?v=oLJyr06g0k",
+            "sizes": "256x256",
             "type": "image/png"
         }
     ],
-    "theme_color": "#000000",
-    "background_color": "#000000",
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
     "display": "standalone"
 }
