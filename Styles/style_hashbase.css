@@ -16,13 +16,14 @@ p               {padding: 0; margin: 10px 0 30px 0;}
 img             {width: 900px; max-width: 900px; margin-bottom: 20px;}
 #page           {max-width: 900px; margin: auto; padding: 0 20px;}
 #content        {max-width:100%; margin: auto;}
-#footer 		{max-width: 900px; margin:auto; margin-top: 55px;}
-.header			{height: 66px; width: 100%; margin: auto; margin-bottom: 50px; border-bottom: dotted 1px #444;}
-.logodiv 		{max-width: 900px; margin:auto; padding: 0 20px;}
-.logo			{width: 150px; margin: auto; margin-top: 20px; border: solid 0px}
+#footer 				{max-width: 900px; margin:auto; margin-top: 55px;}
+.header					{height: 66px; width: 100%; margin: auto; margin-bottom: 50px; border-bottom: dotted 1px #444;}
+.logodiv 				{max-width: 900px; margin:auto; padding: 0 20px;}
+.logo						{width: 150px; margin: auto; margin-top: 20px; border: solid 0px}
+.svgLink				{width: 40px; margin: auto;margin-top: 5px; border: solid 0px; filter:invert(0.5);}
 #list           {margin-bottom: 50px;}
 #post           {max-width: 900px; margin-bottom: 20px; margin-top: -10px; line-height: 28px;}
-.categories		{max-width: 300px; right:0; margin: 40px 60px 0 0; position: fixed; background: #222;
+.categories			{max-width: 300px; right:0; margin: 40px 60px 0 0; position: fixed; background: #222;
 				text-align: right; z-index: 0;}
 @media 			all and (max-width: 1000px) and (min-width: 20px) {
 .categories 	{visibility: hidden;}
