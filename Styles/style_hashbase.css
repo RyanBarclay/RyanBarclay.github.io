@@ -13,7 +13,7 @@ li              {margin: 15px 0; padding: 0; list-style: none;}
 a               {text-decoration: none; color: #fff;}
 a:hover         {color: #fff; text-decoration: underline;}
 p               {padding: 0; margin: 10px 0 30px 0;}
-img             {width: 900px; max-width: 900px; margin-bottom: 20px;}
+img             {/*width: 900px;*/ max-width: 900px; margin-bottom: 20px;}
 #page           {max-width: 900px; margin: auto; padding: 0 20px;}
 #content        {max-width:100%; margin: auto;}
 #footer 				{max-width: 900px; margin:auto; margin-top: 55px;}
