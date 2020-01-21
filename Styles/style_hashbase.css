@@ -1,10 +1,9 @@
 @font-face 		{
 				font-family: 'Share Tech Mono';
-				/* src: url('https://n-o-d-e.hashbase.io/fonts/font.eot'); */
 				src: local('â˜º'), url('../Fonts/font.woff') format('woff'), url('../Fonts/font.ttf') format('truetype'), url('../Fonts/font.svg') format('svg');
 				}
 
-body            {letter-spacing: 0.1px; padding: 0; margin: 0; font-family: 'Share Tech Mono', Monospace, Courier; font-weight: 400; font-size: 17px; color: #c8c8c8; background: #222;}
+body            {letter-spacing: 0.1px; padding: 0; margin: 0; font-family: 'Share Tech Mono', Monospace, Courier; font-weight: 400; font-size: 17px; color: #c8c8c8; background: #002b36;}
 html            {-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
 pre             {padding: 0; margin: 0 0 50px 0;}
 ul              {padding: 0;}
@@ -17,7 +16,7 @@ img             {/*width: 900px;*/ max-width: 900px; margin-bottom: 20px;}
 #page           {max-width: 900px; margin: auto; padding: 0 20px;}
 #content        {max-width:100%; margin: auto;}
 #footer 				{max-width: 900px; margin:auto; margin-top: 55px;}
-.header					{height: 66px; width: 100%; margin: auto; margin-bottom: 50px; border-bottom: dotted 1px #444;}
+.header					{height: 66px; width: 100%; margin: auto; margin-bottom: 50px; border-bottom: dotted 1px #444; background: #073642}
 .logodiv 				{max-width: 900px; margin:auto; padding: 0 20px;}
 .logo						{width: 150px; margin: auto; margin-top: 20px; border: solid 0px}
 .svgLink				{width: 40px; margin: auto;margin-top: 5px; border: solid 0px; filter:invert(0.5);}
