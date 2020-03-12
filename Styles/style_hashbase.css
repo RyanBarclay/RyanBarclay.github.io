@@ -43,6 +43,7 @@ img             {/*width: 900px;*/ max-width: 900px; margin-bottom: 20px;}
 .filter         {display:block; margin-bottom: 30px; margin-top: -28px; text-align: right;}
 .description    {background: #073642; padding: 10px 0 10px 10px; margin-top: 0px;}
 .videowrapper   {position: relative; padding-bottom: 56.45%; height: 0;}
+.imagewrapper   {position: relative; padding-bottom: 56.45%; height: 0;}
 video 			{max-width: 100%}
 
 @media 			only screen and (max-width: 900px)
