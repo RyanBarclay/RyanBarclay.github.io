@@ -41,7 +41,7 @@ img             {/*width: 900px;*/ max-width: 900px; margin-bottom: 20px;}
 .shop           {max-width: 900px; margin: -10px 0 40px 0;}
 .codesmall      {background: #1f1f1f; display:inline-block;}
 .filter         {display:block; margin-bottom: 30px; margin-top: -28px; text-align: right;}
-.description    {background: #1f1f1f; padding: 10px 0 10px 10px; margin-top: 0px;}
+.description    {background: #073642; padding: 10px 0 10px 10px; margin-top: 0px;}
 .videowrapper   {position: relative; padding-bottom: 56.45%; height: 0;}
 video 			{max-width: 100%}
 
