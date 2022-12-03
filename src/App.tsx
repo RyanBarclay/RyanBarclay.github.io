@@ -1,37 +1,19 @@
-import React, { useState } from "react";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import NavigationRail from "./components/NavigationRail";
+import React, { useContext } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { darkTheme, lightTheme } from "./theme/theme";
-import { CssBaseline } from "@mui/material";
-import styled from "@emotion/styled";
-import HomeComponent from "./components/HomeComponent";
-
-const Page = styled.div`
-  display: flex;
-`;
-
-const PageContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 4;
-  margin: 3vh;
-`;
+import { Box, CssBaseline } from "@mui/material";
+import { ThemeContext } from "./Context/DarkModeContext";
+import LeftSide from "./Components/Molecule/SideBar/LeftSide";
 
 function App() {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-  const [darkMode, setDarkMode] = useState(prefersDarkMode);
-
+  const { isDarkTheme } = useContext(ThemeContext);
   return (
-    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
       <CssBaseline />
-
-      <Page>
-        <NavigationRail darkMode={darkMode} setDarkMode={setDarkMode} />
-        <PageContent>
-          <HomeComponent />
-        </PageContent>
-      </Page>
+      <Box sx={{ display: "flex", gap: "10%" }}>
+        <LeftSide />
+        {/* <Content /> */}
+      </Box>
     </ThemeProvider>
   );
 }
