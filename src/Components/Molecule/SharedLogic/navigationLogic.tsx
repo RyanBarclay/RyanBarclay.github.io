@@ -5,7 +5,7 @@ import {
   Home,
   Info,
 } from "@mui/icons-material";
-import { Paper } from "@mui/material";
+import { colors, Paper } from "@mui/material";
 
 export interface ComponentLinkInfo {
   [key: string]: {
@@ -46,11 +46,7 @@ const componentLinkInfo: ComponentLinkInfo = {
       Overview: {
         label: "Overview",
         to: "/projects",
-        component: (
-          <Paper>
-            <Build />
-          </Paper>
-        ),
+        component: <Build />,
       },
     },
   },

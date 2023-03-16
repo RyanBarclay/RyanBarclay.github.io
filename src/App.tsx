@@ -9,13 +9,29 @@ import { darkTheme, lightTheme } from "./theme/theme";
 
 function App() {
   const { isDarkTheme } = useContext(ThemeContext);
+
   return (
     <HashRouter>
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
         <CssBaseline />
-        <Box sx={{ display: "flex", height: "100vh" }}>
+        <Box
+          sx={{
+            display: "flex",
+          }}
+        >
           <LeftSide />
-          <RightSide />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              padding: "2vh",
+              alignItems: "center",
+              width: "-webkit-fill-available",
+              gap: "2vh",
+            }}
+          >
+            <RightSide />
+          </Box>
         </Box>
       </ThemeProvider>
     </HashRouter>
