@@ -1,26 +1,25 @@
 import { List, Paper } from "@mui/material";
-import { useContext, useMemo, useState } from "react";
-import { ThemeContext } from "../../../../Context/DarkModeContext";
-import ThemeButton from "../../../Atom/ThemeButton/ThemeButton";
-import componentLinkInfo from "../../../Logic/navigationLogic";
+import { useContext, useMemo } from "react";
+import { ThemeContext } from "../../../Context/DarkModeContext";
+import { NavigationContext } from "../../../Context/NavigationContext";
+import ThemeButton from "../../Atom/ThemeButton/ThemeButton";
+import componentLinkInfo from "../SharedLogic/navigationLogic";
 import { makeTree } from "./navigationUtils";
 
 const LeftSide = (): JSX.Element => {
   const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
 
-  const [expandedItems, setExpandedItems] = useState<string[]>([]);
-
-  const handleListItemClick = (id: string) => {
-    if (expandedItems.includes(id)) {
-      setExpandedItems(expandedItems.filter((item) => item !== id));
-    } else {
-      setExpandedItems([...expandedItems, id]);
-    }
-  };
+  const { expandedItems, toggleExpandedItems, currentItem } =
+    useContext(NavigationContext);
 
   const ListItems = useMemo(() => {
-    return makeTree(componentLinkInfo, expandedItems, handleListItemClick);
-  }, [expandedItems]);
+    return makeTree(
+      componentLinkInfo,
+      expandedItems,
+      toggleExpandedItems,
+      currentItem
+    );
+  }, [expandedItems, currentItem]);
 
   return (
     <Paper

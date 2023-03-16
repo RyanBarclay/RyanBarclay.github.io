@@ -3,7 +3,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useContext } from "react";
 import { BrowserRouter } from "react-router-dom";
 import RightSide from "./Components/Molecule/RightSide/RightSide";
-import LeftSide from "./Components/Molecule/SideBar/LeftSide/LeftSide";
+import LeftSide from "./Components/Molecule/LeftSide/LeftSide";
 import { ThemeContext } from "./Context/DarkModeContext";
 import { darkTheme, lightTheme } from "./theme/theme";
 

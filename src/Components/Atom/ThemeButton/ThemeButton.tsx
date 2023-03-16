@@ -7,17 +7,13 @@ type ThemeButtonProps = FabProps & {
 };
 
 const ThemeButtonIcon = (props: { isDarkTheme: boolean }) => {
-  return props.isDarkTheme ? <DarkMode /> : <LightMode />;
+  return props.isDarkTheme ? <LightMode /> : <DarkMode />;
 };
 
 const ThemeButton = (props: ThemeButtonProps): JSX.Element => {
   const { isDarkTheme, toggleTheme, ...rest } = props;
   return (
-    <Fab
-      onClick={toggleTheme}
-      color={isDarkTheme ? "primary" : "secondary"}
-      {...rest}
-    >
+    <Fab onClick={toggleTheme} {...rest}>
       <ThemeButtonIcon isDarkTheme={isDarkTheme} />
     </Fab>
   );

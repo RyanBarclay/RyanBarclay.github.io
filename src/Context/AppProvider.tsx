@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import ThemeProvider, { ThemeContext } from "./DarkModeContext";
 import { Theme } from "@mui/system";
 import { darkTheme, lightTheme } from "../theme/theme";
+import NavigationProvider from "./NavigationContext";
 // import ScrollToProvider from "./ScrollToComponentContext";
 
 interface Props {
@@ -9,10 +10,11 @@ interface Props {
 }
 
 const AppProvider: React.FC<Props> = ({ children }) => {
-  const { isDarkTheme } = useContext(ThemeContext);
-
-  var theme: Theme = isDarkTheme ? darkTheme : lightTheme;
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider>
+      <NavigationProvider>{children}</NavigationProvider>
+    </ThemeProvider>
+  );
 };
 
 export default AppProvider;
