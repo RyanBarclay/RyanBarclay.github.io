@@ -3,11 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "/RyanBarclay.github.io/#",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build && cp CNAME ./dist&& gh-pages -d dist"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
