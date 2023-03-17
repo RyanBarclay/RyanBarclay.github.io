@@ -1,4 +1,4 @@
-import { Box, Drawer, List, Paper } from "@mui/material";
+import { Drawer, List } from "@mui/material";
 import { useContext, useMemo } from "react";
 import { ThemeContext } from "../../../Context/DarkModeContext";
 import { NavigationContext } from "../../../Context/NavigationContext";
@@ -6,7 +6,7 @@ import ThemeButton from "../../Atom/ThemeButton/ThemeButton";
 import componentLinkInfo from "../SharedLogic/navigationLogic";
 import { makeTree } from "./navigationUtils";
 
-const drawerWidth = 200;
+export const maxDrawerWidth = "20vw";
 
 const LeftSide = (): JSX.Element => {
   const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
@@ -24,31 +24,29 @@ const LeftSide = (): JSX.Element => {
   }, [expandedItems, currentItem]);
 
   return (
-    <Drawer
-      variant="permanent"
-      PaperProps={{
-        sx: {
-          display: "flex",
-          flexDirection: "column",
-          paddingTop: "5vh",
-          width: drawerWidth,
-          boxSizing: "border-box",
-          alignItems: "center",
-          gap: " 10vh",
-        },
-      }}
-      sx={{ flexShrink: 0, width: drawerWidth }}
-    >
-      <ThemeButton
-        isDarkTheme={isDarkTheme}
-        toggleTheme={toggleTheme}
-        sx={{
-          borderRadius: "50rem",
-          width: drawerWidth * 0.9,
+    <nav>
+      <Drawer
+        variant="permanent"
+        PaperProps={{
+          sx: {
+            paddingTop: "5vh",
+            gap: "10vh",
+            maxWidth: maxDrawerWidth,
+          },
         }}
-      />
-      <List>{ListItems}</List>
-    </Drawer>
+      >
+        <ThemeButton
+          isDarkTheme={isDarkTheme}
+          toggleTheme={toggleTheme}
+          sx={{
+            borderRadius: "50rem",
+            width: "-webkit-fill-available",
+            marginX: "2vw",
+          }}
+        />
+        <List>{ListItems}</List>
+      </Drawer>
+    </nav>
   );
 };
 

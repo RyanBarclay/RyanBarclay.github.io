@@ -26,7 +26,6 @@ function makeListButtonLeaf(
       component={Link}
       to={to}
       key={key}
-      sx={layer > 0 ? { pl: layer * 4 } : {}}
       selected={currentItem == key}
     >
       <ListItemIcon>{icon}</ListItemIcon>
@@ -53,7 +52,6 @@ function makeListButtonNode(
           handleListItemClick(key);
         }}
         key={key}
-        sx={layer == 4 ? { pl: layer * 4 } : {}}
       >
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText primary={label} />
@@ -70,7 +68,6 @@ function makeListButtonNode(
             expandedItems,
             handleListItemClick,
             currentItem,
-
             layer + 1,
             key
           )}
@@ -88,7 +85,6 @@ export function makeTree(
   layer = 0,
   curKey = ""
 ): JSX.Element {
-  const foo = () => {};
   return (
     <>
       {Object.keys(obj).map((key) => {

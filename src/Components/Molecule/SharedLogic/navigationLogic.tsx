@@ -2,10 +2,11 @@ import {
   AlternateEmail,
   Build,
   HistoryEdu,
+  HistoryEduRounded,
   Home,
   Info,
 } from "@mui/icons-material";
-import { colors, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 
 export interface ComponentLinkInfo {
   [key: string]: {
@@ -47,6 +48,15 @@ const componentLinkInfo: ComponentLinkInfo = {
         label: "Overview",
         to: "/projects",
         component: <Build />,
+      },
+      NBodySimulation: {
+        label: "N-Body Simulation",
+        to: "/projects/NBodySimulation",
+        component: (
+          <Paper sx={{ height: "300vh" }}>
+            <HistoryEduRounded />
+          </Paper>
+        ),
       },
     },
   },
