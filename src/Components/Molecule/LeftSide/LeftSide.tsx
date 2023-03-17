@@ -1,4 +1,4 @@
-import { Drawer, List } from "@mui/material";
+import { Drawer, List, Paper, Typography } from "@mui/material";
 import { useContext, useMemo } from "react";
 import { ThemeContext } from "../../../Context/DarkModeContext";
 import { NavigationContext } from "../../../Context/NavigationContext";
@@ -6,7 +6,8 @@ import ThemeButton from "../../Atom/ThemeButton/ThemeButton";
 import componentLinkInfo from "../SharedLogic/navigationLogic";
 import { makeTree } from "./navigationUtils";
 
-export const maxDrawerWidth = "20vw";
+const widthNum = 20;
+export const maxDrawerWidth = widthNum + "vw";
 
 const LeftSide = (): JSX.Element => {
   const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
@@ -29,9 +30,10 @@ const LeftSide = (): JSX.Element => {
         variant="permanent"
         PaperProps={{
           sx: {
-            paddingTop: "5vh",
+            paddingX: widthNum * 0.1 + "vw",
             gap: "10vh",
             maxWidth: maxDrawerWidth,
+            alignItems: "center",
           },
         }}
       >
@@ -41,9 +43,27 @@ const LeftSide = (): JSX.Element => {
           sx={{
             borderRadius: "50rem",
             width: "-webkit-fill-available",
-            marginX: "2vw",
+            marginTop: "5vh",
           }}
         />
+        <Paper
+          sx={{
+            display: "flex",
+            alignContent: "center",
+            flexDirection: "column",
+            position: "sticky",
+            top: 0,
+            width: "100%",
+            zIndex: 20,
+          }}
+          elevation={0}
+        >
+          <Typography align="center" variant="h6">
+            Ryan Barclay's
+          </Typography>
+          <Typography align="center">Portfolio</Typography>
+        </Paper>
+
         <List>{ListItems}</List>
       </Drawer>
     </nav>
