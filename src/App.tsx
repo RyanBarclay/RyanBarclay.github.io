@@ -16,7 +16,6 @@ function App() {
     <HashRouter>
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
         <CssBaseline />
-
         <LeftSide />
         <Box
           sx={{

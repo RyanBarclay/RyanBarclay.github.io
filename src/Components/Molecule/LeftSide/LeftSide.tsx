@@ -3,7 +3,7 @@ import { useContext, useMemo } from "react";
 import { ThemeContext } from "../../../Context/DarkModeContext";
 import { NavigationContext } from "../../../Context/NavigationContext";
 import ThemeButton from "../../Atom/ThemeButton/ThemeButton";
-import componentLinkInfo from "../SharedLogic/navigationLogic";
+import componentLinkInfo from "../../SharedLogic/navigationLogic";
 import { makeTree } from "./navigationUtils";
 
 const widthNum = 20;

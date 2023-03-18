@@ -1,6 +1,6 @@
 import React, { createContext, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { findPathToKey } from "../Components/Molecule/SharedLogic/navigationLogic";
+import { findPathToKey } from "../Components/SharedLogic/navigationLogic";
 
 interface Props {
   children: React.ReactNode;

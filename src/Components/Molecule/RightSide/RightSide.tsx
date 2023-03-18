@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { NavigationContext } from "../../../Context/NavigationContext";
-
 import componentLinkInfo, {
   ComponentLinkInfo,
-} from "../SharedLogic/navigationLogic";
+} from "../../SharedLogic/navigationLogic";
 
 const RightSide = (): JSX.Element => {
   const { setFooBar } = useContext(NavigationContext);

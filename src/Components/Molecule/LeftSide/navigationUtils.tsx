@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ComponentLinkInfo } from "../SharedLogic/navigationLogic";
+import { ComponentLinkInfo } from "../../SharedLogic/navigationLogic";
 
 function makeListButtonLeaf(
   to: string,

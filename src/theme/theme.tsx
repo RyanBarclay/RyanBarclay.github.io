@@ -25,7 +25,6 @@ const sharedTheme = {
     },
   },
   typography: {
-    fontFamily: "Roboto",
     fontSize: 12, // smaller font size
   },
 };
