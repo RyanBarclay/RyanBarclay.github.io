@@ -25,48 +25,45 @@ const LeftSide = (): JSX.Element => {
   }, [expandedItems, currentItem]);
 
   return (
-    <nav>
-      <Drawer
-        variant="permanent"
-        PaperProps={{
-          sx: {
-            paddingX: widthNum * 0.1 + "vw",
-            gap: "10vh",
-            maxWidth: maxDrawerWidth,
-            alignItems: "center",
-          },
+    <Drawer
+      variant="permanent"
+      PaperProps={{
+        sx: {
+          paddingX: widthNum * 0.1 + "vw",
+          gap: "10vh",
+          maxWidth: maxDrawerWidth,
+          alignItems: "center",
+        },
+      }}
+    >
+      <ThemeButton
+        isDarkTheme={isDarkTheme}
+        toggleTheme={toggleTheme}
+        sx={{
+          borderRadius: "50rem",
+          width: "-webkit-fill-available",
+          marginTop: "5vh",
         }}
+      />
+      <Paper
+        sx={{
+          display: "flex",
+          alignContent: "center",
+          flexDirection: "column",
+          position: "sticky",
+          top: 0,
+          width: "100%",
+          zIndex: 20,
+        }}
+        elevation={0}
       >
-        <ThemeButton
-          isDarkTheme={isDarkTheme}
-          toggleTheme={toggleTheme}
-          sx={{
-            borderRadius: "50rem",
-            width: "-webkit-fill-available",
-            marginTop: "5vh",
-          }}
-        />
-        <Paper
-          sx={{
-            display: "flex",
-            alignContent: "center",
-            flexDirection: "column",
-            position: "sticky",
-            top: 0,
-            width: "100%",
-            zIndex: 20,
-          }}
-          elevation={0}
-        >
-          <Typography align="center" variant="h6">
-            Ryan Barclay's
-          </Typography>
-          <Typography align="center">Portfolio</Typography>
-        </Paper>
-
-        <List>{ListItems}</List>
-      </Drawer>
-    </nav>
+        <Typography align="center" variant="h6">
+          Ryan Barclay's
+        </Typography>
+        <Typography align="center">Portfolio</Typography>
+      </Paper>
+      <List>{ListItems}</List>
+    </Drawer>
   );
 };
 
