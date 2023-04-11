@@ -7,6 +7,7 @@ import {
   Info,
 } from "@mui/icons-material";
 import { Paper } from "@mui/material";
+import NBodySimulation from "../Molecule/NBody-Simulation/NBodySimulation";
 
 export interface ComponentLinkInfo {
   [key: string]: {
@@ -52,11 +53,7 @@ const componentLinkInfo: ComponentLinkInfo = {
       NBodySimulation: {
         label: "N-Body Simulation",
         to: "/projects/NBodySimulation",
-        component: (
-          <Paper sx={{ height: "300vh" }}>
-            <HistoryEduRounded />
-          </Paper>
-        ),
+        component: <NBodySimulation />,
       },
     },
   },
