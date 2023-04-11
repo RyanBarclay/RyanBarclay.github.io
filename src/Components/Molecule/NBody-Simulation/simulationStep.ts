@@ -8,13 +8,15 @@ import {
 
 const isInChild = (particle: Particle, boundingBox: BoundingBox): boolean => {
   // O(1) time complexity
+
+  // TODO: might be some issues with the bounding box edges
   if (
     particle.position.x >= boundingBox.frontLeftBottom.x &&
     particle.position.x <= boundingBox.frontRightBottom.x &&
     particle.position.y >= boundingBox.frontLeftBottom.y &&
     particle.position.y <= boundingBox.frontLeftTop.y &&
-    particle.position.z >= boundingBox.frontLeftBottom.z &&
-    particle.position.z <= boundingBox.backLeftBottom.z
+    particle.position.z >= boundingBox.backLeftBottom.z &&
+    particle.position.z <= boundingBox.frontLeftBottom.z
   ) {
     return true;
   }
@@ -22,16 +24,18 @@ const isInChild = (particle: Particle, boundingBox: BoundingBox): boolean => {
 };
 
 const getBoundingBox = (particles: Particle[]): BoundingBox => {
+  // Working
   // returns a axis aligned bounding box fora all the particles that are in the octal tree
   // https://en.wikipedia.org/wiki/Bounding_box
 
   // O(n) time complexity
   var bb: BoundingBox = {
+    //front = +z, back = -z, left = -x, right = +x, top = +y, bottom = -y
     frontLeftBottom: { x: 0, y: 0, z: 0 },
     frontRightBottom: { x: 0, y: 0, z: 0 },
     frontLeftTop: { x: 0, y: 0, z: 0 },
-    frontRightTop: { x: 0, y: 0, z: 0 },
-    backLeftBottom: { x: 0, y: 0, z: 0 },
+    frontRightTop: { x: 0, y: 0, z: 0 }, // all vals +
+    backLeftBottom: { x: 0, y: 0, z: 0 }, // all vals -
     backRightBottom: { x: 0, y: 0, z: 0 },
     backLeftTop: { x: 0, y: 0, z: 0 },
     backRightTop: { x: 0, y: 0, z: 0 },
@@ -39,52 +43,55 @@ const getBoundingBox = (particles: Particle[]): BoundingBox => {
   particles.forEach((particle) => {
     if (particle.position.x < bb.frontLeftBottom.x) {
       bb.frontLeftBottom.x = particle.position.x;
-      bb.frontLeftTop.x = particle.position.x;
       bb.backLeftBottom.x = particle.position.x;
+      bb.frontLeftTop.x = particle.position.x;
       bb.backLeftTop.x = particle.position.x;
     }
     if (particle.position.x > bb.frontRightBottom.x) {
       bb.frontRightBottom.x = particle.position.x;
-      bb.frontRightTop.x = particle.position.x;
       bb.backRightBottom.x = particle.position.x;
+      bb.frontRightTop.x = particle.position.x;
       bb.backRightTop.x = particle.position.x;
     }
     if (particle.position.y < bb.frontLeftBottom.y) {
       bb.frontLeftBottom.y = particle.position.y;
-      bb.frontRightBottom.y = particle.position.y;
       bb.backLeftBottom.y = particle.position.y;
+      bb.frontRightBottom.y = particle.position.y;
       bb.backRightBottom.y = particle.position.y;
     }
     if (particle.position.y > bb.frontLeftTop.y) {
       bb.frontLeftTop.y = particle.position.y;
-      bb.frontRightTop.y = particle.position.y;
       bb.backLeftTop.y = particle.position.y;
+      bb.frontRightTop.y = particle.position.y;
       bb.backRightTop.y = particle.position.y;
     }
-    if (particle.position.z < bb.frontLeftBottom.z) {
-      bb.frontLeftBottom.z = particle.position.z;
-      bb.frontRightBottom.z = particle.position.z;
-      bb.frontLeftTop.z = particle.position.z;
-      bb.frontRightTop.z = particle.position.z;
-    }
-    if (particle.position.z > bb.backLeftBottom.z) {
+    if (particle.position.z < bb.backLeftBottom.z) {
       bb.backLeftBottom.z = particle.position.z;
       bb.backRightBottom.z = particle.position.z;
       bb.backLeftTop.z = particle.position.z;
       bb.backRightTop.z = particle.position.z;
     }
+    if (particle.position.z > bb.frontLeftBottom.z) {
+      bb.frontLeftBottom.z = particle.position.z;
+      bb.frontRightBottom.z = particle.position.z;
+      bb.frontLeftTop.z = particle.position.z;
+      bb.frontRightTop.z = particle.position.z;
+    }
   });
   return bb;
 };
 
-const initOctalTreeChildren = (
+let initOctalTreeChildren = (
   boundingBox: BoundingBox,
   existingParticle: Particle
 ) => {
   // returns an array of 8 undefined octal trees that are the children of the bounding box
   // all the values will be initialized to a default value;
   // O(1) time complexity
-  const children: OctalTree[] = [];
+  // console.log("initOctalTreeChildren");
+  // console.log("boundingBox", boundingBox);
+  // console.log("existingParticle", existingParticle);
+  let children: OctalTree[] = [];
   // get the center of the bounding box
   const center: Point = {
     x: (boundingBox.frontLeftBottom.x + boundingBox.frontRightBottom.x) / 2,
@@ -116,7 +123,6 @@ const initOctalTreeChildren = (
         boundingBox: bb,
         children: undefined,
       });
-      continue;
     } else {
       children.push({
         centerOfMass: centerOfBB,
@@ -127,8 +133,8 @@ const initOctalTreeChildren = (
       });
     }
   }
-
-  return children;
+  const childConst = children;
+  return childConst;
 };
 
 const getOctalTreeChild = (
@@ -136,15 +142,27 @@ const getOctalTreeChild = (
   octalTree: OctalTree
 ): number => {
   // returns the index of the child that the particle belongs to
-
+  // console.log("getOctalTreeChild");
+  // console.log("particle", particle);
+  // console.log("octalTree", octalTree);
   if (octalTree === undefined) {
     throw new Error("octalTree is undefined where it shouldn't be");
   } else if (octalTree.children === undefined) {
     throw new Error("octalTree children is undefined where it shouldn't be");
-  }
-  for (let i = 0; i < 8; i++) {
-    if (isInChild(particle, octalTree.children[i]!.boundingBox)) {
-      return i;
+  } else {
+    // console.log(
+    //   "particle is in parent",
+    //   isInChild(particle, octalTree.boundingBox)
+    // );
+    for (let i = 0; i < octalTree.children.length; i++) {
+      // console.log("octalTree.children[i]", octalTree.children[i]);
+      if (octalTree.children[i] !== undefined) {
+        let found = isInChild(particle, octalTree.children[i]!.boundingBox);
+        // console.log("found", found);
+        if (found) {
+          return i;
+        }
+      }
     }
   }
   throw new Error("particle is not in any child");
@@ -181,15 +199,24 @@ const octInsert = (particle: Particle, octalTree: OctalTree): OctalTree => {
     octalTree.particle === undefined &&
     octalTree.children !== undefined
   ) {
+    // console.log("octalTree before insert ", octalTree);
     // if the subtree rooted at n contains more than 1 particle
     //     determine which child c of node n particle i lies in
     //       QuadInsert(i,c)
+    // console.log("adding particle to a branch with children");
     const childIndex = getOctalTreeChild(particle, octalTree);
-    octalTree.children[childIndex] = octInsert(
-      particle,
-      octalTree.children[childIndex]
-    );
-    return octalTree;
+
+    let newOctalTree = {
+      ...octalTree,
+      children: octalTree.children.map((child, index) => {
+        if (index === childIndex) {
+          return octInsert(particle, child!);
+        }
+        return child;
+      }),
+    };
+    // console.log("octalTree after insert branch", newOctalTree);
+    return newOctalTree;
   } else if (
     octalTree.particle !== undefined &&
     octalTree.children === undefined
@@ -203,14 +230,33 @@ const octInsert = (particle: Particle, octalTree: OctalTree): OctalTree => {
     // QuadInsert(i,c)
 
     // add n's four children to the OctalTree and move the particle already in n into the child in which it lies
-    octalTree.children = initOctalTreeChildren(
+    // remove the particle from the node
+    // console.log("adding particle to a leaf with a particle");
+    // console.log("particle", particle);
+    // console.log("octalTree", octalTree);
+    const children = initOctalTreeChildren(
       octalTree.boundingBox,
       octalTree.particle
     );
-    // remove the particle from the node
-    octalTree.particle = undefined;
-    octalTree = octInsert(particle, octalTree);
-    return octalTree;
+    // console.log("children returned from initOctalTreeChildren", children);
+    let newOctalTree1: OctalTree = {
+      centerOfMass: octalTree.centerOfMass,
+      totalMass: octalTree.totalMass,
+      boundingBox: octalTree.boundingBox,
+      children: children,
+      particle: undefined,
+    };
+    // console.log("octalTree after adding children", newOctalTree1);
+    // works up to here
+    let newOctalTree = octInsert(particle, newOctalTree1);
+    //children are undefined here for some reason
+    // route octinsert,adding particle to non-leaf,inserting a new particle, inserting into empty leaf
+    // console.log(
+    // "octal tree after insert",
+    // JSON.stringify(newOctalTree, null, 2)
+    // );
+
+    return newOctalTree;
   } else if (
     octalTree.particle === undefined &&
     octalTree.children === undefined
@@ -218,8 +264,14 @@ const octInsert = (particle: Particle, octalTree: OctalTree): OctalTree => {
     // else if the subtree rooted at n is empty
     // ... n is a leaf
     // store particle i in node n
-    octalTree.particle = particle;
-    return octalTree;
+    // console.log("inserting particle into empty leaf");
+    let newOctalTree = { ...octalTree, particle };
+
+    // console.log(
+    //   "octalTree after insert",
+    //   JSON.stringify(newOctalTree, null, 2)
+    // );
+    return newOctalTree;
   }
 };
 
@@ -278,9 +330,10 @@ const octTreeBuild = (particles: Particle[]): OctalTree => {
     particle: undefined,
   };
   particles.forEach((particle) => {
-    console.log({ particle });
-    console.log({ octalTree });
+    // console.log("");
+    // console.log("inserting a new particle", particle);
     octalTree = octInsert(particle, octalTree);
+    // console.log("octalTree after insert", octalTree);
   });
 
   // traverse the tree and eliminate empty leaves
@@ -319,16 +372,23 @@ const octTreeComputeCenterOfMass = (octalTree: OctalTree): OctalTree => {
       end
   end function
   */
+  let newOctalTree: OctalTree;
   if (octalTree === undefined) {
     // if trimmed leaf
-    return undefined;
+    return newOctalTree;
   }
+
   // if the node is a leaf
   if (octalTree.children === undefined) {
     // if the node is a leaf and has a particle
     if (octalTree.particle !== undefined) {
-      octalTree.centerOfMass = octalTree.particle.position;
-      octalTree.totalMass = octalTree.particle.mass;
+      newOctalTree = {
+        centerOfMass: octalTree.particle.position,
+        totalMass: octalTree.particle.mass,
+        boundingBox: octalTree.boundingBox,
+        children: undefined,
+        particle: octalTree.particle,
+      };
     } else {
       throw new Error("untrimmed leaf still in tree");
     }
@@ -337,7 +397,8 @@ const octTreeComputeCenterOfMass = (octalTree: OctalTree): OctalTree => {
   // if the node is a branch
   else {
     // compute the center of mass for each child
-    octalTree.children = octalTree.children.map((child) =>
+
+    let children = octalTree.children.map((child) =>
       octTreeComputeCenterOfMass(child)
     );
     // compute the center of mass for the branch
@@ -358,16 +419,25 @@ const octTreeComputeCenterOfMass = (octalTree: OctalTree): OctalTree => {
     centerOfMass.x /= totalMass;
     centerOfMass.y /= totalMass;
     centerOfMass.z /= totalMass;
-    octalTree.centerOfMass = centerOfMass;
-    octalTree.totalMass = totalMass;
+    newOctalTree = {
+      centerOfMass: centerOfMass,
+      totalMass: totalMass,
+      boundingBox: octalTree.boundingBox,
+      children: children,
+      particle: undefined,
+    };
   }
-  return octalTree;
+  return newOctalTree;
 };
 
 const calcForceBetweenParticles = (p: Particle, pb: Particle): Vector3D => {
   // F = G*m1*m2*( (pb - p) / R)
   // R = {x:(xcm - x)/(r^3), y:(ycm - y)/(r^3), z:(zcm - z)/(r^3)}
   // r = sqrt(   ( xcm - x )^2  + ( ycm - y )^2  + ( zcm - z )^2 )
+
+  if (p === pb) {
+    return { x: 0, y: 0, z: 0 };
+  }
 
   const G = 6.67408e-11;
   const x1MinusX2 = p.position.x - pb.position.x;
@@ -380,9 +450,9 @@ const calcForceBetweenParticles = (p: Particle, pb: Particle): Vector3D => {
   const Rz = z1MinusZ2 / rCubed;
 
   const force: Vector3D = {
-    x: G * p.mass * pb.mass * Rx,
-    y: G * p.mass * pb.mass * Ry,
-    z: G * p.mass * pb.mass * Rz,
+    x: -G * p.mass * pb.mass * Rx,
+    y: -G * p.mass * pb.mass * Ry,
+    z: -G * p.mass * pb.mass * Rz,
   };
   return force;
 };
@@ -414,16 +484,21 @@ const calcForce = (
           end if
   */
   let force: Vector3D = { x: 0, y: 0, z: 0 };
-
+  // console.log("octTree: ", JSON.stringify(octTree));
+  // console.log("particle: ", JSON.stringify(particle));
+  // console.log("theta: ", theta);
   if (octTree === undefined) {
-    // if trimmed leaf
+    // if trimmed leaf it will apply no force
     return force;
   }
 
   // if the node is a leaf
   if (octTree.children === undefined) {
     if (octTree.particle !== undefined) {
+      // console.log("octTree.particle: ", JSON.stringify(octTree.particle));
+      // console.log("particle: ", JSON.stringify(particle));
       force = calcForceBetweenParticles(particle, octTree.particle);
+      // console.log("force: ", JSON.stringify(force));
     }
   } else {
     // if the node is a branch
@@ -494,6 +569,7 @@ const update_particles = (
   for (let i = 0; i < particles.length; i++) {
     const particle = particles[i];
     const force: Vector3D = calcForce(particle, octTree, theta);
+    // console.log("force", force);
     const acceleration = {
       x: force.x / particle.mass,
       y: force.y / particle.mass,
@@ -532,12 +608,16 @@ const simulationStep = (
     return undefined;
   }
   let octalTree = octTreeBuild(particles);
+  // console.log("computed octal tree", { octalTree });
   // for each sub-tree in octal tree compute the center of mass and total mass for all the particles in the sub-tree.
   octalTree = octTreeComputeCenterOfMass(octalTree);
+  // console.log("computed octal tree center of mass", { octalTree });
   // update velocity and position of each particle
-  particles = update_particles(particles, octalTree, dt, theta);
+  // console.log("particles", { particles });
+  let newParticles = update_particles(particles, octalTree, dt, theta);
+  // console.log("updated particles", { newParticles });
   // return new particles
-  return particles;
+  return newParticles;
 };
 
 export default simulationStep;

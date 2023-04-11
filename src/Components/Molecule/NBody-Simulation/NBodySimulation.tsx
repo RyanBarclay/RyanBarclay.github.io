@@ -6,22 +6,40 @@ import { Particle } from "./nBodyTypes";
 
 const defaultParticles: Particle[] = [
   {
-    position: { x: -20, y: -1, z: -1 },
-    velocity: { x: -1, y: -1, z: -1 },
+    position: { x: -10, y: -10, z: -10 },
+    velocity: { x: 0, y: 0.0, z: 0.0 },
     radius: 1,
-    mass: 10,
+    mass: 1,
   },
   {
-    position: { x: 1, y: 1, z: 1 },
-    velocity: { x: 1, y: 1, z: 1 },
+    position: { x: 10, y: 10, z: 10 },
+    velocity: { x: 0.0, y: 0, z: 0 },
     radius: 1,
-    mass: 10,
+    mass: 1,
+  },
+  {
+    position: { x: -10, y: 10, z: 10 },
+    velocity: { x: 0.0, y: 0, z: 0 },
+    radius: 1,
+    mass: 1,
+  },
+  {
+    position: { x: 10, y: -10, z: 10 },
+    velocity: { x: 0.0, y: 0, z: 0 },
+    radius: 1,
+    mass: 1,
+  },
+  {
+    position: { x: 10, y: 10, z: -10 },
+    velocity: { x: 0.0, y: 0, z: 0 },
+    radius: 2,
+    mass: 10000,
   },
   {
     position: { x: 0, y: 0, z: 0 },
     velocity: { x: 0, y: 0, z: 0 },
     radius: 1,
-    mass: 10,
+    mass: 1,
   },
 ];
 
