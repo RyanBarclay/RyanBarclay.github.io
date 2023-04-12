@@ -557,6 +557,7 @@ const update_particles = (
   // D/R = size of box / distance to center of mass(pb)
   // if D/r < theta then use center of mass approximation
   // F = G*m1*m2*( (pb - p) / R^3)
+  // R = sqrt(   ( xcm - x )^2  + ( ycm - y )^2  + ( zcm - z )^2 )
   /* 
   https://people.eecs.berkeley.edu/~demmel/cs267/lecture26/lecture26.html
   step 3 of barnes hut algorithm

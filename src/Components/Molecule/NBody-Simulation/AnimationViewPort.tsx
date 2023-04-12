@@ -13,6 +13,7 @@ type AnimationViewPortProps = {
   isPaused: boolean;
   theta: number;
   particlesFromFile: Particle[];
+  updateSimulationParticles: (particles?: Particle[]) => void;
 };
 
 const Bodies = (props: { particles?: Particle[] }): JSX.Element => {
@@ -44,9 +45,9 @@ const Body = (props: { particle: Particle }) => {
 };
 
 const AnimationViewPort = (props: AnimationViewPortProps): JSX.Element => {
-  const { isPaused, theta, particlesFromFile } = props;
+  const { isPaused, theta, particlesFromFile, updateSimulationParticles } =
+    props;
   // barnes hut simulation
-
   const dt = 100; // 100ms
   const msPerFrame = 1000 / 60; // 60fps
 
@@ -64,12 +65,14 @@ const AnimationViewPort = (props: AnimationViewPortProps): JSX.Element => {
       setRenderedParticles(particles);
       setLastRendered(0);
     }
-  }, [lastRendered, particles]);
+  }, [lastRendered]);
 
   useEffect(() => {
     if (!isPaused) {
       const intervalId = setInterval(() => {
         // console.log("simulating");
+        // get nano seconds
+        const now = performance.now() * 1_000_000; // 1_000_000 nanoseconds in a millisecond
         setParticles((particles) => {
           // return particles?.map((particle) => {
           //   return {
@@ -86,10 +89,14 @@ const AnimationViewPort = (props: AnimationViewPortProps): JSX.Element => {
           // });
           return simulationStep(dt, theta, particles);
         });
+        console.log(performance.now() * 1_000_000 - now + "ns");
         setLastRendered((lastRendered) => (lastRendered += dt));
       }, dt); // 100ms
       return () => clearInterval(intervalId);
+    } else {
+      updateSimulationParticles(particles);
     }
+
     return;
   }, [isPaused]);
 
