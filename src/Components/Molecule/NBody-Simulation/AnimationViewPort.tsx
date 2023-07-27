@@ -1,12 +1,7 @@
 import { Paper } from "@mui/material";
-import {
-  CubeCamera,
-  OrbitControls,
-  OrthographicCamera,
-  PerspectiveCamera,
-} from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import React, { useEffect, useState } from "react";
 import { Particle } from "./nBodyTypes";
 import simulationStep from "./simulationStep";
 type AnimationViewPortProps = {

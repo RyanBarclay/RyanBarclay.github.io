@@ -2,11 +2,10 @@ import {
   AlternateEmail,
   Build,
   HistoryEdu,
-  HistoryEduRounded,
   Home,
   Info,
 } from "@mui/icons-material";
-import { Paper } from "@mui/material";
+import React from "react";
 import NBodySimulation from "../Molecule/NBody-Simulation/NBodySimulation";
 
 export interface ComponentLinkInfo {

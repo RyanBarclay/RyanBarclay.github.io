@@ -1,5 +1,6 @@
 import { DarkMode, LightMode } from "@mui/icons-material";
 import { Fab, FabProps } from "@mui/material";
+import React from "react";
 
 type ThemeButtonProps = FabProps & {
   isDarkTheme: boolean;

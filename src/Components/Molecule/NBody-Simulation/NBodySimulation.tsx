@@ -1,13 +1,7 @@
-import { Box, Fab, Stack, Typography } from "@mui/material";
+import { Box, Fab, Typography } from "@mui/material";
 import AnimationViewPort from "./AnimationViewPort";
-import {
-  Download,
-  Pause,
-  PlayArrow,
-  Repeat,
-  Upload,
-} from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { Download, Pause, PlayArrow, Upload } from "@mui/icons-material";
+import { useState } from "react";
 import { Particle } from "./nBodyTypes";
 
 const scalar = 2;
@@ -181,7 +175,7 @@ const NBodySimulation = () => {
   return (
     <Box
       sx={
-        //@ts-expect-error some weird typescript error ts(2590) from wrapping 3js with mui
+        // @ts-expect-error some weird typescript error ts(2590) from wrapping 3js with mui
         {
           display: "flex",
           width: "100%",

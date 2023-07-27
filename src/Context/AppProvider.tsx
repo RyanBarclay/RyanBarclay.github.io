@@ -1,9 +1,6 @@
-import React, { useContext } from "react";
-import ThemeProvider, { ThemeContext } from "./DarkModeContext";
-import { Theme } from "@mui/system";
-import { darkTheme, lightTheme } from "../theme/theme";
+import React from "react";
+import ThemeProvider from "./DarkModeContext";
 import NavigationProvider from "./NavigationContext";
-// import ScrollToProvider from "./ScrollToComponentContext";
 
 interface Props {
   children: React.ReactNode;

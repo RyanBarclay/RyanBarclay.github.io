@@ -34,8 +34,8 @@ const getBoundingBox = (particles: Particle[]): BoundingBox => {
     frontLeftBottom: { x: 0, y: 0, z: 0 },
     frontRightBottom: { x: 0, y: 0, z: 0 },
     frontLeftTop: { x: 0, y: 0, z: 0 },
-    frontRightTop: { x: 0, y: 0, z: 0 }, // all vals +
-    backLeftBottom: { x: 0, y: 0, z: 0 }, // all vals -
+    frontRightTop: { x: 0, y: 0, z: 0 }, // all values+
+    backLeftBottom: { x: 0, y: 0, z: 0 }, // all vales -
     backRightBottom: { x: 0, y: 0, z: 0 },
     backLeftTop: { x: 0, y: 0, z: 0 },
     backRightTop: { x: 0, y: 0, z: 0 },
@@ -250,7 +250,7 @@ const octInsert = (particle: Particle, octalTree: OctalTree): OctalTree => {
     // works up to here
     let newOctalTree = octInsert(particle, newOctalTree1);
     //children are undefined here for some reason
-    // route octinsert,adding particle to non-leaf,inserting a new particle, inserting into empty leaf
+    // route Oct-insert,adding particle to non-leaf,inserting a new particle, inserting into empty leaf
     // console.log(
     // "octal tree after insert",
     // JSON.stringify(newOctalTree, null, 2)

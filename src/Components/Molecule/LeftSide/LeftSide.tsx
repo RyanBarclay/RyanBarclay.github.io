@@ -1,5 +1,5 @@
 import { Drawer, List, Paper, Typography } from "@mui/material";
-import { useContext, useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { ThemeContext } from "../../../Context/DarkModeContext";
 import { NavigationContext } from "../../../Context/NavigationContext";
 import ThemeButton from "../../Atom/ThemeButton/ThemeButton";
@@ -7,7 +7,7 @@ import componentLinkInfo from "../../SharedLogic/navigationLogic";
 import { makeTree } from "./navigationUtils";
 
 const widthNum = 20;
-export const maxDrawerWidth = widthNum + "vw";
+export const maxDrawerWidth: string = widthNum + "vw";
 
 const LeftSide = (): JSX.Element => {
   const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
