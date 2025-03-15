@@ -1,21 +1,17 @@
-// new type point that has x,y,z coordinates and velocity
-export type Particle = {
-  position: Point;
-  velocity: {
-    x: number;
-    y: number;
-    z: number;
-  };
-  radius: number;
-  mass: number;
-};
-
 export type Point = Vector3D;
 
 export type Vector3D = {
   x: number;
   y: number;
   z: number;
+};
+
+export type Particle = {
+  position: Point;
+  velocity: Vector3D;
+  radius: number;
+  mass: number;
+  color?: string; // Optional to maintain compatibility with existing particle data
 };
 
 export type OctalTree =
