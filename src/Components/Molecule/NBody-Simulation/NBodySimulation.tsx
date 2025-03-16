@@ -155,7 +155,7 @@ const SimulationControls = ({
             <Typography>Particle Count: {bounds.PARTICLE_COUNT}</Typography>
             <Slider
               value={bounds.PARTICLE_COUNT}
-              onChange={(_: React.ChangeEvent<{}>, value: number | number[]) =>
+              onChange={(_event: Event, value: number | number[]) =>
                 setBounds({ ...bounds, PARTICLE_COUNT: value as number })
               }
               min={10}
@@ -169,10 +169,7 @@ const SimulationControls = ({
             </Typography>
             <Slider
               value={[bounds.POSITION.MIN, bounds.POSITION.MAX]}
-              onChange={(
-                _: React.ChangeEvent<{}>,
-                value: number | number[]
-              ) => {
+              onChange={(_event: Event, value: number | number[]) => {
                 const [min, max] = Array.isArray(value)
                   ? value
                   : [value, value];
@@ -190,10 +187,7 @@ const SimulationControls = ({
             </Typography>
             <Slider
               value={[bounds.VELOCITY.MIN, bounds.VELOCITY.MAX]}
-              onChange={(
-                _: React.ChangeEvent<{}>,
-                value: number | number[]
-              ) => {
+              onChange={(_event: Event, value: number | number[]) => {
                 const [min, max] = Array.isArray(value)
                   ? value
                   : [value, value];
@@ -209,7 +203,7 @@ const SimulationControls = ({
             <Typography>Central Mass: {bounds.MASS.CENTRAL}</Typography>
             <Slider
               value={bounds.MASS.CENTRAL}
-              onChange={(_: React.ChangeEvent<{}>, value: number | number[]) =>
+              onChange={(_event: Event, value: number | number[]) =>
                 handleChange("MASS", { CENTRAL: value as number })
               }
               min={100000}
@@ -228,10 +222,7 @@ const SimulationControls = ({
                 </Typography>
                 <Slider
                   value={[bounds.MASS.TINY, bounds.MASS.SMALL]}
-                  onChange={(
-                    _: React.ChangeEvent<{}>,
-                    value: number | number[]
-                  ) => {
+                  onChange={(_event: Event, value: number | number[]) => {
                     const [tiny, small] = Array.isArray(value)
                       ? value
                       : [value, value];
@@ -249,10 +240,7 @@ const SimulationControls = ({
                 </Typography>
                 <Slider
                   value={[bounds.MASS.MEDIUM, bounds.MASS.LARGE]}
-                  onChange={(
-                    _: React.ChangeEvent<{}>,
-                    value: number | number[]
-                  ) => {
+                  onChange={(_event: Event, value: number | number[]) => {
                     const [medium, large] = Array.isArray(value)
                       ? value
                       : [value, value];
@@ -274,10 +262,7 @@ const SimulationControls = ({
                 </Typography>
                 <Slider
                   value={[bounds.RADIUS.MIN, bounds.RADIUS.MAX]}
-                  onChange={(
-                    _: React.ChangeEvent<{}>,
-                    value: number | number[]
-                  ) => {
+                  onChange={(_event: Event, value: number | number[]) => {
                     const [min, max] = Array.isArray(value)
                       ? value
                       : [value, value];
@@ -295,10 +280,9 @@ const SimulationControls = ({
                 </Typography>
                 <Slider
                   value={bounds.RADIUS.CENTRAL}
-                  onChange={(
-                    _: React.ChangeEvent<{}>,
-                    value: number | number[]
-                  ) => handleChange("RADIUS", { CENTRAL: value as number })}
+                  onChange={(_event: Event, value: number | number[]) =>
+                    handleChange("RADIUS", { CENTRAL: value as number })
+                  }
                   min={1}
                   max={10}
                   step={0.1}
