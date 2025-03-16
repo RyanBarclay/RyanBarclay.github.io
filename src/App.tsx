@@ -17,7 +17,6 @@ function App() {
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
         <CssBaseline />
         <LeftSide />
-        {/* for some reason Drei is breaking linting errors by union'ing with MUI types */}
         <Box
           sx={{
             display: "flex",
