@@ -2,11 +2,20 @@ import {
   AlternateEmail,
   Build,
   HistoryEdu,
-  Home,
+  Home as HomeIcon,
   Info,
 } from "@mui/icons-material";
 import React from "react";
 import NBodySimulation from "../Molecule/NBody-Simulation/NBodySimulation";
+import Projects from "../Molecule/Projects/Projects";
+import BattlesnakeProject from "../Molecule/Projects/BattlesnakeProject";
+import SpookathonProject from "../Molecule/Projects/SpookathonProject";
+import PersonalServer from "../Molecule/Projects/PersonalServer";
+import JSChallenge from "../Molecule/Projects/JSChallenge";
+import About from "../Molecule/About/About";
+import Contact from "../Molecule/Contact/Contact";
+import Home from "../Molecule/Home/Home";
+import NBodyProject from "../Molecule/Projects/NBodyProject";
 
 export interface ComponentLinkInfo {
   [key: string]: {
@@ -25,14 +34,14 @@ const componentLinkInfo: ComponentLinkInfo = {
   Home: {
     to: "/",
     label: "Home",
-    icon: <Home />,
+    icon: <HomeIcon />,
     component: <Home />,
   },
   About: {
     to: "/about",
     label: "About Me",
     icon: <Info />,
-    component: <Info />,
+    component: <About />,
   },
   Resume: {
     to: "/resume",
@@ -47,12 +56,32 @@ const componentLinkInfo: ComponentLinkInfo = {
       Overview: {
         label: "Overview",
         to: "/projects",
-        component: <Build />,
+        component: <Projects />,
       },
       NBodySimulation: {
         label: "N-Body Simulation",
         to: "/projects/NBodySimulation",
-        component: <NBodySimulation />,
+        component: <NBodyProject />,
+      },
+      Battlesnake: {
+        label: "Battlesnake 2019",
+        to: "/projects/battlesnake",
+        component: <BattlesnakeProject />,
+      },
+      Spookathon: {
+        label: "Spookathon 2019",
+        to: "/projects/spookathon",
+        component: <SpookathonProject />,
+      },
+      PersonalServer: {
+        label: "Personal Server",
+        to: "/projects/personal-server",
+        component: <PersonalServer />,
+      },
+      JSChallenge: {
+        label: "21 Day JS Challenge",
+        to: "/projects/js-challenge",
+        component: <JSChallenge />,
       },
     },
   },
@@ -60,7 +89,7 @@ const componentLinkInfo: ComponentLinkInfo = {
     to: "/contact",
     label: "Contact Me",
     icon: <AlternateEmail />,
-    component: <AlternateEmail />,
+    component: <Contact />,
   },
 };
 

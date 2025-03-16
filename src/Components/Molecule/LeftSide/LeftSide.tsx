@@ -1,7 +1,7 @@
 import { Drawer, List, Paper, Typography } from "@mui/material";
 import React, { useContext, useMemo } from "react";
-import { ThemeContext } from "../../../Context/DarkModeContext";
-import { NavigationContext } from "../../../Context/NavigationContext";
+import { ThemeContext } from "../../../contexts/DarkModeContext";
+import { NavigationContext } from "../../../contexts/NavigationContext";
 import ThemeButton from "../../Atom/ThemeButton/ThemeButton";
 import componentLinkInfo from "../../SharedLogic/navigationLogic";
 import { makeTree } from "./navigationUtils";

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { NavigationContext } from "../../../Context/NavigationContext";
+import { NavigationContext } from "../../../contexts/NavigationContext";
 import componentLinkInfo, {
   ComponentLinkInfo,
 } from "../../SharedLogic/navigationLogic";

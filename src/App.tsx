@@ -6,7 +6,7 @@ import LeftSide, {
   maxDrawerWidth,
 } from "./Components/Molecule/LeftSide/LeftSide";
 import RightSide from "./Components/Molecule/RightSide/RightSide";
-import { ThemeContext } from "./Context/DarkModeContext";
+import { ThemeContext } from "./contexts/DarkModeContext";
 import { darkTheme, lightTheme } from "./theme/theme";
 
 function App() {
