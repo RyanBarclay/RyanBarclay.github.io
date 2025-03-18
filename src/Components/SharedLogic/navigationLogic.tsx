@@ -5,8 +5,6 @@ import {
   Home as HomeIcon,
   Info,
 } from "@mui/icons-material";
-import React from "react";
-import NBodySimulation from "../Molecule/NBody-Simulation/NBodySimulation";
 import Projects from "../Molecule/Projects/Projects";
 import BattlesnakeProject from "../Molecule/Projects/BattlesnakeProject";
 import SpookathonProject from "../Molecule/Projects/SpookathonProject";
@@ -16,6 +14,7 @@ import About from "../Molecule/About/About";
 import Contact from "../Molecule/Contact/Contact";
 import Home from "../Molecule/Home/Home";
 import NBodyProject from "../Molecule/Projects/NBodyProject";
+import Randomizer from "../Molecule/Randomizer/Randomizer";
 
 export interface ComponentLinkInfo {
   [key: string]: {
@@ -58,11 +57,17 @@ const componentLinkInfo: ComponentLinkInfo = {
         to: "/projects",
         component: <Projects />,
       },
+      Randomizer: {
+        label: "Randomizer",
+        to: "/projects/randomizer",
+        component: <Randomizer />,
+      },
       NBodySimulation: {
         label: "N-Body Simulation",
         to: "/projects/NBodySimulation",
         component: <NBodyProject />,
       },
+
       Battlesnake: {
         label: "Battlesnake 2019",
         to: "/projects/battlesnake",
