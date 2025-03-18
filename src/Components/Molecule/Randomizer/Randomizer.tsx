@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Box,
   Typography,
@@ -19,14 +19,26 @@ import {
   DialogContent,
   DialogActions,
   DialogContentText,
-  Fab,
   Card,
   CardContent,
   Divider,
   Zoom,
+  Tooltip,
+  Fab,
+  Grid,
 } from "@mui/material";
-import { ExpandMore, Delete, Edit, Casino, Add } from "@mui/icons-material";
+import {
+  ExpandMore,
+  Delete,
+  Edit,
+  Casino,
+  Add,
+  FileUpload,
+  FileDownload,
+} from "@mui/icons-material";
 import { RandomizerProvider, useRandomizer } from "./RandomizerContext";
+import { parseSetFile, downloadSet } from "./fileUtils";
+import { ItemSet } from "./types";
 
 interface EditDialogProps {
   open: boolean;
@@ -122,6 +134,7 @@ const RandomizerContent = () => {
     updateItem,
     removeItem,
     randomizeSelections,
+    importSet,
   } = useRandomizer();
   const [editingSet, setEditingSet] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<{
@@ -140,9 +153,51 @@ const RandomizerContent = () => {
     }>
   >([]);
 
+  // Reference for file input
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleRandomize = () => {
     const results = randomizeSelections();
     setRandomResults(results);
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const importedSet = parseSetFile(content);
+
+        if (importedSet) {
+          importSet(importedSet);
+        } else {
+          alert("Could not parse the uploaded file. Please check the format.");
+        }
+      } catch (error) {
+        console.error("Error reading file:", error);
+        alert("An error occurred while reading the file.");
+      }
+
+      // Reset the input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    };
+
+    reader.readAsText(file);
+  };
+
+  const handleDownloadSet = (set: ItemSet) => {
+    downloadSet(set);
+  };
+
+  const triggerFileUpload = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   return (
@@ -150,6 +205,15 @@ const RandomizerContent = () => {
       <Typography variant="h4" gutterBottom>
         Randomizer
       </Typography>
+
+      {/* Hidden file input element */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        accept=".txt"
+        onChange={handleFileUpload}
+      />
 
       {/* Randomization Results */}
       {randomResults.length > 0 && (
@@ -182,29 +246,61 @@ const RandomizerContent = () => {
         </Card>
       )}
 
-      {/* Create New Set button styled as an accordion */}
-      <Paper
-        sx={{
-          mb: 1,
-          borderRadius: "4px",
-          "&:hover": {
-            backgroundColor: "action.hover",
-          },
-        }}
-      >
-        <Box
-          sx={{
-            p: 2,
-            display: "flex",
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-          onClick={() => setNewSetDialogOpen(true)}
-        >
-          <Add sx={{ mr: 1 }} />
-          <Typography>Create New Set</Typography>
-        </Box>
-      </Paper>
+      {/* Action buttons placed side-by-side with equal width */}
+      <Grid container spacing={2} sx={{ mb: 2 }}>
+        <Grid item xs={6}>
+          <Paper
+            sx={{
+              borderRadius: "4px",
+              height: "100%",
+              "&:hover": {
+                backgroundColor: "action.hover",
+              },
+            }}
+          >
+            <Box
+              sx={{
+                p: 2,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                height: "100%",
+              }}
+              onClick={() => setNewSetDialogOpen(true)}
+            >
+              <Add sx={{ mr: 1 }} />
+              <Typography>Create New Set</Typography>
+            </Box>
+          </Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper
+            sx={{
+              borderRadius: "4px",
+              height: "100%",
+              "&:hover": {
+                backgroundColor: "action.hover",
+              },
+            }}
+          >
+            <Box
+              sx={{
+                p: 2,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                height: "100%",
+              }}
+              onClick={triggerFileUpload}
+            >
+              <FileUpload sx={{ mr: 1 }} />
+              <Typography>Import Set from File</Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
 
       {sets.map((set) => (
         <Accordion key={set.name} sx={{ mb: 1 }}>
@@ -226,6 +322,19 @@ const RandomizerContent = () => {
               />
               <Typography sx={{ flexGrow: 1 }}>{set.name}</Typography>
               <Box sx={{ display: "flex", gap: 1 }}>
+                {/* Download button */}
+                <Tooltip title="Download Set">
+                  <IconButton
+                    size="small"
+                    onClick={(e: React.MouseEvent) => {
+                      e.stopPropagation();
+                      handleDownloadSet(set);
+                    }}
+                  >
+                    <FileDownload />
+                  </IconButton>
+                </Tooltip>
+                {/* Edit and Delete buttons */}
                 <IconButton
                   size="small"
                   onClick={(e: React.MouseEvent) => {

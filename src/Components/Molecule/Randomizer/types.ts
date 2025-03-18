@@ -3,7 +3,7 @@ export interface Item {
   enabled: boolean;
 }
 
-export interface Set {
+export interface ItemSet {
   name: string;
   enabled: boolean;
   items: Item[];

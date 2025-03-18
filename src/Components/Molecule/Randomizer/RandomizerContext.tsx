@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { Set, Item } from "./types";
+import { ItemSet, Item } from "./types";
 
 interface RandomResult {
   setName: string;
@@ -7,9 +7,9 @@ interface RandomResult {
 }
 
 interface RandomizerContextType {
-  sets: Set[];
+  sets: ItemSet[];
   addSet: (name: string) => void;
-  updateSet: (name: string, updates: Partial<Set>) => void;
+  updateSet: (name: string, updates: Partial<ItemSet>) => void;
   removeSet: (name: string) => void;
   addItem: (setName: string, itemName: string) => void;
   updateItem: (
@@ -19,6 +19,7 @@ interface RandomizerContextType {
   ) => void;
   removeItem: (setName: string, itemName: string) => void;
   randomizeSelections: () => RandomResult[];
+  importSet: (set: ItemSet) => void;
 }
 
 const RandomizerContext = createContext<RandomizerContextType | undefined>(
@@ -28,7 +29,7 @@ const RandomizerContext = createContext<RandomizerContextType | undefined>(
 export const RandomizerProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [sets, setSets] = useState<Set[]>([]);
+  const [sets, setSets] = useState<ItemSet[]>([]);
 
   const addSet = (name: string) => {
     // Check if set with this name already exists
@@ -47,7 +48,7 @@ export const RandomizerProvider: React.FC<{ children: React.ReactNode }> = ({
     ]);
   };
 
-  const updateSet = (name: string, updates: Partial<Set>) => {
+  const updateSet = (name: string, updates: Partial<ItemSet>) => {
     // If updating the name, check if the new name already exists
     if (
       updates.name &&
@@ -164,6 +165,25 @@ export const RandomizerProvider: React.FC<{ children: React.ReactNode }> = ({
       });
   };
 
+  const importSet = (newSet: ItemSet) => {
+    setSets((prev) => {
+      // Check if a set with this name already exists
+      const existingSetIndex = prev.findIndex(
+        (set) => set.name === newSet.name
+      );
+
+      if (existingSetIndex >= 0) {
+        // Replace the existing set
+        const updatedSets = [...prev];
+        updatedSets[existingSetIndex] = newSet;
+        return updatedSets;
+      } else {
+        // Add as a new set
+        return [...prev, newSet];
+      }
+    });
+  };
+
   return (
     <RandomizerContext.Provider
       value={{
@@ -175,6 +195,7 @@ export const RandomizerProvider: React.FC<{ children: React.ReactNode }> = ({
         updateItem,
         removeItem,
         randomizeSelections,
+        importSet,
       }}
     >
       {children}
