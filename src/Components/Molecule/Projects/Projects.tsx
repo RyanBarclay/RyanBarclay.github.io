@@ -111,9 +111,9 @@ const Projects = () => {
       <Typography variant="h4" gutterBottom>
         Projects
       </Typography>
-      <Grid container spacing={3}>
+      <Grid spacing={3}>
         {projects.map((project) => (
-          <Grid item xs={12} sm={6} md={4} key={project.title}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.title}>
             <Card
               sx={{ height: "100%", display: "flex", flexDirection: "column" }}
             >

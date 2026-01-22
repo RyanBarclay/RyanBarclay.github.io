@@ -9,7 +9,7 @@ import { makeTree } from "./navigationUtils";
 const widthNum = 20;
 export const maxDrawerWidth: string = widthNum + "vw";
 
-const LeftSide = (): JSX.Element => {
+const LeftSide = (): React.JSX.Element => {
   const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
 
   const { expandedItems, toggleExpandedItems, currentItem } =
@@ -20,7 +20,7 @@ const LeftSide = (): JSX.Element => {
       componentLinkInfo,
       expandedItems,
       toggleExpandedItems,
-      currentItem
+      currentItem,
     );
   }, [expandedItems, currentItem]);
 

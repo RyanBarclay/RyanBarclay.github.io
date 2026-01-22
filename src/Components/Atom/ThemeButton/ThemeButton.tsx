@@ -11,7 +11,7 @@ const ThemeButtonIcon = (props: { isDarkTheme: boolean }) => {
   return props.isDarkTheme ? <LightMode /> : <DarkMode />;
 };
 
-const ThemeButton = (props: ThemeButtonProps): JSX.Element => {
+const ThemeButton = (props: ThemeButtonProps): React.JSX.Element => {
   const { isDarkTheme, toggleTheme, ...rest } = props;
   return (
     <Fab onClick={toggleTheme} {...rest}>

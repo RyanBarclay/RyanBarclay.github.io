@@ -19,8 +19,8 @@ function makeListButtonLeaf(
   currentItem: string,
 
   layer: number,
-  icon?: JSX.Element
-): JSX.Element {
+  icon?: React.JSX.Element,
+): React.JSX.Element {
   return (
     <ListItemButton
       component={Link}
@@ -43,8 +43,8 @@ function makeListButtonNode(
   currentItem: string,
 
   layer: number,
-  icon?: JSX.Element
-): JSX.Element {
+  icon?: React.JSX.Element,
+): React.JSX.Element {
   return (
     <React.Fragment key={key + "Parent"}>
       <ListItemButton
@@ -69,7 +69,7 @@ function makeListButtonNode(
             handleListItemClick,
             currentItem,
             layer + 1,
-            key
+            key,
           )}
         </List>
       </Collapse>
@@ -83,8 +83,8 @@ export function makeTree(
   handleListItemClick: (id: string) => void,
   currentItem: string,
   layer = 0,
-  curKey = ""
-): JSX.Element {
+  curKey = "",
+): React.JSX.Element {
   return (
     <>
       {Object.keys(obj).map((key) => {
@@ -97,7 +97,7 @@ export function makeTree(
               curKey + key,
               currentItem,
               layer,
-              icon
+              icon,
             )
           : makeListButtonNode(
               label,
@@ -107,7 +107,7 @@ export function makeTree(
               handleListItemClick,
               currentItem,
               layer,
-              icon
+              icon,
             );
       })}
     </>

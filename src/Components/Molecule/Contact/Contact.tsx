@@ -36,9 +36,9 @@ const Contact = () => {
       <Typography variant="h4" gutterBottom>
         Contact Me
       </Typography>
-      <Grid container spacing={3}>
+      <Grid spacing={3}>
         {contacts.map((contact) => (
-          <Grid item xs={12} sm={6} key={contact.name}>
+          <Grid size={{ xs: 12, sm: 6 }} key={contact.name}>
             <Paper
               sx={{
                 p: 3,

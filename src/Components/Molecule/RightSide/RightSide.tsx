@@ -5,14 +5,17 @@ import componentLinkInfo, {
   ComponentLinkInfo,
 } from "../../SharedLogic/navigationLogic";
 
-const RightSide = (): JSX.Element => {
+const RightSide = (): React.JSX.Element => {
   const { setFooBar } = useContext(NavigationContext);
   const temp = useLocation().pathname;
   useEffect(() => {
     setFooBar(temp);
   }, [temp]);
 
-  const getRoutes = (obj: ComponentLinkInfo, lastKey = ""): JSX.Element => {
+  const getRoutes = (
+    obj: ComponentLinkInfo,
+    lastKey = "",
+  ): React.JSX.Element => {
     return (
       <>
         {Object.keys(obj).map((key) => {
@@ -23,13 +26,14 @@ const RightSide = (): JSX.Element => {
             typeof component !== "undefined"
           ) {
             return <Route path={to} element={component} key={lastKey + key} />;
-          } else {
+          } else if (childListItems) {
             return (
               <React.Fragment key={lastKey + key}>
                 {getRoutes(childListItems, lastKey + key)}
               </React.Fragment>
             );
           }
+          return null;
         })}
       </>
     );

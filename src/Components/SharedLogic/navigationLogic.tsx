@@ -19,12 +19,12 @@ import Randomizer from "../Molecule/Randomizer/Randomizer";
 export interface ComponentLinkInfo {
   [key: string]: {
     label: string;
-    icon?: JSX.Element;
+    icon?: React.JSX.Element;
     to?: string;
     childListItems?: ComponentLinkInfo;
-    component?: JSX.Element;
+    component?: React.JSX.Element;
   } & (
-    | { to: string; component: JSX.Element; childListItems?: never }
+    | { to: string; component: React.JSX.Element; childListItems?: never }
     | { to?: never; component?: never; childListItems: ComponentLinkInfo }
   );
 }
@@ -100,7 +100,7 @@ const componentLinkInfo: ComponentLinkInfo = {
 
 export const findPathToKey = (
   to: string,
-  obj = componentLinkInfo
+  obj = componentLinkInfo,
 ): string[] => {
   const result: string[] = [];
 
