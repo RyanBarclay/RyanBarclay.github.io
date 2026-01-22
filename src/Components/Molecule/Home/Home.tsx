@@ -8,8 +8,8 @@ const Home = () => {
 
   return (
     <Box sx={{ width: "100%", padding: 2 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+      <Grid spacing={3}>
+        <Grid size={12}>
           <Paper
             sx={{
               p: 4,
@@ -52,7 +52,7 @@ const Home = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3, height: "100%" }}>
             <Typography variant="h5" gutterBottom>
               Latest Project
@@ -71,7 +71,7 @@ const Home = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3, height: "100%" }}>
             <Typography variant="h5" gutterBottom>
               Connect With Me

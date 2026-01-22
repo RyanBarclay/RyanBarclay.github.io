@@ -133,7 +133,7 @@ const SimulationControls = ({
 }) => {
   const handleChange = (
     section: keyof SimulationBoundsType,
-    updates: Record<string, number>
+    updates: Record<string, number>,
   ) => {
     setBounds({
       ...bounds,
@@ -150,8 +150,8 @@ const SimulationControls = ({
         <Typography>Simulation Parameters</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
+        <Grid spacing={2}>
+          <Grid size={12}>
             <Typography>Particle Count: {bounds.PARTICLE_COUNT}</Typography>
             <Slider
               value={bounds.PARTICLE_COUNT}
@@ -163,7 +163,7 @@ const SimulationControls = ({
               valueLabelDisplay="auto"
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography>
               Position Range: {bounds.POSITION.MIN} - {bounds.POSITION.MAX}
             </Typography>
@@ -180,7 +180,7 @@ const SimulationControls = ({
               valueLabelDisplay="auto"
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography>
               Velocity Range: {bounds.VELOCITY.MIN.toFixed(4)} -{" "}
               {bounds.VELOCITY.MAX.toFixed(4)}
@@ -199,7 +199,7 @@ const SimulationControls = ({
               valueLabelDisplay="auto"
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography>Central Mass: {bounds.MASS.CENTRAL}</Typography>
             <Slider
               value={bounds.MASS.CENTRAL}
@@ -212,10 +212,10 @@ const SimulationControls = ({
               valueLabelDisplay="auto"
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography>Particle Mass Ranges</Typography>
-            <Grid container spacing={1}>
-              <Grid item xs={6}>
+            <Grid spacing={1}>
+              <Grid size={6}>
                 <Typography>
                   Tiny to Small: {bounds.MASS.TINY.toExponential(2)} -{" "}
                   {bounds.MASS.SMALL}
@@ -234,7 +234,7 @@ const SimulationControls = ({
                   valueLabelDisplay="auto"
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={6}>
                 <Typography>
                   Medium to Large: {bounds.MASS.MEDIUM} - {bounds.MASS.LARGE}
                 </Typography>
@@ -253,10 +253,10 @@ const SimulationControls = ({
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography>Particle Radius</Typography>
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
+            <Grid spacing={1}>
+              <Grid size={12}>
                 <Typography>
                   Min/Max Radius: {bounds.RADIUS.MIN} - {bounds.RADIUS.MAX}
                 </Typography>
@@ -274,7 +274,7 @@ const SimulationControls = ({
                   valueLabelDisplay="auto"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Typography>
                   Central Body Radius: {bounds.RADIUS.CENTRAL}
                 </Typography>
@@ -291,7 +291,7 @@ const SimulationControls = ({
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Fab
               color="primary"
               onClick={onUpdate}
@@ -313,7 +313,7 @@ const NBodySimulation = () => {
     useState<SimulationBoundsType>(DEFAULT_SIMULATION_BOUNDS);
   const [paused, setPaused] = useState(true);
   const [particles, setParticles] = useState(() =>
-    generateRandomParticles(simulationBounds)
+    generateRandomParticles(simulationBounds),
   );
   const [simulationParticles, setSimulationParticles] = useState(particles);
   const [theta, setTheta] = useState(0.1);
@@ -355,7 +355,7 @@ const NBodySimulation = () => {
     reader.onload = (e) => {
       try {
         const uploadedParticles = JSON.parse(
-          e.target?.result as string
+          e.target?.result as string,
         ) as Particle[];
 
         // Validate the uploaded data has the correct structure
@@ -403,7 +403,7 @@ const NBodySimulation = () => {
       } catch (error) {
         console.error("Error parsing uploaded file:", error);
         alert(
-          "Error parsing the uploaded file. Please make sure it has the correct JSON format for N-Body particles."
+          "Error parsing the uploaded file. Please make sure it has the correct JSON format for N-Body particles.",
         );
       }
     };

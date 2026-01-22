@@ -7,8 +7,8 @@ const About = () => {
 
   return (
     <Box sx={{ width: "100%", padding: 2 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+      <Grid spacing={3}>
+        <Grid size={12}>
           <Paper sx={{ p: 3, mb: 3 }}>
             <Typography variant="h4" gutterBottom>
               About Me
@@ -31,13 +31,13 @@ const About = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Paper sx={{ p: 3 }}>
             <Typography variant="h5" gutterBottom>
               Skills & Technologies
             </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={4}>
+            <Grid spacing={2}>
+              <Grid size={{ xs: 12, md: 4 }}>
                 <Typography variant="h6" gutterBottom>
                   Languages
                 </Typography>
@@ -45,13 +45,13 @@ const About = () => {
                   • Python • JavaScript/TypeScript • HTML/CSS • Shell Scripting
                 </Typography>
               </Grid>
-              <Grid item xs={12} md={4}>
+              <Grid size={{ xs: 12, md: 4 }}>
                 <Typography variant="h6" gutterBottom>
                   Frameworks & Libraries
                 </Typography>
                 <Typography>• React • Material-UI • Node.js • NumPy</Typography>
               </Grid>
-              <Grid item xs={12} md={4}>
+              <Grid size={{ xs: 12, md: 4 }}>
                 <Typography variant="h6" gutterBottom>
                   Tools & Platforms
                 </Typography>

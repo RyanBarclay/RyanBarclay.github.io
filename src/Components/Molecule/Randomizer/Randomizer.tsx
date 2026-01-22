@@ -247,8 +247,8 @@ const RandomizerContent = () => {
       )}
 
       {/* Action buttons placed side-by-side with equal width */}
-      <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={6}>
+      <Grid spacing={2} sx={{ mb: 2 }}>
+        <Grid size={6}>
           <Paper
             sx={{
               borderRadius: "4px",
@@ -274,7 +274,7 @@ const RandomizerContent = () => {
             </Box>
           </Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <Paper
             sx={{
               borderRadius: "4px",

@@ -12,7 +12,7 @@ type AnimationViewPortProps = {
   updateSimulationParticles: (particles?: Particle[]) => void;
 };
 
-const Bodies = (props: { particles?: Particle[] }): JSX.Element => {
+const Bodies = (props: { particles?: Particle[] }): React.JSX.Element => {
   const { particles } = props;
   if (!particles) {
     return <></>;
@@ -47,7 +47,9 @@ const Body = (props: { particle: Particle }) => {
   );
 };
 
-const AnimationViewPort = (props: AnimationViewPortProps): JSX.Element => {
+const AnimationViewPort = (
+  props: AnimationViewPortProps,
+): React.JSX.Element => {
   const { isPaused, theta, particlesFromFile, updateSimulationParticles } =
     props;
 
@@ -56,7 +58,7 @@ const AnimationViewPort = (props: AnimationViewPortProps): JSX.Element => {
   const msPerFrame = 1000 / 60; // 60fps
   const [lastRendered, setLastRendered] = useState(msPerFrame);
   const [particles, setParticles] = useState<Particle[] | undefined>(
-    particlesFromFile
+    particlesFromFile,
   );
   const [renderedParticles, setRenderedParticles] = useState<
     Particle[] | undefined
@@ -104,7 +106,7 @@ const AnimationViewPort = (props: AnimationViewPortProps): JSX.Element => {
 
   return (
     <Paper sx={{ width: "100%", height: "70vh" }}>
-      <Canvas frameloop="demand">
+      <Canvas frameloop={`demand`}>
         <PerspectiveCamera makeDefault position={[200, 200, 60]} />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
