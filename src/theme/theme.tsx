@@ -1,5 +1,6 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme, ThemeOptions } from "@mui/material/styles";
 
+// TODO: Type sharedTheme as ThemeOptions for better type safety
 const sharedTheme = {
   mixins: {
     toolbar: {
@@ -25,7 +26,56 @@ const sharedTheme = {
     },
   },
   typography: {
+    // TODO: Use rem units consistently instead of mixing rem with base fontSize of 12
+    // MUI best practice: Keep default 14px base and scale with rem units
+    // TODO: Consider adding responsive typography with theme.breakpoints
     fontSize: 12, // smaller font size
+    fontFamily: [
+      "BC Sans",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+    ].join(","),
+    h1: {
+      fontWeight: 400,
+      fontSize: "3rem",
+      lineHeight: 1.2,
+      letterSpacing: "0.02em",
+    },
+    h2: {
+      fontWeight: 400,
+      fontSize: "2.5rem",
+      lineHeight: 1.3,
+      letterSpacing: "0.02em",
+    },
+    h3: {
+      fontWeight: 400,
+      fontSize: "2rem",
+      lineHeight: 1.3,
+      letterSpacing: "0.02em",
+    },
+    h4: {
+      fontWeight: 400,
+      fontSize: "1.75rem",
+      lineHeight: 1.4,
+      letterSpacing: "0.02em",
+    },
+    h5: {
+      fontWeight: 400,
+      fontSize: "1.5rem",
+      lineHeight: 1.4,
+      letterSpacing: "0.02em",
+    },
+    h6: {
+      fontWeight: 400,
+      fontSize: "1.25rem",
+      lineHeight: 1.5,
+      letterSpacing: "0.02em",
+    },
   },
 };
 

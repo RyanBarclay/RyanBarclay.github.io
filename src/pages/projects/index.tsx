@@ -11,6 +11,7 @@ import {
   Button,
 } from "@mui/material";
 import { GitHub, Launch } from "@mui/icons-material";
+import PageHero from "../../components/ui/PageHero";
 
 type Project = {
   title: string;
@@ -107,62 +108,72 @@ const projects: Project[] = [
 
 const Projects = () => {
   return (
-    <Box sx={{ width: "100%", padding: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Projects
-      </Typography>
-      <Grid spacing={3}>
-        {projects.map((project) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.title}>
-            <Card
-              sx={{ height: "100%", display: "flex", flexDirection: "column" }}
-            >
-              <CardHeader
-                title={project.title}
-                subheader={<Chip label={project.tag} size="small" />}
-              />
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography paragraph>{project.description}</Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                  {project.technologies.map((tech) => (
-                    <Chip
-                      key={tech}
-                      label={tech}
-                      variant="outlined"
-                      size="small"
-                    />
-                  ))}
-                </Box>
-              </CardContent>
-              {project.links && (
-                <CardActions>
-                  {project.links.github && (
-                    <Button
-                      size="small"
-                      startIcon={<GitHub />}
-                      href={project.links.github}
-                      target="_blank"
-                    >
-                      Code
-                    </Button>
-                  )}
-                  {project.links.live && (
-                    <Button
-                      size="small"
-                      startIcon={<Launch />}
-                      href={project.links.live}
-                      target="_blank"
-                    >
-                      Live Demo
-                    </Button>
-                  )}
-                </CardActions>
-              )}
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+    <>
+      <PageHero
+        title="My Projects"
+        subtitle="Explore my work in software development and innovation"
+      />
+      <Box sx={{ width: "100%", padding: 2 }}>
+        <Typography variant="h4" gutterBottom>
+          Projects
+        </Typography>
+        <Grid spacing={3}>
+          {projects.map((project) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.title}>
+              <Card
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <CardHeader
+                  title={project.title}
+                  subheader={<Chip label={project.tag} size="small" />}
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography paragraph>{project.description}</Typography>
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                    {project.technologies.map((tech) => (
+                      <Chip
+                        key={tech}
+                        label={tech}
+                        variant="outlined"
+                        size="small"
+                      />
+                    ))}
+                  </Box>
+                </CardContent>
+                {project.links && (
+                  <CardActions>
+                    {project.links.github && (
+                      <Button
+                        size="small"
+                        startIcon={<GitHub />}
+                        href={project.links.github}
+                        target="_blank"
+                      >
+                        Code
+                      </Button>
+                    )}
+                    {project.links.live && (
+                      <Button
+                        size="small"
+                        startIcon={<Launch />}
+                        href={project.links.live}
+                        target="_blank"
+                      >
+                        Live Demo
+                      </Button>
+                    )}
+                  </CardActions>
+                )}
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </>
   );
 };
 

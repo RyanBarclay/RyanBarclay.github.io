@@ -1,5 +1,5 @@
 import { Box, Chip, Paper, Typography } from "@mui/material";
-import NBodySimulation from "../NBody-Simulation/NBodySimulation";
+import NBodySimulation from "./NBodySimulation/NBodySimulation";
 import React from "react";
 
 const NBodyProject = () => {
