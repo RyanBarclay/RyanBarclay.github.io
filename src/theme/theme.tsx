@@ -1,4 +1,5 @@
 import { createTheme, ThemeOptions } from "@mui/material/styles";
+import "./fonts.css";
 
 // TODO: Type sharedTheme as ThemeOptions for better type safety
 const sharedTheme = {
@@ -24,6 +25,21 @@ const sharedTheme = {
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: "12px",
+          textTransform: "none",
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: "12px",
+        },
+      },
+    },
   },
   typography: {
     // TODO: Use rem units consistently instead of mixing rem with base fontSize of 12
@@ -41,12 +57,14 @@ const sharedTheme = {
       "sans-serif",
     ].join(","),
     h1: {
+      fontFamily: "GreatForest, sans-serif",
       fontWeight: 400,
       fontSize: "3rem",
       lineHeight: 1.2,
       letterSpacing: "0.02em",
     },
     h2: {
+      fontFamily: "GreatForest, sans-serif",
       fontWeight: 400,
       fontSize: "2.5rem",
       lineHeight: 1.3,
@@ -83,14 +101,18 @@ export const darkTheme = createTheme({
   ...sharedTheme,
   palette: {
     primary: {
-      main: "#BB86FC",
-      light: "#EE99FF",
-      dark: "#3700B3",
+      main: "#00A3A1", // BC teal - inspired by coastal waters
+      light: "#4DD4D2",
+      dark: "#007573",
     },
     secondary: {
-      main: "#03DAC6",
-      light: "#BFFAF3",
-      dark: "#018786",
+      main: "#F58634", // Warm orange - inspired by BC sunsets
+      light: "#FFB770",
+      dark: "#C25A00",
+    },
+    background: {
+      default: "#1a1a1a", // Dark background
+      paper: "#242424", // Slightly lighter for cards/papers
     },
     mode: "dark",
   },
@@ -100,14 +122,18 @@ export const lightTheme = createTheme({
   ...sharedTheme,
   palette: {
     primary: {
-      main: "#6200EE",
-      light: "#9D4EDD",
-      dark: "#3700B3",
+      main: "#00897B", // Forest green/teal - BC nature
+      light: "#4EBAAA",
+      dark: "#005B4F",
     },
     secondary: {
-      main: "#03DAC6",
-      light: "#BFFAF3",
-      dark: "#018786",
+      main: "#FF6F3C", // Vibrant orange - BC outdoor adventure
+      light: "#FFA270",
+      dark: "#C53D0A",
+    },
+    background: {
+      default: "#f8f9fa", // Subtle off-white background
+      paper: "#ffffff", // White for cards/papers
     },
     mode: "light",
   },

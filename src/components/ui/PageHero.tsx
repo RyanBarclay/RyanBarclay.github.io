@@ -1,11 +1,24 @@
 import { Box, Container, Typography } from "@mui/material";
+import { HERO_VARIANTS, HeroVariant } from "../../config/constants";
 
 interface PageHeroProps {
   title: string;
   subtitle?: string;
+  backgroundImage?: string;
+  gradientOverlay?: string;
+  variant?: HeroVariant;
 }
 
-const PageHero = ({ title, subtitle }: PageHeroProps) => {
+const PageHero = ({
+  title,
+  subtitle,
+  backgroundImage,
+  gradientOverlay,
+  variant = "default",
+}: PageHeroProps) => {
+  const variantConfig = HERO_VARIANTS[variant];
+  const finalBackgroundImage = backgroundImage || variantConfig.backgroundImage;
+  const finalGradientOverlay = gradientOverlay || variantConfig.gradientOverlay;
   return (
     <Box
       sx={{
@@ -16,8 +29,7 @@ const PageHero = ({ title, subtitle }: PageHeroProps) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        marginTop: "-64px",
-        paddingTop: "64px",
+        marginTop: "-80px",
         mb: 4,
       }}
     >
@@ -30,14 +42,13 @@ const PageHero = ({ title, subtitle }: PageHeroProps) => {
           width: "100%",
           height: "100%",
           zIndex: 0,
-          backgroundImage:
-            "url(https://images.unsplash.com/photo-1735508729860-c9a4752585eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxicml0aXNoJTIwY29sdW1iaWElMjBtb3VudGFpbnN8ZW58MXx8fHwxNzY5MTk4MjU3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral)",
+          backgroundImage: `url(${finalBackgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       />
 
-      {/* Dark Overlay for Text Readability */}
+      {/* Gradient Overlay */}
       <Box
         sx={{
           position: "absolute",
@@ -45,8 +56,7 @@ const PageHero = ({ title, subtitle }: PageHeroProps) => {
           left: 0,
           width: "100%",
           height: "100%",
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7))",
+          background: finalGradientOverlay,
           zIndex: 1,
         }}
       />

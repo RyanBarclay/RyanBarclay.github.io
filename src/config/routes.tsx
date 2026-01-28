@@ -6,15 +6,15 @@ import {
   Info,
 } from "@mui/icons-material";
 import Projects from "../pages/projects/index";
-import BattlesnakeProject from "../pages/projects/BattlesnakeProject";
-import SpookathonProject from "../pages/projects/SpookathonProject";
-import PersonalServer from "../pages/projects/PersonalServer";
-import JSChallenge from "../pages/projects/JSChallenge";
+import BattlesnakeProject from "../pages/projects/battlesnake";
+import SpookathonProject from "../pages/projects/spookathon";
+import PersonalServer from "../pages/projects/personal-server";
+import JSChallenge from "../pages/projects/js-challenge";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Home from "../pages/Home";
-import NBodyProject from "../pages/projects/NBodyProject";
-import Randomizer from "../pages/projects/Randomizer/Randomizer";
+import NBodyProject from "../pages/projects/nbody-simulation";
+import Randomizer from "../pages/projects/randomizer/Randomizer";
 
 export interface ComponentLinkInfo {
   [key: string]: {

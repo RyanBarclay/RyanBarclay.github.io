@@ -15,9 +15,7 @@ function App() {
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
         <CssBaseline />
         <Navbar />
-        <Box>
-          <MainContent />
-        </Box>
+        <MainContent />
       </ThemeProvider>
     </HashRouter>
   );

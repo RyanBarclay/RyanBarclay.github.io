@@ -13,6 +13,8 @@ import {
   ListItemIcon,
   ListItemText,
   IconButton,
+  Paper,
+  Typography,
 } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { useState } from "react";
@@ -80,18 +82,25 @@ const Navbar = () => {
           }}
         >
           <Container maxWidth="xl">
-            <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
-              {/* TODO: Consider using Typography component instead of Box for text content */}
-              {/* MUI best practice: Use semantic components (Typography) over generic Box */}
-              <Box
+            <Toolbar
+              disableGutters
+              sx={{ justifyContent: "space-between", py: 2 }}
+            >
+              <Typography
+                variant="h4"
+                onClick={() => navigate("/")}
                 sx={{
                   color: trigger ? "text.primary" : "common.white",
-                  fontSize: "1.5rem",
+                  cursor: "pointer",
                   letterSpacing: "0.02em",
+                  fontFamily: "CustomHeader, sans-serif",
+                  "&:hover": {
+                    opacity: 0.8,
+                  },
                 }}
               >
                 Ryan Barclay
-              </Box>
+              </Typography>
               <Box>
                 <ThemeButton
                   isDarkTheme={isDarkTheme}
@@ -120,57 +129,58 @@ const Navbar = () => {
           ModalProps={{
             keepMounted: true,
           }}
-          PaperProps={{
-            sx: {
-              backdropFilter: "blur(20px) saturate(180%)",
-              backgroundColor: "rgba(255, 255, 255, 0.08)",
-              border: "1px solid rgba(255, 255, 255, 0.2)",
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
+          slotProps={{
+            paper: {
+              sx: {
+                backgroundColor: "#000000c1",
+                backdropFilter: "blur(20px) saturate(180%)",
+              },
             },
           }}
         >
-          <Box
+          <Paper
             sx={{
-              px: 2,
-              pb: 2,
-              height: "100%",
-              overflow: "auto",
+              backgroundColor: "#000000c1",
+              backdropFilter: "blur(20px) saturate(180%)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 1,
+              position: "absolute",
+              top: -drawerBleeding,
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+              visibility: "visible",
+              right: 0,
+              left: 0,
+              height: drawerBleeding,
             }}
           >
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: 1,
+                width: 30,
+                height: 6,
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                borderRadius: 3,
               }}
-            >
-              <Box
-                sx={{
-                  width: 30,
-                  height: 6,
-                  backgroundColor: "rgba(255, 255, 255, 0.5)",
-                  borderRadius: 3,
+            />
+          </Paper>
+
+          <List>
+            {navItems.map(([key, { to, label, icon }]) => (
+              <ListItemButton
+                key={key}
+                onClick={() => {
+                  navigate(to);
+                  setMobileOpen(false);
                 }}
-              />
-            </Box>
-            <List>
-              {navItems.map(([key, { to, label, icon }]) => (
-                <ListItemButton
-                  key={key}
-                  onClick={() => {
-                    navigate(to);
-                    setMobileOpen(false);
-                  }}
-                  selected={location.pathname === to}
-                >
-                  {icon && <ListItemIcon>{icon}</ListItemIcon>}
-                  <ListItemText primary={label} />
-                </ListItemButton>
-              ))}
-            </List>
-          </Box>
+                selected={location.pathname === to}
+              >
+                {icon && <ListItemIcon>{icon}</ListItemIcon>}
+                <ListItemText primary={label} />
+              </ListItemButton>
+            ))}
+          </List>
         </SwipeableDrawer>
       </>
     );
@@ -201,24 +211,29 @@ const Navbar = () => {
         <Toolbar
           disableGutters
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
+            display: "grid",
+            gridTemplateColumns: "1fr auto 1fr",
             width: "100%",
+            py: 2,
           }}
         >
           {/* Left: Name */}
-          <Box
-            sx={{ flex: "0 0 200px", display: "flex", alignItems: "center" }}
-          >
-            <Box
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography
+              variant="h4"
+              onClick={() => navigate("/")}
               sx={{
                 color: trigger ? "text.primary" : "common.white",
-                fontSize: "1.5rem",
+                cursor: "pointer",
                 letterSpacing: "0.02em",
+                fontFamily: "GreatForest, sans-serif",
+                "&:hover": {
+                  opacity: 0.8,
+                },
               }}
             >
               Ryan Barclay
-            </Box>
+            </Typography>
           </Box>
 
           {/* Center: Navigation links */}
@@ -237,6 +252,7 @@ const Navbar = () => {
                 sx={{
                   color: trigger ? "text.primary" : "common.white",
                   fontWeight: location.pathname === to ? 700 : 400,
+                  fontSize: "1.1rem",
                   borderBottom:
                     location.pathname === to
                       ? `2px solid ${theme.palette.primary.main}`
@@ -253,7 +269,6 @@ const Navbar = () => {
           {/* Right: Theme toggle */}
           <Box
             sx={{
-              flex: "0 0 200px",
               display: "flex",
               justifyContent: "flex-end",
               alignItems: "center",

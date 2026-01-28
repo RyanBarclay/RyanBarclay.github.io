@@ -1,10 +1,13 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Typography, Button } from "@mui/material";
 import { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/DarkModeContext";
+import { KeyboardArrowDown, ArrowForward } from "@mui/icons-material";
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
   const { isDarkTheme } = useContext(ThemeContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -92,7 +95,7 @@ const Hero = () => {
             textShadow: "2px 2px 8px rgba(0,0,0,0.8)",
           }}
         >
-          Crafting Digital Experiences
+          Full-Stack Developer
         </Typography>
         <Typography
           variant="h5"
@@ -101,13 +104,91 @@ const Hero = () => {
             fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
             maxWidth: "800px",
             mx: "auto",
+            mb: 4,
             textShadow: "1px 1px 4px rgba(0,0,0,0.8)",
           }}
         >
-          Full-stack developer building scalable solutions inspired by the
-          natural world
+          Building scalable applications and intelligent systems—from concept to
+          deployment
         </Typography>
+
+        {/* Action Buttons */}
+        <Box sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 8 }}>
+          <Button
+            variant="contained"
+            size="large"
+            endIcon={<ArrowForward />}
+            onClick={() => navigate("/projects")}
+            sx={{
+              px: 4,
+              py: 1.5,
+              fontSize: "1.1rem",
+              textTransform: "none",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+              "&:hover": {
+                boxShadow: "0 6px 16px rgba(0,0,0,0.4)",
+              },
+            }}
+          >
+            View Projects
+          </Button>
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={() => navigate("/about")}
+            sx={{
+              px: 4,
+              py: 1.5,
+              fontSize: "1.1rem",
+              textTransform: "none",
+              color: "white",
+              borderColor: "rgba(255,255,255,0.7)",
+              "&:hover": {
+                borderColor: "white",
+                backgroundColor: "rgba(255,255,255,0.1)",
+              },
+            }}
+          >
+            About Me
+          </Button>
+        </Box>
       </Container>
+
+      {/* Scroll Indicator */}
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: 32,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 2,
+          animation: "bounce 2s infinite",
+          "@keyframes bounce": {
+            "0%, 100%": {
+              transform: "translateX(-50%) translateY(0)",
+            },
+            "50%": {
+              transform: "translateX(-50%) translateY(10px)",
+            },
+          },
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            color: "white",
+            opacity: 0.8,
+            cursor: "pointer",
+          }}
+          onClick={() =>
+            window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+          }
+        >
+          <KeyboardArrowDown sx={{ fontSize: 40 }} />
+        </Box>
+      </Box>
     </Box>
   );
 };

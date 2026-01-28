@@ -1,29 +1,26 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import { Box } from "@mui/material";
 import componentLinkInfo from "../../config/routes";
-import BattlesnakeProject from "../../pages/projects/BattlesnakeProject";
-import SpookathonProject from "../../pages/projects/SpookathonProject";
-import PersonalServer from "../../pages/projects/PersonalServer";
-import JSChallenge from "../../pages/projects/JSChallenge";
-import NBodyProject from "../../pages/projects/NBodyProject";
-import Randomizer from "../../pages/projects/Randomizer/Randomizer";
+import { generateProjectRoutes } from "../../config/projectRoutes";
 
 const MainContent = (): React.JSX.Element => {
-  return (
-    <Routes>
-      {/* Top-level routes from config */}
-      {Object.entries(componentLinkInfo).map(([key, { to, component }]) => (
-        <Route path={to} element={component} key={key} />
-      ))}
+  const projectRoutes = generateProjectRoutes();
 
-      {/* Nested project routes */}
-      <Route path="/projects/randomizer" element={<Randomizer />} />
-      <Route path="/projects/NBodySimulation" element={<NBodyProject />} />
-      <Route path="/projects/battlesnake" element={<BattlesnakeProject />} />
-      <Route path="/projects/spookathon" element={<SpookathonProject />} />
-      <Route path="/projects/personal-server" element={<PersonalServer />} />
-      <Route path="/projects/js-challenge" element={<JSChallenge />} />
-    </Routes>
+  return (
+    <Box sx={{ pt: "80px" }}>
+      <Routes>
+        {/* Top-level routes from config */}
+        {Object.entries(componentLinkInfo).map(([key, { to, component }]) => (
+          <Route path={to} element={component} key={key} />
+        ))}
+
+        {/* Auto-generated project routes */}
+        {projectRoutes.map(({ path, element, key }) => (
+          <Route path={path} element={element} key={key} />
+        ))}
+      </Routes>
+    </Box>
   );
 };
 
