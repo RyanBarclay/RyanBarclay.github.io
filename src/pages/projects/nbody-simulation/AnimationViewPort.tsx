@@ -105,8 +105,22 @@ const AnimationViewPort = (
   }, [isPaused, theta]);
 
   return (
-    <Paper sx={{ width: "100%", height: "70vh" }}>
-      <Canvas frameloop={`demand`}>
+    <Paper
+      sx={{
+        width: "100%",
+        height: { xs: "50vh", lg: "85vh" },
+        touchAction: "pan-y",
+        position: "relative",
+      }}
+    >
+      <Canvas
+        frameloop={`demand`}
+        style={{
+          pointerEvents: "auto",
+          touchAction: "none",
+        }}
+        onPointerDown={(e) => e.stopPropagation()}
+      >
         <PerspectiveCamera makeDefault position={[200, 200, 60]} />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />

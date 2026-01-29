@@ -1,6 +1,11 @@
 import { Box, Container, Typography } from "@mui/material";
 import { HERO_VARIANTS, HeroVariant } from "../../config/constants";
 
+/**
+ * ISSUE: Props interface lacks JSDoc documentation
+ * FIX: Add JSDoc comments for each prop explaining purpose and usage
+ * FE Best Practice: Document component APIs for better developer experience
+ */
 interface PageHeroProps {
   title: string;
   subtitle?: string;
@@ -22,6 +27,12 @@ const PageHero = ({
   return (
     <Box
       sx={{
+        /**
+         * ISSUE: Hardcoded height values (40vh, -80px) not responsive
+         * FIX: Use theme.spacing for margins, responsive height with breakpoints
+         * MUI v7: { height: { xs: '30vh', md: '40vh' }, marginTop: -10 }
+         * PATTERN: All spacing should use theme.spacing() multiplier
+         */
         position: "relative",
         height: "40vh",
         width: "100%",
@@ -34,6 +45,12 @@ const PageHero = ({
       }}
     >
       {/* Background Image */}
+      {/**
+       * ISSUE: Repeated Box pattern for background/overlay layers
+       * FIX: Create styled components: HeroBackground, HeroOverlay, HeroContent
+       * MUI v7: Reduces duplication and improves readability
+       * FE Best Practice: Named components are easier to test and maintain
+       */}
       <Box
         sx={{
           position: "absolute",
@@ -75,6 +92,12 @@ const PageHero = ({
           component="h1"
           gutterBottom
           sx={{
+            /**
+             * ISSUE: Inline styles overriding theme typography
+             * FIX: Define hero-specific typography variant in theme
+             * MUI v7: theme.typography.heroTitle = { fontWeight: 700, ... }
+             * PATTERN: Use variant="heroTitle" instead of sx overrides
+             */
             fontWeight: 700,
             textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
           }}

@@ -14,7 +14,6 @@ import {
 import {
   GitHub,
   LinkedIn,
-  Twitter,
   Email,
   Palette,
   Storage,
@@ -30,6 +29,12 @@ const About = () => {
         {/* Profile Section */}
         <Grid container spacing={6} sx={{ mb: 8 }}>
           <Grid size={{ xs: 12, md: 5 }}>
+            {/**
+             * ISSUE: Hardcoded gradient colors not from theme palette
+             * FIX: Use theme.palette.primary/secondary for gradient endpoints
+             * MUI v7: Gradients should derive from theme for consistent branding
+             * PATTERN: Create theme.palette.background.gradient object
+             */}
             <Box
               sx={{
                 background: "linear-gradient(135deg, #a8e6cf 0%, #7dd3c0 100%)",
@@ -41,6 +46,12 @@ const About = () => {
                 minHeight: 400,
               }}
             >
+              {/**
+               * ISSUE: Emoji avatar not accessible and unprofessional
+               * FIX: Use actual profile image or SVG illustration
+               * FE Best Practice: Provide alt text and proper image format
+               * A11Y: Emoji in Avatar has no semantic meaning for screen readers
+               */}
               <Avatar
                 sx={{
                   width: 250,
@@ -73,6 +84,12 @@ const About = () => {
                   products that truly make a difference.
                 </Typography>
               </Box>
+              {/**
+               * ISSUE: Hardcoded color values (#333, #0077b5, #00897b) not theme-aware
+               * FIX: Use theme.palette for consistent colors across light/dark modes
+               * MUI v7: Social buttons should use theme colors or custom palette tokens
+               * PATTERN: Create theme.palette.social.github, .linkedin, etc.
+               */}
               <Box sx={{ display: "flex", gap: 1.5 }}>
                 <IconButton
                   href="http://www.github.com/ryanbarclay"
@@ -103,21 +120,6 @@ const About = () => {
                   }}
                 >
                   <LinkedIn sx={{ fontSize: 24 }} />
-                </IconButton>
-                <IconButton
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 1.5,
-                    bgcolor: "#1DA1F2",
-                    color: "white",
-                    "&:hover": { bgcolor: "#0d8bd9" },
-                  }}
-                >
-                  <Twitter sx={{ fontSize: 24 }} />
                 </IconButton>
                 <IconButton
                   href="mailto:work@ryanbarclay.ca"

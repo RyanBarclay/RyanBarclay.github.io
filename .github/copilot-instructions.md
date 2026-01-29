@@ -296,7 +296,7 @@ The project uses MCP servers for enhanced AI development:
   - Leverage this for up-to-date MUI v7 component API documentation
   - Use when implementing or debugging MUI components
 
-Configuration: [.vscode/mcp.json](.vscode/mcp.json)
+Configuration: [../.vscode/mcp.json](../.vscode/mcp.json)
 
 ## Project Structure Best Practices
 

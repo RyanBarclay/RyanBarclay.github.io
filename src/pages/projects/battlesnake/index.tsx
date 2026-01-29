@@ -1,6 +1,7 @@
 import React from "react";
 import { Typography, Box } from "@mui/material";
 import ProjectDetailLayout from "../../../components/layout/ProjectDetailLayout";
+import BattlesnakeGif from "./assets/battlesnake.gif";
 
 const BattlesnakeProject = () => {
   const sections = [
@@ -50,7 +51,7 @@ const BattlesnakeProject = () => {
           </Box>
           <Box
             component="img"
-            src="/assets/images/battlesnake.gif"
+            src={BattlesnakeGif}
             alt="Battlesnake gameplay demonstration"
             sx={{
               width: "100%",

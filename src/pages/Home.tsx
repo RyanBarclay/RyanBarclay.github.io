@@ -41,6 +41,12 @@ const Home = () => {
             </Typography>
           </Box>
           <Grid container spacing={4} sx={{ mb: 4 }}>
+            {/**
+             * ISSUE: Repeated Card styling pattern across multiple pages
+             * FIX: Create a ProjectCard styled component for reuse
+             * MUI v7: Extract common card styles to theme.components.MuiCard.variants
+             * FE Best Practice: DRY principle - eliminate duplicate hover/transition logic
+             */}
             {featuredProjects.map((project) => (
               <Grid size={{ xs: 12, md: 6, lg: 4 }} key={project.title}>
                 <Card
@@ -50,12 +56,6 @@ const Home = () => {
                     display: "flex",
                     flexDirection: "column",
                     cursor: "pointer",
-                    transition:
-                      "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-                    "&:hover": {
-                      transform: "translateY(-4px)",
-                      boxShadow: 6,
-                    },
                   }}
                 >
                   <CardMedia
@@ -88,11 +88,7 @@ const Home = () => {
                           key={tech}
                           label={tech}
                           size="small"
-                          sx={{
-                            backgroundColor: "primary.main",
-                            color: "primary.contrastText",
-                            fontWeight: 500,
-                          }}
+                          variant="technology"
                         />
                       ))}
                     </Box>
@@ -115,6 +111,12 @@ const Home = () => {
         {/* Connect Section */}
         <Paper
           sx={{
+            /**
+             * ISSUE: Inline gradient not using theme colors
+             * FIX: Define gradient in theme or use theme palette colors
+             * MUI v7: Create theme.palette.gradient object for reusable gradients
+             * PATTERN: background: theme.palette.gradient.primary
+             */
             p: 6,
             textAlign: "center",
             background:
@@ -133,6 +135,12 @@ const Home = () => {
             </Typography>
           </Box>
           <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+            {/**
+             * ISSUE: Using Button href instead of Link component
+             * FIX: Use MUI Link component or custom NavLink for accessibility
+             * MUI v7: Button href creates <a> tag, use component="a" for clarity
+             * PATTERN: <Link component={RouterLink} to="..."> for internal navigation
+             */}
             <Button
               variant="contained"
               startIcon={<GitHub />}

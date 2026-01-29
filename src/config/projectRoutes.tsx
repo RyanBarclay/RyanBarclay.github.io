@@ -5,6 +5,7 @@ import PersonalServer from "../pages/projects/personal-server";
 import JSChallenge from "../pages/projects/js-challenge";
 import NBodyProject from "../pages/projects/nbody-simulation";
 import Randomizer from "../pages/projects/randomizer/Randomizer";
+import TerrainGenerator from "../pages/projects/terrain-generator";
 
 /**
  * Centralized project route configuration
@@ -13,6 +14,7 @@ import Randomizer from "../pages/projects/randomizer/Randomizer";
 export const projectRouteComponents: Record<string, React.ReactElement> = {
   randomizer: <Randomizer />,
   "nbody-simulation": <NBodyProject />,
+  "terrain-generator": <TerrainGenerator />,
   battlesnake: <BattlesnakeProject />,
   spookathon: <SpookathonProject />,
   "personal-server": <PersonalServer />,

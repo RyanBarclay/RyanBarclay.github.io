@@ -26,6 +26,16 @@ import { ThemeContext } from "../../contexts/DarkModeContext";
 import { Global } from "@emotion/react";
 import { grey } from "@mui/material/colors";
 
+/**
+ * ISSUE: Large component with extensive inline sx props throughout
+ * FIX: Extract styled components or move repeated styles to theme overrides
+ * MUI v7: Large sx objects reduce readability and increase re-render overhead
+ * PATTERN: Use styled() for complex components, sx for one-off customizations
+ *
+ * ISSUE: Conditional styling logic scattered throughout component
+ * FIX: Extract style computation functions or use styled() with transient props
+ * FE Best Practice: Separate presentation logic from component logic for testability
+ */
 // TODO: Consider extracting repeated sx styles into styled components or theme styleOverrides
 // MUI best practice: Large components with many inline sx props should use styled() API
 const drawerBleeding = 56;
@@ -50,6 +60,12 @@ const Navbar = () => {
   if (isMobile) {
     return (
       <>
+        {/**
+         * ISSUE: Global styles injected at component level
+         * FIX: Move to theme.components.MuiDrawer.styleOverrides.root
+         * MUI v7: Component-level Global styles cause re-rendering and violate separation of concerns
+         * PATTERN: All global overrides belong in theme configuration, not components
+         */}
         {/* TODO: Global styles should be in theme, not component-level */}
         {/* MUI best practice: Use theme.components.MuiDrawer.styleOverrides instead */}
         <Global
@@ -66,6 +82,12 @@ const Navbar = () => {
           elevation={trigger ? 4 : 0}
           color="transparent"
           sx={{
+            /**
+             * ISSUE: Hardcoded rgba values not using theme colors
+             * FIX: Use theme.palette.background.paper with alpha() helper
+             * MUI v7: alpha(theme.palette.background.paper, 0.08) for theme-aware transparency
+             * PATTERN: theme => ({ backgroundColor: alpha(theme.palette.background.default, 0.8) })
+             */
             // TODO: Move these hardcoded rgba values to theme.palette.background or alpha helper
             // MUI best practice: Use theme.palette.mode and alpha() from @mui/material/styles
             backdropFilter: trigger ? "none" : "blur(20px) saturate(180%)",
@@ -117,8 +139,9 @@ const Navbar = () => {
             </Toolbar>
           </Container>
         </AppBar>
-
         {/* Swipeable Drawer from Bottom */}
+        {/**\n         * ISSUE: Theme-aware color logic duplicated in multiple places\n         * FIX: Create a reusable styled component or theme token\n         * MUI v7: Use theme.palette with alpha() instead of manual rgba strings\n         * PATTERN: Define glassmorphism effect in theme.components.MuiPaper.variants\n         */}
+        \n{" "}
         <SwipeableDrawer
           anchor="bottom"
           open={mobileOpen}
@@ -132,7 +155,9 @@ const Navbar = () => {
           slotProps={{
             paper: {
               sx: {
-                backgroundColor: "#000000c1",
+                backgroundColor: isDarkTheme
+                  ? "rgba(0, 0, 0, 0.75)"
+                  : "rgba(255, 255, 255, 0.75)",
                 backdropFilter: "blur(20px) saturate(180%)",
               },
             },
@@ -140,7 +165,9 @@ const Navbar = () => {
         >
           <Paper
             sx={{
-              backgroundColor: "#000000c1",
+              backgroundColor: isDarkTheme
+                ? "rgba(0, 0, 0, 0.75)"
+                : "rgba(255, 255, 255, 0.75)",
               backdropFilter: "blur(20px) saturate(180%)",
               display: "flex",
               justifyContent: "center",
@@ -160,7 +187,9 @@ const Navbar = () => {
               sx={{
                 width: 30,
                 height: 6,
-                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                backgroundColor: isDarkTheme
+                  ? "rgba(255, 255, 255, 0.5)"
+                  : "rgba(0, 0, 0, 0.3)",
                 borderRadius: 3,
               }}
             />
@@ -245,6 +274,12 @@ const Navbar = () => {
               justifyContent: "center",
             }}
           >
+            {/**
+             * ISSUE: Inline button styling with fontWeight and borderBottom logic
+             * FIX: Create a NavButton styled component with active state handling
+             * MUI v7: Use styled() with ownerState for active/inactive states
+             * PATTERN: <NavButton active={isActive}> instead of ternary logic in sx
+             */}
             {navItems.map(([key, { to, label }]) => (
               <Button
                 key={key}

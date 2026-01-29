@@ -41,6 +41,12 @@ import { parseSetFile, downloadSet } from "./fileUtils";
 import { ItemSet } from "./types";
 import PageHero from "../../../components/ui/PageHero";
 
+/**
+ * ISSUE: Multiple sub-components defined in same file (EditDialog, ConfirmDeleteDialog, etc)
+ * FIX: Extract to separate files: EditDialog.tsx, ConfirmDeleteDialog.tsx
+ * FE Best Practice: One component per file for better code organization
+ * PATTERN: components/Randomizer/dialogs/EditDialog.tsx
+ */
 interface EditDialogProps {
   open: boolean;
   onClose: () => void;

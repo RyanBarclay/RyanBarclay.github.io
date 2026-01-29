@@ -2,6 +2,7 @@ import React from "react";
 import { Typography } from "@mui/material";
 import ProjectDetailLayout from "../../../components/layout/ProjectDetailLayout";
 import { getProjectById } from "../../../data/projects";
+import SpookathonBanner from "./assets/Spookathon-Banner.jpg";
 
 const SpookathonProject = () => {
   const projectData = getProjectById("spookathon");
@@ -77,7 +78,7 @@ const SpookathonProject = () => {
       tags={projectData.tags}
       sections={sections}
       technologies={projectData.technologies}
-      heroImage={projectData.heroImage}
+      heroImage={SpookathonBanner}
       heroGradient={projectData.heroGradient}
     />
   );

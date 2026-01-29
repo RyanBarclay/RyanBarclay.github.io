@@ -7,6 +7,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Paper,
 } from "@mui/material";
 import {
   Download,
@@ -21,6 +22,11 @@ import { useRef, useState, useEffect } from "react";
 import { Particle } from "./nBodyTypes";
 import AnimationViewPort from "./AnimationViewPort";
 
+/**
+ * ISSUE: Complex type definitions inline instead of in types file
+ * FIX: Move SimulationBoundsType to nBodyTypes.ts for reusability
+ * FE Best Practice: Centralize type definitions for better maintainability
+ */
 // Define the simulation bounds type
 type SimulationBoundsType = {
   POSITION: {
@@ -46,6 +52,12 @@ type SimulationBoundsType = {
   PARTICLE_COUNT: number;
 };
 
+/**
+ * ISSUE: DEFAULT_SIMULATION_BOUNDS defined in component file
+ * FIX: Move to config/constants.ts or separate config file
+ * FE Best Practice: Configuration should be centralized and easy to modify
+ * PATTERN: Export from config, import where needed for consistency
+ */
 // Initial simulation bounds
 const DEFAULT_SIMULATION_BOUNDS: SimulationBoundsType = {
   POSITION: {
@@ -145,166 +157,168 @@ const SimulationControls = ({
   };
 
   return (
-    <Accordion>
-      <AccordionSummary expandIcon={<ExpandMore />}>
-        <Typography>Simulation Parameters</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Grid spacing={2}>
-          <Grid size={12}>
-            <Typography>Particle Count: {bounds.PARTICLE_COUNT}</Typography>
-            <Slider
-              value={bounds.PARTICLE_COUNT}
-              onChange={(_event: Event, value: number | number[]) =>
-                setBounds({ ...bounds, PARTICLE_COUNT: value as number })
-              }
-              min={10}
-              max={2000}
-              valueLabelDisplay="auto"
-            />
-          </Grid>
-          <Grid size={12}>
-            <Typography>
-              Position Range: {bounds.POSITION.MIN} - {bounds.POSITION.MAX}
-            </Typography>
-            <Slider
-              value={[bounds.POSITION.MIN, bounds.POSITION.MAX]}
-              onChange={(_event: Event, value: number | number[]) => {
-                const [min, max] = Array.isArray(value)
-                  ? value
-                  : [value, value];
-                handleChange("POSITION", { MIN: min, MAX: max });
-              }}
-              min={-200}
-              max={200}
-              valueLabelDisplay="auto"
-            />
-          </Grid>
-          <Grid size={12}>
-            <Typography>
-              Velocity Range: {bounds.VELOCITY.MIN.toFixed(4)} -{" "}
-              {bounds.VELOCITY.MAX.toFixed(4)}
-            </Typography>
-            <Slider
-              value={[bounds.VELOCITY.MIN, bounds.VELOCITY.MAX]}
-              onChange={(_event: Event, value: number | number[]) => {
-                const [min, max] = Array.isArray(value)
-                  ? value
-                  : [value, value];
-                handleChange("VELOCITY", { MIN: min, MAX: max });
-              }}
-              min={-0.01}
-              max={0.01}
-              step={0.0001}
-              valueLabelDisplay="auto"
-            />
-          </Grid>
-          <Grid size={12}>
-            <Typography>Central Mass: {bounds.MASS.CENTRAL}</Typography>
-            <Slider
-              value={bounds.MASS.CENTRAL}
-              onChange={(_event: Event, value: number | number[]) =>
-                handleChange("MASS", { CENTRAL: value as number })
-              }
-              min={100000}
-              max={10000000}
-              step={100000}
-              valueLabelDisplay="auto"
-            />
-          </Grid>
-          <Grid size={12}>
-            <Typography>Particle Mass Ranges</Typography>
-            <Grid spacing={1}>
-              <Grid size={6}>
-                <Typography>
-                  Tiny to Small: {bounds.MASS.TINY.toExponential(2)} -{" "}
-                  {bounds.MASS.SMALL}
-                </Typography>
-                <Slider
-                  value={[bounds.MASS.TINY, bounds.MASS.SMALL]}
-                  onChange={(_event: Event, value: number | number[]) => {
-                    const [tiny, small] = Array.isArray(value)
-                      ? value
-                      : [value, value];
-                    handleChange("MASS", { TINY: tiny, SMALL: small });
-                  }}
-                  min={0.00001}
-                  max={10}
-                  step={0.00001}
-                  valueLabelDisplay="auto"
-                />
-              </Grid>
-              <Grid size={6}>
-                <Typography>
-                  Medium to Large: {bounds.MASS.MEDIUM} - {bounds.MASS.LARGE}
-                </Typography>
-                <Slider
-                  value={[bounds.MASS.MEDIUM, bounds.MASS.LARGE]}
-                  onChange={(_event: Event, value: number | number[]) => {
-                    const [medium, large] = Array.isArray(value)
-                      ? value
-                      : [value, value];
-                    handleChange("MASS", { MEDIUM: medium, LARGE: large });
-                  }}
-                  min={10}
-                  max={2000}
-                  valueLabelDisplay="auto"
-                />
+    <Paper>
+      <Accordion defaultExpanded elevation={0}>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+          <Typography variant="h6">Simulation Parameters</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid spacing={2}>
+            <Grid size={12}>
+              <Typography>Particle Count: {bounds.PARTICLE_COUNT}</Typography>
+              <Slider
+                value={bounds.PARTICLE_COUNT}
+                onChange={(_event: Event, value: number | number[]) =>
+                  setBounds({ ...bounds, PARTICLE_COUNT: value as number })
+                }
+                min={10}
+                max={2000}
+                valueLabelDisplay="auto"
+              />
+            </Grid>
+            <Grid size={12}>
+              <Typography>
+                Position Range: {bounds.POSITION.MIN} - {bounds.POSITION.MAX}
+              </Typography>
+              <Slider
+                value={[bounds.POSITION.MIN, bounds.POSITION.MAX]}
+                onChange={(_event: Event, value: number | number[]) => {
+                  const [min, max] = Array.isArray(value)
+                    ? value
+                    : [value, value];
+                  handleChange("POSITION", { MIN: min, MAX: max });
+                }}
+                min={-200}
+                max={200}
+                valueLabelDisplay="auto"
+              />
+            </Grid>
+            <Grid size={12}>
+              <Typography>
+                Velocity Range: {bounds.VELOCITY.MIN.toFixed(4)} -{" "}
+                {bounds.VELOCITY.MAX.toFixed(4)}
+              </Typography>
+              <Slider
+                value={[bounds.VELOCITY.MIN, bounds.VELOCITY.MAX]}
+                onChange={(_event: Event, value: number | number[]) => {
+                  const [min, max] = Array.isArray(value)
+                    ? value
+                    : [value, value];
+                  handleChange("VELOCITY", { MIN: min, MAX: max });
+                }}
+                min={-0.01}
+                max={0.01}
+                step={0.0001}
+                valueLabelDisplay="auto"
+              />
+            </Grid>
+            <Grid size={12}>
+              <Typography>Central Mass: {bounds.MASS.CENTRAL}</Typography>
+              <Slider
+                value={bounds.MASS.CENTRAL}
+                onChange={(_event: Event, value: number | number[]) =>
+                  handleChange("MASS", { CENTRAL: value as number })
+                }
+                min={100000}
+                max={10000000}
+                step={100000}
+                valueLabelDisplay="auto"
+              />
+            </Grid>
+            <Grid size={12}>
+              <Typography>Particle Mass Ranges</Typography>
+              <Grid spacing={1}>
+                <Grid size={6}>
+                  <Typography>
+                    Tiny to Small: {bounds.MASS.TINY.toExponential(2)} -{" "}
+                    {bounds.MASS.SMALL}
+                  </Typography>
+                  <Slider
+                    value={[bounds.MASS.TINY, bounds.MASS.SMALL]}
+                    onChange={(_event: Event, value: number | number[]) => {
+                      const [tiny, small] = Array.isArray(value)
+                        ? value
+                        : [value, value];
+                      handleChange("MASS", { TINY: tiny, SMALL: small });
+                    }}
+                    min={0.00001}
+                    max={10}
+                    step={0.00001}
+                    valueLabelDisplay="auto"
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <Typography>
+                    Medium to Large: {bounds.MASS.MEDIUM} - {bounds.MASS.LARGE}
+                  </Typography>
+                  <Slider
+                    value={[bounds.MASS.MEDIUM, bounds.MASS.LARGE]}
+                    onChange={(_event: Event, value: number | number[]) => {
+                      const [medium, large] = Array.isArray(value)
+                        ? value
+                        : [value, value];
+                      handleChange("MASS", { MEDIUM: medium, LARGE: large });
+                    }}
+                    min={10}
+                    max={2000}
+                    valueLabelDisplay="auto"
+                  />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid size={12}>
-            <Typography>Particle Radius</Typography>
-            <Grid spacing={1}>
-              <Grid size={12}>
-                <Typography>
-                  Min/Max Radius: {bounds.RADIUS.MIN} - {bounds.RADIUS.MAX}
-                </Typography>
-                <Slider
-                  value={[bounds.RADIUS.MIN, bounds.RADIUS.MAX]}
-                  onChange={(_event: Event, value: number | number[]) => {
-                    const [min, max] = Array.isArray(value)
-                      ? value
-                      : [value, value];
-                    handleChange("RADIUS", { MIN: min, MAX: max });
-                  }}
-                  min={0.1}
-                  max={5}
-                  step={0.1}
-                  valueLabelDisplay="auto"
-                />
-              </Grid>
-              <Grid size={12}>
-                <Typography>
-                  Central Body Radius: {bounds.RADIUS.CENTRAL}
-                </Typography>
-                <Slider
-                  value={bounds.RADIUS.CENTRAL}
-                  onChange={(_event: Event, value: number | number[]) =>
-                    handleChange("RADIUS", { CENTRAL: value as number })
-                  }
-                  min={1}
-                  max={10}
-                  step={0.1}
-                  valueLabelDisplay="auto"
-                />
+            <Grid size={12}>
+              <Typography>Particle Radius</Typography>
+              <Grid spacing={1}>
+                <Grid size={12}>
+                  <Typography>
+                    Min/Max Radius: {bounds.RADIUS.MIN} - {bounds.RADIUS.MAX}
+                  </Typography>
+                  <Slider
+                    value={[bounds.RADIUS.MIN, bounds.RADIUS.MAX]}
+                    onChange={(_event: Event, value: number | number[]) => {
+                      const [min, max] = Array.isArray(value)
+                        ? value
+                        : [value, value];
+                      handleChange("RADIUS", { MIN: min, MAX: max });
+                    }}
+                    min={0.1}
+                    max={5}
+                    step={0.1}
+                    valueLabelDisplay="auto"
+                  />
+                </Grid>
+                <Grid size={12}>
+                  <Typography>
+                    Central Body Radius: {bounds.RADIUS.CENTRAL}
+                  </Typography>
+                  <Slider
+                    value={bounds.RADIUS.CENTRAL}
+                    onChange={(_event: Event, value: number | number[]) =>
+                      handleChange("RADIUS", { CENTRAL: value as number })
+                    }
+                    min={1}
+                    max={10}
+                    step={0.1}
+                    valueLabelDisplay="auto"
+                  />
+                </Grid>
               </Grid>
             </Grid>
+            <Grid size={12}>
+              <Fab
+                color="primary"
+                onClick={onUpdate}
+                variant="extended"
+                size="small"
+                sx={{ mt: 2 }}
+              >
+                Apply Parameters
+              </Fab>
+            </Grid>
           </Grid>
-          <Grid size={12}>
-            <Fab
-              color="primary"
-              onClick={onUpdate}
-              variant="extended"
-              size="small"
-              sx={{ mt: 2 }}
-            >
-              Apply Parameters
-            </Fab>
-          </Grid>
-        </Grid>
-      </AccordionDetails>
-    </Accordion>
+        </AccordionDetails>
+      </Accordion>
+    </Paper>
   );
 };
 
@@ -415,80 +429,160 @@ const NBodySimulation = () => {
       sx={{
         display: "flex",
         width: "100%",
-        alignItems: "center",
         flexDirection: "column",
         gap: 2,
       }}
     >
-      <Typography variant="h4">N Body Simulation</Typography>
-      <AnimationViewPort
-        key={resetKey}
-        isPaused={paused}
-        theta={theta}
-        particlesFromFile={particles}
-        updateSimulationParticles={updateSimulationParticles}
-      />
+      <Typography variant="h4" sx={{ textAlign: "center" }}>
+        N Body Simulation
+      </Typography>
 
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Fab onClick={() => setPaused(false)}>
-          <PlayArrow />
-        </Fab>
-        <Fab onClick={() => setPaused(true)}>
-          <Pause />
-        </Fab>
-        <Fab
-          color="secondary"
-          onClick={regenerateParticles}
-          title="Restart with current parameters"
-        >
-          <Refresh />
-        </Fab>
-        <Fab
-          color="secondary"
-          onClick={() => {
-            setUsingUploadedParticles(false);
-            regenerateParticles();
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+          gap: 2,
+          width: "100%",
+        }}
+      >
+        {/* Viewport - Takes up more space */}
+        <Box sx={{ flex: { xs: "1", lg: "2" }, minWidth: 0 }}>
+          <AnimationViewPort
+            key={resetKey}
+            isPaused={paused}
+            theta={theta}
+            particlesFromFile={particles}
+            updateSimulationParticles={updateSimulationParticles}
+          />
+        </Box>
+
+        {/* Controls Panel - Sidebar */}
+        <Box
+          sx={{
+            flex: { xs: "1", lg: "1" },
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            minWidth: { xs: "100%", lg: "300px" },
+            maxWidth: { xs: "100%", lg: "450px" },
           }}
-          title="Generate new random particles"
         >
-          <Shuffle />
-        </Fab>
-      </Box>
+          {/* Playback Controls */}
+          <Paper sx={{ p: 2 }}>
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{ fontWeight: 600 }}
+            >
+              Playback
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              <Fab
+                onClick={() => setPaused(false)}
+                size="small"
+                color="primary"
+              >
+                <PlayArrow />
+              </Fab>
+              <Fab onClick={() => setPaused(true)} size="small" color="primary">
+                <Pause />
+              </Fab>
+              <Fab
+                color="secondary"
+                onClick={regenerateParticles}
+                title="Restart with current parameters"
+                size="small"
+              >
+                <Refresh />
+              </Fab>
+              <Fab
+                color="secondary"
+                onClick={() => {
+                  setUsingUploadedParticles(false);
+                  regenerateParticles();
+                }}
+                title="Generate new random particles"
+                size="small"
+              >
+                <Shuffle />
+              </Fab>
+            </Box>
+          </Paper>
 
-      <Box>
-        {usingUploadedParticles
-          ? "Using uploaded particles configuration"
-          : `Using ${simulationBounds.PARTICLE_COUNT} randomly generated particles`}
-      </Box>
+          {/* Status */}
+          <Paper sx={{ p: 2 }}>
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{ fontWeight: 600 }}
+            >
+              Status
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {usingUploadedParticles
+                ? "Using uploaded particles configuration"
+                : `Using ${simulationBounds.PARTICLE_COUNT} randomly generated particles`}
+            </Typography>
+          </Paper>
 
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <input
-          type="file"
-          accept=".json"
-          ref={fileInputRef}
-          onChange={handleFileUpload}
-          style={{ display: "none" }}
-        />
-        <Fab
-          color="primary"
-          variant="extended"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <Upload /> Upload
-        </Fab>
-        <Fab
-          onClick={downloadSimulationParticles}
-          color="primary"
-          variant="extended"
-        >
-          <Download /> Download
-        </Fab>
+          {/* File Controls */}
+          <Paper sx={{ p: 2 }}>
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{ fontWeight: 600 }}
+            >
+              Save/Load
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              <input
+                type="file"
+                accept=".json"
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+                style={{ display: "none" }}
+              />
+              <Fab
+                color="primary"
+                variant="extended"
+                onClick={() => fileInputRef.current?.click()}
+                size="small"
+              >
+                <Upload sx={{ mr: 1 }} /> Upload
+              </Fab>
+              <Fab
+                onClick={downloadSimulationParticles}
+                color="primary"
+                variant="extended"
+                size="small"
+              >
+                <Download sx={{ mr: 1 }} /> Download
+              </Fab>
+            </Box>
+          </Paper>
+
+          {/* Simulation Parameters */}
+          <SimulationControls
+            bounds={simulationBounds}
+            setBounds={setSimulationBounds}
+            onUpdate={regenerateParticles}
+          />
+        </Box>
       </Box>
-      <SimulationControls
-        bounds={simulationBounds}
-        setBounds={setSimulationBounds}
-        onUpdate={regenerateParticles}
-      />
     </Box>
   );
 };

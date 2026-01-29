@@ -32,6 +32,12 @@ const Projects = () => {
           Explore my latest work in web development, from full-stack
           applications to innovative frontend solutions
         </Typography>
+        {/**
+         * ISSUE: Duplicate Card component logic from Home.tsx
+         * FIX: Create shared ProjectCard component in components/ui/
+         * MUI v7: Extract to styled component with props for onClick handling
+         * FE Best Practice: Single source of truth for project card presentation
+         */}
         <Grid container spacing={4}>
           {projectsData.map((project) => (
             <Grid size={{ xs: 12, md: 6, lg: 4 }} key={project.title}>
@@ -44,12 +50,6 @@ const Projects = () => {
                   display: "flex",
                   flexDirection: "column",
                   cursor: project.detailPage ? "pointer" : "default",
-                  transition:
-                    "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    boxShadow: 6,
-                  },
                 }}
               >
                 {project.image && (
@@ -84,11 +84,7 @@ const Projects = () => {
                         key={tech}
                         label={tech}
                         size="small"
-                        sx={{
-                          backgroundColor: "primary.main",
-                          color: "primary.contrastText",
-                          fontWeight: 500,
-                        }}
+                        variant="technology"
                       />
                     ))}
                   </Box>
