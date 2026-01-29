@@ -1,9 +1,9 @@
 /**
  * Procedural Terrain Generator - Project Detail Page
- * 
+ *
  * Showcases AI-assisted development with custom noise algorithms,
  * LOD optimization, and real-time 3D terrain visualization.
- * 
+ *
  * Phase F - Complete
  */
 
@@ -28,9 +28,9 @@ const TerrainGeneratorProject = () => {
           development. Built entirely through structured collaboration between
           human oversight and GitHub Copilot with Claude Sonnet 4.5, this
           project demonstrates the power of systematic AI-driven software
-          engineering. Features custom implementations of Simplex noise,
-          fractal Brownian motion, and an advanced LOD system with quadtree
-          spatial partitioning for optimal performance.
+          engineering. Features custom implementations of Simplex noise, fractal
+          Brownian motion, and an advanced LOD system with quadtree spatial
+          partitioning for optimal performance.
         </Typography>
       ),
     },
@@ -91,9 +91,9 @@ const TerrainGeneratorProject = () => {
               elevation
             </Typography>
             <Typography component="li">
-              <strong>Quadtree LOD System:</strong> Distance-based level-of-detail
-              with O(log n) spatial queries, reducing triangles by 75% at
-              maximum distance
+              <strong>Quadtree LOD System:</strong> Distance-based
+              level-of-detail with O(log n) spatial queries, reducing triangles
+              by 75% at maximum distance
             </Typography>
             <Typography component="li">
               <strong>Multi-Format Export:</strong> OBJ (3D modeling), STL (3D
@@ -131,7 +131,8 @@ const TerrainGeneratorProject = () => {
           </Typography>
           <Box component="ul" sx={{ pl: 2 }}>
             <Typography component="li">
-              <strong>Speed:</strong> ~3,800 lines implemented in hours, not days
+              <strong>Speed:</strong> ~3,800 lines implemented in hours, not
+              days
             </Typography>
             <Typography component="li">
               <strong>Quality:</strong> Comprehensive JSDoc, TypeScript strict

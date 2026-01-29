@@ -1,9 +1,9 @@
 /**
  * useTerrainGen Hook
- * 
+ *
  * React hook for terrain generation logic.
  * Integrates fractal noise, color mapping, and geometry building.
- * 
+ *
  * Workflow:
  * 1. Read config from TerrainContext
  * 2. Generate heightmap using fractal noise
@@ -13,14 +13,14 @@
  * 6. Store results in context
  */
 
-import { useCallback, useState, useEffect } from 'react';
-import * as THREE from 'three';
-import { useTerrainContext } from '../context/TerrainContext';
-import { SimplexNoise } from '../utils/noise/simplexNoise';
-import { getFractalNoise } from '../utils/noise/fractalNoise';
-import { createColorArray, applyRadialMask } from '../utils/color/colorMapper';
-import { buildTerrainGeometry } from '../utils/mesh/geometryBuilder';
-import type { HeightmapData } from '../types';
+import { useCallback, useState, useEffect } from "react";
+import * as THREE from "three";
+import { useTerrainContext } from "../context/TerrainContext";
+import { SimplexNoise } from "../utils/noise/simplexNoise";
+import { getFractalNoise } from "../utils/noise/fractalNoise";
+import { createColorArray, applyRadialMask } from "../utils/color/colorMapper";
+import { buildTerrainGeometry } from "../utils/mesh/geometryBuilder";
+import type { HeightmapData } from "../types";
 
 /**
  * Hook return type
@@ -34,15 +34,15 @@ interface UseTerrainGenReturn {
 
 /**
  * Terrain generation hook
- * 
+ *
  * Provides terrain generation functionality with loading states.
  * Integrates with TerrainContext for config and state management.
- * 
+ *
  * @returns Terrain generation state and controls
- * 
+ *
  * @example
  * const { heightmap, geometry, isGenerating, generate } = useTerrainGen();
- * 
+ *
  * // Trigger generation
  * <button onClick={generate} disabled={isGenerating}>
  *   Generate Terrain
@@ -50,13 +50,16 @@ interface UseTerrainGenReturn {
  */
 export function useTerrainGen(): UseTerrainGenReturn {
   const { config, setHeightmap, setGeometry } = useTerrainContext();
-  const [localHeightmap, setLocalHeightmap] = useState<Float32Array | null>(null);
-  const [localGeometry, setLocalGeometry] = useState<THREE.BufferGeometry | null>(null);
+  const [localHeightmap, setLocalHeightmap] = useState<Float32Array | null>(
+    null,
+  );
+  const [localGeometry, setLocalGeometry] =
+    useState<THREE.BufferGeometry | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
   /**
    * Generate terrain
-   * 
+   *
    * Main generation pipeline:
    * 1. Initialize simplex noise with seed
    * 2. Generate heightmap using fractal Brownian motion
@@ -81,7 +84,7 @@ export function useTerrainGen(): UseTerrainGenReturn {
           frequency,
           preset,
           colorScheme,
-          animation
+          animation,
         } = config;
 
         // Step 1: Initialize noise generator with seed
@@ -98,11 +101,11 @@ export function useTerrainGen(): UseTerrainGenReturn {
         for (let z = 0; z < size; z++) {
           for (let x = 0; x < size; x++) {
             const index = z * size + x;
-            
+
             // Normalize coordinates to 0-1 range
             const nx = x / size;
             const nz = z / size;
-            
+
             // Generate fractal noise value with time offset for animation
             const height = getFractalNoise(
               simplex,
@@ -111,11 +114,11 @@ export function useTerrainGen(): UseTerrainGenReturn {
               octaves,
               persistence,
               lacunarity,
-              frequency
+              frequency,
             );
-            
+
             heightmap[index] = height;
-            
+
             // Track min/max for metadata
             if (height < minHeight) minHeight = height;
             if (height > maxHeight) maxHeight = height;
@@ -124,16 +127,16 @@ export function useTerrainGen(): UseTerrainGenReturn {
 
         // Step 3: Apply radial mask for island preset
         let finalHeightmap: Float32Array = heightmap;
-        
-        if (preset === 'islands') {
+
+        if (preset === "islands") {
           // Apply radial falloff to create circular islands
           const maskedHeightmap = applyRadialMask(heightmap, size, 0.7, 2.0);
           finalHeightmap = new Float32Array(maskedHeightmap);
-          
+
           // Recalculate min/max after masking
           minHeight = Infinity;
           maxHeight = -Infinity;
-          
+
           for (let i = 0; i < finalHeightmap.length; i++) {
             const h = finalHeightmap[i];
             if (h < minHeight) minHeight = h;
@@ -149,7 +152,7 @@ export function useTerrainGen(): UseTerrainGenReturn {
           finalHeightmap,
           size,
           heightScale,
-          colorArray
+          colorArray,
         );
 
         // Step 6: Create heightmap data structure
@@ -158,7 +161,7 @@ export function useTerrainGen(): UseTerrainGenReturn {
           height: size,
           data: finalHeightmap,
           minHeight,
-          maxHeight
+          maxHeight,
         };
 
         // Update local state
@@ -168,10 +171,9 @@ export function useTerrainGen(): UseTerrainGenReturn {
         // Update context
         setHeightmap(heightmapData);
         setGeometry(geometry);
-
       } catch (error) {
-        console.error('Terrain generation failed:', error);
-        
+        console.error("Terrain generation failed:", error);
+
         // Reset on error
         setLocalHeightmap(null);
         setLocalGeometry(null);
@@ -192,7 +194,7 @@ export function useTerrainGen(): UseTerrainGenReturn {
       // Regenerate every time the animation time crosses a 0.5 second boundary
       const timeThreshold = Math.floor(config.animation.time / 0.5);
       const prevThreshold = Math.floor((config.animation.time - 0.1) / 0.5);
-      
+
       if (timeThreshold > prevThreshold) {
         generate();
       }
@@ -203,35 +205,34 @@ export function useTerrainGen(): UseTerrainGenReturn {
     heightmap: localHeightmap,
     geometry: localGeometry,
     isGenerating,
-    generate
+    generate,
   };
 }
 
 /**
  * Generate heightmap only (without geometry)
- * 
+ *
  * Useful for scenarios where you only need the height data,
  * such as exporting heightmap images or analysis.
- * 
+ *
  * @param config - Terrain configuration
  * @returns Heightmap data structure
- * 
+ *
  * @example
  * const heightmapData = generateHeightmapOnly(config);
  * exportHeightmapToPNG(heightmapData);
  */
-export function generateHeightmapOnly(
-  config: {
-    size: number;
-    seed: string;
-    octaves: number;
-    persistence: number;
-    lacunarity: number;
-    frequency: number;
-    preset: string;
-  }
-): HeightmapData {
-  const { size, seed, octaves, persistence, lacunarity, frequency, preset } = config;
+export function generateHeightmapOnly(config: {
+  size: number;
+  seed: string;
+  octaves: number;
+  persistence: number;
+  lacunarity: number;
+  frequency: number;
+  preset: string;
+}): HeightmapData {
+  const { size, seed, octaves, persistence, lacunarity, frequency, preset } =
+    config;
 
   // Initialize noise generator
   const simplex = new SimplexNoise(seed);
@@ -246,7 +247,7 @@ export function generateHeightmapOnly(
       const index = z * size + x;
       const nx = x / size;
       const nz = z / size;
-      
+
       const height = getFractalNoise(
         simplex,
         nx,
@@ -254,9 +255,9 @@ export function generateHeightmapOnly(
         octaves,
         persistence,
         lacunarity,
-        frequency
+        frequency,
       );
-      
+
       heightmap[index] = height;
       if (height < minHeight) minHeight = height;
       if (height > maxHeight) maxHeight = height;
@@ -265,14 +266,14 @@ export function generateHeightmapOnly(
 
   // Apply island mask if needed
   let finalHeightmap: Float32Array = heightmap;
-  
-  if (preset === 'islands') {
+
+  if (preset === "islands") {
     const maskedHeightmap = applyRadialMask(heightmap, size, 0.7, 2.0);
     finalHeightmap = new Float32Array(maskedHeightmap);
-    
+
     minHeight = Infinity;
     maxHeight = -Infinity;
-    
+
     for (let i = 0; i < finalHeightmap.length; i++) {
       const h = finalHeightmap[i];
       if (h < minHeight) minHeight = h;
@@ -285,6 +286,6 @@ export function generateHeightmapOnly(
     height: size,
     data: finalHeightmap,
     minHeight,
-    maxHeight
+    maxHeight,
   };
 }

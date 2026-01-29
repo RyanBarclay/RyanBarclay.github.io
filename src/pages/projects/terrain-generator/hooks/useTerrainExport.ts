@@ -1,15 +1,15 @@
-import { useCallback } from 'react';
-import { useTerrainContext } from '../context/TerrainContext';
-import { downloadOBJ } from '../utils/export/objExporter';
-import { downloadSTL } from '../utils/export/stlExporter';
+import { useCallback } from "react";
+import { useTerrainContext } from "../context/TerrainContext";
+import { downloadOBJ } from "../utils/export/objExporter";
+import { downloadSTL } from "../utils/export/stlExporter";
 import {
   exportHeightmapToPNG,
   exportHeightmapRAW,
   extractHeightmapFromGeometry,
-} from '../utils/export/heightmapExporter';
-import type { HeightmapData } from '../types';
+} from "../utils/export/heightmapExporter";
+import type { HeightmapData } from "../types";
 
-export type ExportFormat = 'obj' | 'stl' | 'heightmap-png' | 'heightmap-raw';
+export type ExportFormat = "obj" | "stl" | "heightmap-png" | "heightmap-raw";
 
 interface UseTerrainExportReturn {
   exportTerrain: (format: ExportFormat, filename?: string) => void;
@@ -18,7 +18,7 @@ interface UseTerrainExportReturn {
 
 /**
  * Convert HeightmapData (Float32Array) to number[][] format for export
- * 
+ *
  * @param heightmapData - Heightmap from TerrainContext
  * @returns 2D array of height values
  */
@@ -39,22 +39,22 @@ function convertHeightmapTo2DArray(heightmapData: HeightmapData): number[][] {
 
 /**
  * Hook for exporting terrain to various formats
- * 
+ *
  * Provides export functions for:
  * - OBJ: 3D mesh format (Wavefront OBJ)
  * - STL: 3D printing format (STereoLithography)
  * - PNG heightmap: Grayscale image (game engines)
  * - RAW heightmap: Binary Float32Array (advanced usage)
- * 
+ *
  * @returns Export functions and state
- * 
+ *
  * @example
  * ```tsx
  * const { exportTerrain, canExport } = useTerrainExport();
- * 
+ *
  * // Export to OBJ with auto-generated filename
  * exportTerrain('obj');
- * 
+ *
  * // Export to PNG with custom filename
  * exportTerrain('heightmap-png', 'my-terrain-heightmap.png');
  * ```
@@ -68,27 +68,27 @@ export function useTerrainExport(): UseTerrainExportReturn {
   const exportTerrain = useCallback(
     (format: ExportFormat, filename?: string) => {
       if (!geometry) {
-        console.error('No terrain geometry available to export');
+        console.error("No terrain geometry available to export");
         return;
       }
 
       try {
         switch (format) {
-          case 'obj':
+          case "obj":
             downloadOBJ(
               geometry,
-              filename || `terrain-${config.size}x${config.size}.obj`
+              filename || `terrain-${config.size}x${config.size}.obj`,
             );
             break;
 
-          case 'stl':
+          case "stl":
             downloadSTL(
               geometry,
-              filename || `terrain-${config.size}x${config.size}.stl`
+              filename || `terrain-${config.size}x${config.size}.stl`,
             );
             break;
 
-          case 'heightmap-png': {
+          case "heightmap-png": {
             // Try to use heightmap from context first, fallback to extracting from geometry
             const heightmapArray = heightmap
               ? convertHeightmapTo2DArray(heightmap)
@@ -96,12 +96,12 @@ export function useTerrainExport(): UseTerrainExportReturn {
 
             exportHeightmapToPNG(
               heightmapArray,
-              filename || `heightmap-${config.size}x${config.size}.png`
+              filename || `heightmap-${config.size}x${config.size}.png`,
             );
             break;
           }
 
-          case 'heightmap-raw': {
+          case "heightmap-raw": {
             // Try to use heightmap from context first, fallback to extracting from geometry
             const heightmapArray = heightmap
               ? convertHeightmapTo2DArray(heightmap)
@@ -109,7 +109,7 @@ export function useTerrainExport(): UseTerrainExportReturn {
 
             exportHeightmapRAW(
               heightmapArray,
-              filename || `heightmap-${config.size}x${config.size}.raw`
+              filename || `heightmap-${config.size}x${config.size}.raw`,
             );
             break;
           }
@@ -121,7 +121,7 @@ export function useTerrainExport(): UseTerrainExportReturn {
         console.error(`Export failed: ${error}`);
       }
     },
-    [geometry, heightmap, config.size]
+    [geometry, heightmap, config.size],
   );
 
   return {

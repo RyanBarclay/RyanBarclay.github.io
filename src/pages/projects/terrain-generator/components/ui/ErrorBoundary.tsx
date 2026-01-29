@@ -1,21 +1,21 @@
 /**
  * ErrorBoundary Component
- * 
+ *
  * React error boundary for graceful failure handling in the terrain generator.
  * Catches JavaScript errors anywhere in the component tree and displays a fallback UI.
- * 
+ *
  * Features:
  * - Material-UI styled error display
  * - Error message display
  * - Reload button to recover from errors
  * - Console logging for debugging
- * 
+ *
  * Phase F - Group 1A: Loading States & Error Boundaries
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { Box, Typography, Button, Paper } from '@mui/material';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { Box, Typography, Button, Paper } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 interface Props {
   children: ReactNode;
@@ -28,10 +28,10 @@ interface State {
 
 /**
  * ErrorBoundary class component
- * 
+ *
  * Provides error boundary functionality for the terrain generator.
  * Must be a class component to use componentDidCatch lifecycle method.
- * 
+ *
  * @example
  * <ErrorBoundary>
  *   <TerrainProvider>
@@ -44,7 +44,7 @@ export class ErrorBoundary extends Component<Props, State> {
     super(props);
     this.state = {
       hasError: false,
-      error: null
+      error: null,
     };
   }
 
@@ -54,7 +54,7 @@ export class ErrorBoundary extends Component<Props, State> {
   static getDerivedStateFromError(error: Error): State {
     return {
       hasError: true,
-      error
+      error,
     };
   }
 
@@ -62,7 +62,7 @@ export class ErrorBoundary extends Component<Props, State> {
    * Log error details to console
    */
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Terrain Generator Error:', error, errorInfo);
+    console.error("Terrain Generator Error:", error, errorInfo);
   }
 
   /**
@@ -78,33 +78,31 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-            p: 3
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+            p: 3,
           }}
         >
           <Paper
             sx={{
               p: 4,
               maxWidth: 500,
-              textAlign: 'center'
+              textAlign: "center",
             }}
             elevation={3}
           >
-            <ErrorOutlineIcon sx={{ fontSize: 64, color: 'error.main', mb: 2 }} />
+            <ErrorOutlineIcon
+              sx={{ fontSize: 64, color: "error.main", mb: 2 }}
+            />
             <Typography variant="h5" gutterBottom>
               Something went wrong
             </Typography>
             <Typography variant="body1" color="text.secondary" paragraph>
-              {this.state.error?.message || 'An unexpected error occurred'}
+              {this.state.error?.message || "An unexpected error occurred"}
             </Typography>
-            <Button
-              variant="contained"
-              onClick={this.handleReset}
-              size="large"
-            >
+            <Button variant="contained" onClick={this.handleReset} size="large">
               Reload Page
             </Button>
           </Paper>

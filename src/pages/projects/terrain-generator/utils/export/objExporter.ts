@@ -1,20 +1,20 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 /**
  * Export terrain geometry to Wavefront OBJ format
- * 
+ *
  * OBJ format structure:
  * - v x y z (vertex positions)
  * - vn x y z (vertex normals)
  * - f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3 (faces)
- * 
+ *
  * @param geometry - Three.js BufferGeometry to export
  * @param filename - Output filename (default: "terrain.obj")
  * @returns OBJ file content as string
  */
 export function exportToOBJ(
   geometry: THREE.BufferGeometry,
-  filename: string = 'terrain.obj'
+  filename: string = "terrain.obj",
 ): string {
   const positions = geometry.attributes.position;
   const normals = geometry.attributes.normal;
@@ -51,7 +51,7 @@ export function exportToOBJ(
       const v1 = indices.getX(i) + 1; // OBJ uses 1-based indexing
       const v2 = indices.getX(i + 1) + 1;
       const v3 = indices.getX(i + 2) + 1;
-      
+
       if (normals) {
         objContent += `f ${v1}//${v1} ${v2}//${v2} ${v3}//${v3}\n`;
       } else {
@@ -73,22 +73,22 @@ export function exportToOBJ(
 
 /**
  * Download OBJ file to user's computer
- * 
+ *
  * @param geometry - Three.js BufferGeometry to export
  * @param filename - Output filename (default: "terrain.obj")
  */
 export function downloadOBJ(
   geometry: THREE.BufferGeometry,
-  filename: string = 'terrain.obj'
+  filename: string = "terrain.obj",
 ): void {
   const objContent = exportToOBJ(geometry, filename);
-  const blob = new Blob([objContent], { type: 'text/plain' });
+  const blob = new Blob([objContent], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
-  
-  const link = document.createElement('a');
+
+  const link = document.createElement("a");
   link.href = url;
   link.download = filename;
   link.click();
-  
+
   URL.revokeObjectURL(url);
 }

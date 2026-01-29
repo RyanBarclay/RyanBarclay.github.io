@@ -1,18 +1,18 @@
 /**
  * ControlPanel.tsx
- * 
+ *
  * Material-UI control panel for terrain generation parameters.
- * 
+ *
  * Features:
  * - Modular control sections (TerrainParameters, NoiseSettings, PresetSelector, AnimationControls)
  * - Wireframe toggle
  * - Generate button
- * 
+ *
  * Follows Material-UI v7 patterns from portfolio project.
  * References: src/pages/projects/randomizer/Randomizer.tsx
  */
 
-import React from 'react';
+import React from "react";
 import {
   Box,
   Typography,
@@ -24,22 +24,22 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useTerrainContext } from '../../context/TerrainContext';
-import { useTerrainGen } from '../../hooks/useTerrainGen';
-import TerrainParameters from './TerrainParameters';
-import NoiseSettings from './NoiseSettings';
-import PresetSelector from './PresetSelector';
-import AnimationControls from './AnimationControls';
-import ExportPanel from '../ui/ExportPanel';
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useTerrainContext } from "../../context/TerrainContext";
+import { useTerrainGen } from "../../hooks/useTerrainGen";
+import TerrainParameters from "./TerrainParameters";
+import NoiseSettings from "./NoiseSettings";
+import PresetSelector from "./PresetSelector";
+import AnimationControls from "./AnimationControls";
+import ExportPanel from "../ui/ExportPanel";
 
 /**
  * ControlPanel component
- * 
+ *
  * Provides UI controls for terrain generation parameters using modular sub-components.
  * Integrates with TerrainContext for state management.
- * 
+ *
  * @returns MUI control panel with terrain parameters
  */
 export default function ControlPanel() {
@@ -50,11 +50,11 @@ export default function ControlPanel() {
     <Paper
       sx={{
         width: 320,
-        height: '100%',
+        height: "100%",
         p: 3,
-        overflowY: 'auto',
+        overflowY: "auto",
         borderRight: 1,
-        borderColor: 'divider'
+        borderColor: "divider",
       }}
       elevation={0}
     >
@@ -73,7 +73,7 @@ export default function ControlPanel() {
           <TerrainParameters />
         </AccordionDetails>
       </Accordion>
-      
+
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Noise Settings</Typography>
@@ -82,7 +82,7 @@ export default function ControlPanel() {
           <NoiseSettings />
         </AccordionDetails>
       </Accordion>
-      
+
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Presets</Typography>
@@ -91,7 +91,7 @@ export default function ControlPanel() {
           <PresetSelector />
         </AccordionDetails>
       </Accordion>
-      
+
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Animation</Typography>
@@ -114,7 +114,9 @@ export default function ControlPanel() {
 
       {/* Wireframe Toggle - Always Visible */}
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h6" gutterBottom>Visualization</Typography>
+        <Typography variant="h6" gutterBottom>
+          Visualization
+        </Typography>
         <FormControlLabel
           control={
             <Switch
@@ -134,7 +136,7 @@ export default function ControlPanel() {
         onClick={generate}
         disabled={isGenerating}
       >
-        {isGenerating ? 'Generating...' : 'Generate Terrain'}
+        {isGenerating ? "Generating..." : "Generate Terrain"}
       </Button>
     </Paper>
   );

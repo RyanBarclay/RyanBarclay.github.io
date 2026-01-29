@@ -1,17 +1,17 @@
-import { Box, Typography, Slider, IconButton, Tooltip } from '@mui/material';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { useTerrainContext } from '../../context/TerrainContext';
-import { useAnimationLoop } from '../../hooks/useAnimationLoop';
+import { Box, Typography, Slider, IconButton, Tooltip } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { useTerrainContext } from "../../context/TerrainContext";
+import { useAnimationLoop } from "../../hooks/useAnimationLoop";
 
 export default function AnimationControls() {
   const { config, updateConfig } = useTerrainContext();
-  
+
   const { isPlaying, currentTime, play, pause, reset } = useAnimationLoop({
     speed: config.animation?.speed || 1,
-    enabled: config.animation?.enabled || false
+    enabled: config.animation?.enabled || false,
   });
 
   const togglePlayback = () => {
@@ -23,8 +23,8 @@ export default function AnimationControls() {
     updateConfig({
       animation: {
         ...config.animation,
-        enabled: !isPlaying
-      }
+        enabled: !isPlaying,
+      },
     });
   };
 
@@ -32,46 +32,46 @@ export default function AnimationControls() {
     updateConfig({
       animation: {
         ...config.animation,
-        speed: value as number
-      }
+        speed: value as number,
+      },
     });
   };
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
         <Typography variant="body2">
           Animation gradually morphs terrain over time
         </Typography>
-        <Tooltip 
+        <Tooltip
           title="The animation slowly modifies the noise offset, causing the terrain to gradually evolve and morph. It's subtle - wait 5-10 seconds to see visible changes!"
           arrow
         >
           <InfoOutlinedIcon fontSize="small" sx={{ opacity: 0.6 }} />
         </Tooltip>
       </Box>
-      
+
       {/* Playback Controls */}
-      <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
         <IconButton
           onClick={togglePlayback}
-          color={isPlaying ? 'primary' : 'default'}
+          color={isPlaying ? "primary" : "default"}
           size="large"
         >
           {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
         </IconButton>
-        
+
         <IconButton onClick={reset} size="large">
           <RestartAltIcon />
         </IconButton>
-        
-        <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', ml: 2 }}>
-          <Typography variant="caption" sx={{ fontFamily: 'monospace' }}>
+
+        <Box sx={{ flex: 1, display: "flex", alignItems: "center", ml: 2 }}>
+          <Typography variant="caption" sx={{ fontFamily: "monospace" }}>
             {currentTime.toFixed(2)}s
           </Typography>
         </Box>
       </Box>
-      
+
       {/* Speed Control */}
       <Typography variant="body2" gutterBottom>
         Speed: {(config.animation?.speed || 1).toFixed(1)}x
@@ -84,10 +84,10 @@ export default function AnimationControls() {
         step={0.1}
         valueLabelDisplay="auto"
         marks={[
-          { value: 0.5, label: '0.5x' },
-          { value: 1, label: '1x' },
-          { value: 2, label: '2x' },
-          { value: 5, label: '5x' }
+          { value: 0.5, label: "0.5x" },
+          { value: 1, label: "1x" },
+          { value: 2, label: "2x" },
+          { value: 5, label: "5x" },
         ]}
       />
     </Box>

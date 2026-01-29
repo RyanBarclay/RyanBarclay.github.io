@@ -5,20 +5,25 @@
 /**
  * Preset terrain type options
  */
-export type TerrainPreset = 'mountains' | 'islands' | 'canyons' | 'valleys' | 'custom';
+export type TerrainPreset =
+  | "mountains"
+  | "islands"
+  | "canyons"
+  | "valleys"
+  | "custom";
 
 /**
  * Color scheme options for terrain visualization
  */
-export type ColorScheme = 'bc-nature' | 'grayscale';
+export type ColorScheme = "bc-nature" | "grayscale";
 
 /**
  * Animation configuration
  */
 export interface AnimationConfig {
   enabled: boolean;
-  speed: number;      // Animation speed multiplier (0.1 - 5.0)
-  time: number;       // Current animation time
+  speed: number; // Animation speed multiplier (0.1 - 5.0)
+  time: number; // Current animation time
 }
 
 /**
@@ -26,21 +31,21 @@ export interface AnimationConfig {
  */
 export interface TerrainConfig {
   // Basic parameters
-  size: number;              // Grid size: 16-512 (power of 2)
-  heightScale: number;       // Height multiplier: 1-100
-  seed: string;              // Random seed for reproducibility
-  
+  size: number; // Grid size: 16-512 (power of 2)
+  heightScale: number; // Height multiplier: 1-100
+  seed: string; // Random seed for reproducibility
+
   // Noise parameters
-  octaves: number;           // Number of noise layers: 1-8
-  persistence: number;       // Amplitude decay per octave: 0.1-1.0
-  lacunarity: number;        // Frequency increase per octave: 1.5-4.0
-  frequency: number;         // Base noise frequency: 0.5-5.0
-  
+  octaves: number; // Number of noise layers: 1-8
+  persistence: number; // Amplitude decay per octave: 0.1-1.0
+  lacunarity: number; // Frequency increase per octave: 1.5-4.0
+  frequency: number; // Base noise frequency: 0.5-5.0
+
   // Visual settings
   preset: TerrainPreset;
   colorScheme: ColorScheme;
   wireframe: boolean;
-  
+
   // Animation
   animation: AnimationConfig;
 }
@@ -49,34 +54,34 @@ export interface TerrainConfig {
  * Level of Detail configuration
  */
 export interface LODLevel {
-  resolution: number;        // Grid density (vertices per side)
-  minDistance: number;       // Minimum camera distance for this LOD
-  maxDistance: number;       // Maximum camera distance for this LOD
+  resolution: number; // Grid density (vertices per side)
+  minDistance: number; // Minimum camera distance for this LOD
+  maxDistance: number; // Maximum camera distance for this LOD
 }
 
 /**
  * Performance statistics for monitoring
  */
 export interface PerformanceStats {
-  fps: number;               // Frames per second
-  triangleCount: number;     // Total triangles rendered
-  vertexCount: number;       // Total vertices
-  drawCalls: number;         // Number of draw calls
-  memoryUsage: number;       // Estimated GPU memory (MB)
-  lastUpdateTime: number;    // Timestamp of last update
+  fps: number; // Frames per second
+  triangleCount: number; // Total triangles rendered
+  vertexCount: number; // Total vertices
+  drawCalls: number; // Number of draw calls
+  memoryUsage: number; // Estimated GPU memory (MB)
+  lastUpdateTime: number; // Timestamp of last update
 }
 
 /**
  * Terrain chunk for LOD system
  */
 export interface TerrainChunk {
-  id: string;                // Unique identifier
+  id: string; // Unique identifier
   position: [number, number, number]; // World position [x, y, z]
-  size: number;              // Chunk size
-  lodLevel: number;          // Current LOD level (0 = highest detail)
-  resolution: number;        // Grid resolution
-  heightData: Float32Array;  // Height values
-  visible: boolean;          // Visibility flag
+  size: number; // Chunk size
+  lodLevel: number; // Current LOD level (0 = highest detail)
+  resolution: number; // Grid resolution
+  heightData: Float32Array; // Height values
+  visible: boolean; // Visibility flag
 }
 
 /**
@@ -92,8 +97,8 @@ export interface QuadtreeNode {
   center: [number, number, number];
   size: number;
   depth: number;
-  children: QuadtreeNode[] | null;  // null for leaf nodes
-  chunk: TerrainChunk | null;       // null for parent nodes
+  children: QuadtreeNode[] | null; // null for leaf nodes
+  chunk: TerrainChunk | null; // null for parent nodes
 }
 
 /**
@@ -113,14 +118,14 @@ export interface NoisePreset {
  * Color mapping configuration
  */
 export interface ColorMapping {
-  elevation: number;         // Height threshold (0-1)
-  color: string;             // Hex color
+  elevation: number; // Height threshold (0-1)
+  color: string; // Hex color
 }
 
 /**
  * Export format options
  */
-export type ExportFormat = 'obj' | 'stl' | 'heightmap';
+export type ExportFormat = "obj" | "stl" | "heightmap";
 
 /**
  * Export configuration
@@ -128,8 +133,8 @@ export type ExportFormat = 'obj' | 'stl' | 'heightmap';
 export interface ExportConfig {
   format: ExportFormat;
   filename: string;
-  includeTexture: boolean;   // For OBJ format
-  resolution: number;        // Export resolution (may differ from display)
+  includeTexture: boolean; // For OBJ format
+  resolution: number; // Export resolution (may differ from display)
 }
 
 /**
@@ -146,7 +151,7 @@ export interface Gradient2D {
 export interface SimplexContribution {
   x: number;
   y: number;
-  t: number;               // Attenuation factor
+  t: number; // Attenuation factor
   gradient: Gradient2D;
 }
 
@@ -168,7 +173,7 @@ export interface TerrainContextState {
 export interface HeightmapData {
   width: number;
   height: number;
-  data: Float32Array;       // Height values in range [0, 1]
-  minHeight: number;        // Actual minimum height
-  maxHeight: number;        // Actual maximum height
+  data: Float32Array; // Height values in range [0, 1]
+  minHeight: number; // Actual minimum height
+  maxHeight: number; // Actual maximum height
 }

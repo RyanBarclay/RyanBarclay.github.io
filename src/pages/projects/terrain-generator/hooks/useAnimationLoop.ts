@@ -1,24 +1,24 @@
 /**
  * useAnimationLoop - Animation control hook for terrain morphing
- * 
+ *
  * Manages requestAnimationFrame-based animation loop that increments
  * the time parameter for procedural terrain evolution.
- * 
+ *
  * Features:
  * - Delta time calculation for consistent speed
  * - Play/pause/reset controls
  * - Speed adjustment multiplier
  * - Proper cleanup with cancelAnimationFrame
- * 
+ *
  * @module hooks/useAnimationLoop
  */
 
-import { useEffect, useRef, useState } from 'react';
-import { useTerrainContext } from '../context/TerrainContext';
+import { useEffect, useRef, useState } from "react";
+import { useTerrainContext } from "../context/TerrainContext";
 
 interface UseAnimationLoopOptions {
-  speed?: number;        // Animation speed multiplier (default: 1)
-  enabled?: boolean;     // Enable/disable animation (default: false)
+  speed?: number; // Animation speed multiplier (default: 1)
+  enabled?: boolean; // Enable/disable animation (default: false)
 }
 
 interface UseAnimationLoopReturn {
@@ -32,10 +32,10 @@ interface UseAnimationLoopReturn {
 
 /**
  * Hook for animating terrain by incrementing time parameter
- * 
+ *
  * @param options - Animation configuration
  * @returns Animation controls
- * 
+ *
  * @example
  * const { isPlaying, play, pause, reset } = useAnimationLoop({
  *   speed: 1,
@@ -43,11 +43,11 @@ interface UseAnimationLoopReturn {
  * });
  */
 export function useAnimationLoop(
-  options: UseAnimationLoopOptions = {}
+  options: UseAnimationLoopOptions = {},
 ): UseAnimationLoopReturn {
   const { speed = 1, enabled = false } = options;
   const { config, updateConfig } = useTerrainContext();
-  
+
   const animationFrameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(Date.now());
   const [isPlaying, setIsPlaying] = useState<boolean>(enabled);
@@ -63,14 +63,14 @@ export function useAnimationLoop(
 
       // Increment animation time
       const newTime = (config.animation?.time || 0) + delta * speed;
-      
+
       updateConfig({
         animation: {
           ...config.animation,
           enabled: true,
           speed,
-          time: newTime
-        }
+          time: newTime,
+        },
       });
 
       animationFrameRef.current = requestAnimationFrame(animate);
@@ -106,8 +106,8 @@ export function useAnimationLoop(
     updateConfig({
       animation: {
         ...config.animation,
-        time: 0
-      }
+        time: 0,
+      },
     });
   };
 
@@ -115,8 +115,8 @@ export function useAnimationLoop(
     updateConfig({
       animation: {
         ...config.animation,
-        speed: newSpeed
-      }
+        speed: newSpeed,
+      },
     });
   };
 
@@ -126,6 +126,6 @@ export function useAnimationLoop(
     play,
     pause,
     reset,
-    setSpeed
+    setSpeed,
   };
 }

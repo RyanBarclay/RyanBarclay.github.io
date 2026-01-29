@@ -1,9 +1,9 @@
-import { Box, Typography, Button, Divider } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
-import { useTerrainExport } from '../../hooks/useTerrainExport';
+import { Box, Typography, Button, Divider } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
+import { useTerrainExport } from "../../hooks/useTerrainExport";
 
 interface ExportOption {
-  format: 'obj' | 'stl' | 'heightmap-png' | 'heightmap-raw';
+  format: "obj" | "stl" | "heightmap-png" | "heightmap-raw";
   label: string;
   description: string;
   icon: string;
@@ -11,28 +11,28 @@ interface ExportOption {
 
 const EXPORT_OPTIONS: ExportOption[] = [
   {
-    format: 'obj',
-    label: 'Wavefront OBJ',
-    description: 'Standard 3D model format (Blender, Maya)',
-    icon: '📐',
+    format: "obj",
+    label: "Wavefront OBJ",
+    description: "Standard 3D model format (Blender, Maya)",
+    icon: "📐",
   },
   {
-    format: 'stl',
-    label: 'STL (3D Print)',
-    description: 'STereoLithography format for 3D printing',
-    icon: '🖨️',
+    format: "stl",
+    label: "STL (3D Print)",
+    description: "STereoLithography format for 3D printing",
+    icon: "🖨️",
   },
   {
-    format: 'heightmap-png',
-    label: 'Heightmap PNG',
-    description: 'Grayscale image (Unity, Unreal)',
-    icon: '🗺️',
+    format: "heightmap-png",
+    label: "Heightmap PNG",
+    description: "Grayscale image (Unity, Unreal)",
+    icon: "🗺️",
   },
   {
-    format: 'heightmap-raw',
-    label: 'Heightmap RAW',
-    description: 'Binary float data (advanced)',
-    icon: '📊',
+    format: "heightmap-raw",
+    label: "Heightmap RAW",
+    description: "Binary float data (advanced)",
+    icon: "📊",
   },
 ];
 
@@ -51,21 +51,21 @@ export default function ExportPanel() {
         </Typography>
       )}
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
         {EXPORT_OPTIONS.map((option) => (
           <Box key={option.format}>
             <Button
               variant="outlined"
               fullWidth
               startIcon={
-                <span style={{ fontSize: '1.5rem' }}>{option.icon}</span>
+                <span style={{ fontSize: "1.5rem" }}>{option.icon}</span>
               }
               endIcon={<DownloadIcon />}
               onClick={() => exportTerrain(option.format)}
               disabled={!canExport}
               sx={{
-                justifyContent: 'flex-start',
-                textAlign: 'left',
+                justifyContent: "flex-start",
+                textAlign: "left",
                 py: 1.5,
               }}
             >

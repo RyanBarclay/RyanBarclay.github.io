@@ -1,22 +1,22 @@
 /**
  * useLODSystem.ts
- * 
+ *
  * React hook for managing LOD (Level of Detail) system integration.
- * 
+ *
  * Features:
  * - Manages quadtree state for spatial partitioning
  * - Updates LOD levels based on camera position (per-frame)
  * - Returns visible chunks ready for rendering
  * - Performance optimized with frame skipping and memoization
  * - Integrates seamlessly with React Three Fiber's useFrame
- * 
+ *
  * Phase C - Sequential: useLODSystem Hook
  */
 
-import { useState, useCallback, useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Quadtree, type QuadtreeNode } from '../utils/lod/quadtree';
-import { getDefaultLODLevels } from '../utils/lod/lodCalculator';
+import { useState, useCallback, useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import { Quadtree, type QuadtreeNode } from "../utils/lod/quadtree";
+import { getDefaultLODLevels } from "../utils/lod/lodCalculator";
 
 /**
  * Configuration options for useLODSystem hook
@@ -24,16 +24,16 @@ import { getDefaultLODLevels } from '../utils/lod/lodCalculator';
 export interface UseLODSystemOptions {
   /** Total terrain size in world units (e.g., 256) */
   terrainSize: number;
-  
+
   /** Maximum LOD subdivision level (e.g., 4) */
   maxLODLevel: number;
-  
+
   /** Frame skip interval for LOD updates (1 = every frame, 2 = every other frame)
    * Higher values improve performance but may cause visible LOD popping
    * @default 1
    */
   updateInterval?: number;
-  
+
   /** Enable/disable LOD system
    * When disabled, hook still returns chunks but doesn't update LOD
    * @default true
@@ -47,13 +47,13 @@ export interface UseLODSystemOptions {
 export interface LODStats {
   /** Total number of chunks in the quadtree */
   totalChunks: number;
-  
+
   /** Number of visible/rendered chunks */
   visibleChunks: number;
-  
+
   /** Number of chunks at highest detail (LOD level 0) */
   highDetailChunks: number;
-  
+
   /** Number of chunks at low detail (LOD level 2+) */
   lowDetailChunks: number;
 }
@@ -64,31 +64,31 @@ export interface LODStats {
 export interface UseLODSystemReturn {
   /** Array of visible chunks to render */
   chunks: QuadtreeNode[];
-  
+
   /** Performance and LOD statistics */
   stats: LODStats;
-  
+
   /** Manually trigger LOD update (usually handled by useFrame)
    * @param cameraPos - Camera position [x, y, z]
    */
   updateLOD: (cameraPos: [number, number, number]) => void;
-  
+
   /** Reset quadtree to initial state */
   reset: () => void;
 }
 
 /**
  * React hook for managing terrain LOD system
- * 
+ *
  * Manages quadtree spatial partitioning and automatically updates
  * LOD levels based on camera distance. Uses React Three Fiber's
  * useFrame for per-frame updates with optional frame skipping.
- * 
+ *
  * **Must be called inside React Three Fiber <Canvas> context.**
- * 
+ *
  * @param options - LOD system configuration
  * @returns Chunks to render, stats, and control functions
- * 
+ *
  * @example
  * ```tsx
  * function TerrainMesh() {
@@ -98,7 +98,7 @@ export interface UseLODSystemReturn {
  *     updateInterval: 2, // Update every 2 frames
  *     enabled: true
  *   });
- * 
+ *
  *   return (
  *     <>
  *       {chunks.map((chunk, i) => (
@@ -132,8 +132,8 @@ export function useLODSystem(options: UseLODSystemOptions): UseLODSystemReturn {
   });
 
   // Track visible chunks for rendering
-  const [visibleChunks, setVisibleChunks] = useState<QuadtreeNode[]>(
-    () => quadtree.getVisibleChunks()
+  const [visibleChunks, setVisibleChunks] = useState<QuadtreeNode[]>(() =>
+    quadtree.getVisibleChunks(),
   );
 
   // Frame counter for update interval
@@ -142,7 +142,7 @@ export function useLODSystem(options: UseLODSystemOptions): UseLODSystemReturn {
   // Get LOD distance thresholds (cached)
   const lodThresholds = useMemo(
     () => getDefaultLODLevels(terrainSize).map((level) => level.maxDistance),
-    [terrainSize]
+    [terrainSize],
   );
 
   /**
@@ -159,7 +159,7 @@ export function useLODSystem(options: UseLODSystemOptions): UseLODSystemReturn {
       // Get updated visible chunks and trigger re-render
       setVisibleChunks(quadtree.getVisibleChunks());
     },
-    [enabled, quadtree, lodThresholds]
+    [enabled, quadtree, lodThresholds],
   );
 
   /**

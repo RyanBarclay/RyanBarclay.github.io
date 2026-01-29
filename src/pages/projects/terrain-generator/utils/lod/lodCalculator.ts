@@ -3,7 +3,7 @@
  * Phase C - Group 1B: LOD Calculator
  */
 
-import { LODLevel } from '../../types';
+import { LODLevel } from "../../types";
 
 /**
  * Calculate LOD level based on distance from camera
@@ -13,10 +13,12 @@ import { LODLevel } from '../../types';
  */
 export function calculateLODLevel(
   distance: number,
-  lodLevels: LODLevel[]
+  lodLevels: LODLevel[],
 ): number {
   // Sort by minDistance to ensure correct order (should already be sorted)
-  const sortedLevels = [...lodLevels].sort((a, b) => a.minDistance - b.minDistance);
+  const sortedLevels = [...lodLevels].sort(
+    (a, b) => a.minDistance - b.minDistance,
+  );
 
   // Find the appropriate LOD level based on distance
   for (let i = 0; i < sortedLevels.length; i++) {
@@ -45,17 +47,17 @@ export function getDefaultLODLevels(terrainSize: number): LODLevel[] {
     {
       resolution: Math.min(128, terrainSize / 2),
       minDistance: 0,
-      maxDistance: 200 * baseScale,  // Was 50 - now 4× farther
+      maxDistance: 200 * baseScale, // Was 50 - now 4× farther
     },
     {
       resolution: Math.min(64, terrainSize / 4),
-      minDistance: 200 * baseScale,  // Was 50
-      maxDistance: 600 * baseScale,  // Was 150 - now 4× farther
+      minDistance: 200 * baseScale, // Was 50
+      maxDistance: 600 * baseScale, // Was 150 - now 4× farther
     },
     {
       resolution: Math.min(32, terrainSize / 8),
-      minDistance: 600 * baseScale,  // Was 150
-      maxDistance: Infinity,  // Keep lowest LOD for very far terrain
+      minDistance: 600 * baseScale, // Was 150
+      maxDistance: Infinity, // Keep lowest LOD for very far terrain
     },
   ];
 }
@@ -69,7 +71,7 @@ export function getDefaultLODLevels(terrainSize: number): LODLevel[] {
  */
 export function getCameraChunkDistance(
   cameraPos: [number, number, number],
-  chunkBounds: { minX: number; maxX: number; minZ: number; maxZ: number }
+  chunkBounds: { minX: number; maxX: number; minZ: number; maxZ: number },
 ): number {
   const [camX, _camY, camZ] = cameraPos;
 
@@ -97,7 +99,7 @@ export function getLODResolution(lodLevel: number, chunkSize: number): number {
   // LOD 1: Half resolution (64)
   // LOD 2: Quarter resolution (32)
   // LOD 3: Eighth resolution (16)
-  
+
   const baseResolution = Math.min(128, chunkSize / 2);
   const resolution = baseResolution / Math.pow(2, lodLevel);
 
@@ -116,7 +118,7 @@ export function getLODResolution(lodLevel: number, chunkSize: number): number {
 export function shouldTransitionLOD(
   currentLOD: number,
   targetLOD: number,
-  hysteresis: number = 5
+  hysteresis: number = 5,
 ): boolean {
   // No transition needed if LODs match
   if (currentLOD === targetLOD) {
@@ -131,11 +133,11 @@ export function shouldTransitionLOD(
   // Transition to lower detail (higher LOD number): apply hysteresis
   // Only transition if the distance is significantly beyond the threshold
   // This prevents rapid LOD switching when camera is near the boundary
-  
+
   // Note: Hysteresis is handled in the distance calculation by the caller
   // This function just determines if the LOD values are different enough
   // to warrant a transition
-  
+
   return Math.abs(targetLOD - currentLOD) >= 1;
 }
 
@@ -152,7 +154,7 @@ export function applyDistanceHysteresis(
   distance: number,
   currentLOD: number,
   targetLOD: number,
-  hysteresis: number = 5
+  hysteresis: number = 5,
 ): number {
   // No adjustment if LODs match
   if (currentLOD === targetLOD) {
@@ -194,7 +196,7 @@ export function getChunkCenter(chunkBounds: {
  */
 export function getLODDebugInfo(
   lodLevel: number,
-  lodLevels: LODLevel[]
+  lodLevels: LODLevel[],
 ): {
   level: number;
   resolution: number;
@@ -210,7 +212,7 @@ export function getLODDebugInfo(
     level: lodLevel,
     resolution: config.resolution,
     distanceRange: `${config.minDistance.toFixed(0)}-${
-      config.maxDistance === Infinity ? '∞' : config.maxDistance.toFixed(0)
+      config.maxDistance === Infinity ? "∞" : config.maxDistance.toFixed(0)
     }`,
     vertexCount,
     triangleCount,

@@ -1,6 +1,6 @@
 /**
  * Quadtree spatial partitioning for LOD system
- * 
+ *
  * Recursively subdivides 2D terrain space for efficient spatial queries
  * and level-of-detail management. Enables O(log n) lookups and dynamic
  * LOD updates based on camera distance.
@@ -18,20 +18,20 @@ export interface QuadtreeNode {
   };
   center: { x: number; z: number };
   size: number;
-  level: number;              // Subdivision depth (0 = root)
+  level: number; // Subdivision depth (0 = root)
   children: QuadtreeNode[] | null; // null if leaf, array of 4 if subdivided
-  lodLevel: number;           // 0 = highest detail, 3+ = lowest
+  lodLevel: number; // 0 = highest detail, 3+ = lowest
 }
 
 /**
  * Quadtree-based spatial partitioning system for terrain LOD
- * 
+ *
  * Subdivides terrain into hierarchical quadrants, enabling:
  * - Efficient spatial queries (O(log n))
  * - Distance-based LOD assignment
  * - Selective chunk rendering
  * - Memory-efficient terrain streaming
- * 
+ *
  * @example
  * ```typescript
  * const quadtree = new Quadtree(256, 4);
@@ -46,7 +46,7 @@ export class Quadtree {
 
   /**
    * Creates a new Quadtree for terrain spatial partitioning
-   * 
+   *
    * @param terrainSize - Total terrain size in world units
    * @param maxLevel - Maximum subdivision depth (typically 3-5)
    */
@@ -73,10 +73,10 @@ export class Quadtree {
 
   /**
    * Subdivides a node into 4 equal quadrants
-   * 
+   *
    * Creates children in order: [NW, NE, SW, SE]
    * Each child gets 1/4 of parent bounds
-   * 
+   *
    * @param node - Node to subdivide
    */
   subdivide(node: QuadtreeNode): void {
@@ -139,7 +139,7 @@ export class Quadtree {
 
   /**
    * Recursively builds the complete tree to maxLevel depth
-   * 
+   *
    * Subdivides all nodes up to maxLevel, creating a uniform
    * grid of leaf nodes at the deepest level.
    */
@@ -149,7 +149,7 @@ export class Quadtree {
 
   /**
    * Recursive helper for building the full tree
-   * 
+   *
    * @param node - Current node to process
    */
   private buildTreeRecursive(node: QuadtreeNode): void {
@@ -170,10 +170,10 @@ export class Quadtree {
 
   /**
    * Returns all leaf nodes (chunks that should be rendered)
-   * 
+   *
    * Only leaf nodes contain actual geometry - parent nodes
    * are purely organizational.
-   * 
+   *
    * @returns Array of leaf nodes
    */
   getLeafNodes(): QuadtreeNode[] {
@@ -184,7 +184,7 @@ export class Quadtree {
 
   /**
    * Recursively collects all leaf nodes
-   * 
+   *
    * @param node - Current node to check
    * @param leaves - Array to accumulate leaf nodes
    */
@@ -202,10 +202,10 @@ export class Quadtree {
 
   /**
    * Finds the node containing a specific point
-   * 
+   *
    * Performs efficient O(log n) spatial query by traversing
    * down the tree to the appropriate quadrant.
-   * 
+   *
    * @param x - X coordinate in world space
    * @param z - Z coordinate in world space
    * @param targetLevel - Optional: stop at specific level (default: leaf)
@@ -217,7 +217,7 @@ export class Quadtree {
 
   /**
    * Recursive helper for finding a node
-   * 
+   *
    * @param node - Current node to search
    * @param x - X coordinate
    * @param z - Z coordinate
@@ -228,7 +228,7 @@ export class Quadtree {
     node: QuadtreeNode,
     x: number,
     z: number,
-    targetLevel?: number
+    targetLevel?: number,
   ): QuadtreeNode | null {
     const { minX, maxX, minZ, maxZ } = node.bounds;
 
@@ -239,7 +239,7 @@ export class Quadtree {
 
     // If we've reached target level or a leaf, return this node
     if (
-      targetLevel !== undefined && node.level >= targetLevel ||
+      (targetLevel !== undefined && node.level >= targetLevel) ||
       node.children === null
     ) {
       return node;
@@ -264,15 +264,15 @@ export class Quadtree {
 
   /**
    * Updates LOD levels for all nodes based on camera distance
-   * 
+   *
    * Assigns higher detail (lower lodLevel) to nodes closer to camera.
    * Uses provided distance thresholds to determine LOD levels.
-   * 
+   *
    * @param cameraX - Camera X position in world space
    * @param cameraZ - Camera Z position in world space
    * @param lodThresholds - Distance thresholds for each LOD level
    *                        [lod0Max, lod1Max, lod2Max, ...] in world units
-   * 
+   *
    * @example
    * ```typescript
    * // LOD 0: 0-50 units, LOD 1: 50-100, LOD 2: 100-200, LOD 3: 200+
@@ -285,7 +285,7 @@ export class Quadtree {
 
   /**
    * Recursive helper for updating LOD levels
-   * 
+   *
    * @param node - Current node to update
    * @param cameraX - Camera X position
    * @param cameraZ - Camera Z position
@@ -295,7 +295,7 @@ export class Quadtree {
     node: QuadtreeNode,
     cameraX: number,
     cameraZ: number,
-    lodThresholds: number[]
+    lodThresholds: number[],
   ): void {
     // Calculate distance from camera to node center
     const dx = node.center.x - cameraX;
@@ -323,10 +323,10 @@ export class Quadtree {
 
   /**
    * Returns all visible chunks for rendering
-   * 
+   *
    * Currently returns all leaf nodes. In future phases, this can
    * be extended with frustum culling and occlusion detection.
-   * 
+   *
    * @returns Array of visible leaf nodes
    */
   getVisibleChunks(): QuadtreeNode[] {
@@ -337,7 +337,7 @@ export class Quadtree {
 
   /**
    * Gets statistics about the quadtree structure
-   * 
+   *
    * @returns Object containing tree statistics
    */
   getStats(): {

@@ -1,25 +1,25 @@
 /**
  * Fractal Brownian Motion (fBm) Noise Implementation
- * 
+ *
  * Combines multiple octaves of Simplex noise to create detailed, natural-looking terrain.
- * 
+ *
  * Algorithm:
  * E(x, z) = Σ(i=0 to octaves-1) [ amplitude * persistence^i * noise(frequency * lacunarity^i * x, z) ]
- * 
+ *
  * Key Parameters:
  * - octaves: Number of noise layers (more = more detail)
  * - persistence: How much each octave contributes (amplitude decay)
  * - lacunarity: How much detail is added per octave (frequency multiplier)
  * - frequency: Base frequency of the noise
- * 
+ *
  * Based on Perlin's original fBm algorithm (1985)
  */
 
-import { SimplexNoise } from './simplexNoise';
+import { SimplexNoise } from "./simplexNoise";
 
 /**
  * Generate fractal Brownian motion noise at a given point
- * 
+ *
  * @param simplex - SimplexNoise instance (with seed initialized)
  * @param x - X coordinate in noise space
  * @param y - Y coordinate in noise space (z in 3D space)
@@ -36,35 +36,35 @@ export function getFractalNoise(
   octaves: number,
   persistence: number,
   lacunarity: number,
-  frequency: number
+  frequency: number,
 ): number {
   let total = 0;
   let amplitude = 1;
   let maxValue = 0; // Used for normalization
   let freq = frequency;
-  
+
   // Accumulate multiple octaves of noise
   for (let i = 0; i < octaves; i++) {
     // Sample noise at current frequency
     // SimplexNoise.noise returns values in [-1, 1]
     const noiseValue = simplex.noise(x * freq, y * freq);
-    
+
     // Add weighted contribution
     total += noiseValue * amplitude;
-    
+
     // Track maximum possible value for normalization
     maxValue += amplitude;
-    
+
     // Decay amplitude and increase frequency for next octave
     amplitude *= persistence;
     freq *= lacunarity;
   }
-  
+
   // Normalize to [0, 1] range
   // total is in range [-maxValue, maxValue]
   // First normalize to [-1, 1], then to [0, 1]
   const normalized = (total / maxValue + 1) * 0.5;
-  
+
   // Clamp to [0, 1] to handle floating point precision issues
   return Math.max(0, Math.min(1, normalized));
 }
@@ -72,7 +72,7 @@ export function getFractalNoise(
 /**
  * Generate fBm noise with ridged characteristics (inverted valleys)
  * Useful for creating canyons, erosion features, and sharp ridges
- * 
+ *
  * @param simplex - SimplexNoise instance
  * @param x - X coordinate
  * @param y - Y coordinate
@@ -89,30 +89,30 @@ export function getRidgedNoise(
   octaves: number,
   persistence: number,
   lacunarity: number,
-  frequency: number
+  frequency: number,
 ): number {
   let total = 0;
   let amplitude = 1;
   let maxValue = 0;
   let freq = frequency;
-  
+
   for (let i = 0; i < octaves; i++) {
     // Get noise value and invert
     let noiseValue = simplex.noise(x * freq, y * freq);
-    
+
     // Create ridges by taking absolute value and inverting
     noiseValue = 1 - Math.abs(noiseValue);
-    
+
     // Square the value to sharpen ridges
     noiseValue = noiseValue * noiseValue;
-    
+
     total += noiseValue * amplitude;
     maxValue += amplitude;
-    
+
     amplitude *= persistence;
     freq *= lacunarity;
   }
-  
+
   // Normalize to [0, 1]
   return Math.max(0, Math.min(1, total / maxValue));
 }
@@ -120,7 +120,7 @@ export function getRidgedNoise(
 /**
  * Generate fBm noise with turbulence (absolute values)
  * Creates billowy, cloud-like patterns
- * 
+ *
  * @param simplex - SimplexNoise instance
  * @param x - X coordinate
  * @param y - Y coordinate
@@ -137,24 +137,24 @@ export function getTurbulentNoise(
   octaves: number,
   persistence: number,
   lacunarity: number,
-  frequency: number
+  frequency: number,
 ): number {
   let total = 0;
   let amplitude = 1;
   let maxValue = 0;
   let freq = frequency;
-  
+
   for (let i = 0; i < octaves; i++) {
     // Take absolute value to create turbulence
     const noiseValue = Math.abs(simplex.noise(x * freq, y * freq));
-    
+
     total += noiseValue * amplitude;
     maxValue += amplitude;
-    
+
     amplitude *= persistence;
     freq *= lacunarity;
   }
-  
+
   // Normalize to [0, 1]
   return Math.max(0, Math.min(1, total / maxValue));
 }
@@ -162,7 +162,7 @@ export function getTurbulentNoise(
 /**
  * Generate domain-warped fBm noise
  * Applies fBm to distort the sampling coordinates, creating organic distortion
- * 
+ *
  * @param simplex - SimplexNoise instance
  * @param x - X coordinate
  * @param y - Y coordinate
@@ -181,7 +181,7 @@ export function getWarpedNoise(
   persistence: number,
   lacunarity: number,
   frequency: number,
-  warpStrength: number = 0.5
+  warpStrength: number = 0.5,
 ): number {
   // Generate offset noise for X and Y coordinates
   const offsetX = getFractalNoise(
@@ -191,9 +191,9 @@ export function getWarpedNoise(
     octaves,
     persistence,
     lacunarity,
-    frequency
+    frequency,
   );
-  
+
   const offsetY = getFractalNoise(
     simplex,
     x + 200,
@@ -201,14 +201,14 @@ export function getWarpedNoise(
     octaves,
     persistence,
     lacunarity,
-    frequency
+    frequency,
   );
-  
+
   // Apply warping to coordinates
   // Convert [0, 1] offsets to [-1, 1] and scale by warpStrength
   const warpedX = x + (offsetX * 2 - 1) * warpStrength;
   const warpedY = y + (offsetY * 2 - 1) * warpStrength;
-  
+
   // Sample noise at warped coordinates
   return getFractalNoise(
     simplex,
@@ -217,6 +217,6 @@ export function getWarpedNoise(
     octaves,
     persistence,
     lacunarity,
-    frequency
+    frequency,
   );
 }
