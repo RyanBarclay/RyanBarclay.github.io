@@ -112,7 +112,7 @@ const MyProject = () => {
       technologies={projectData.technologies}
       heroImage={projectData.heroImage} // Optional: uses default if not provided
       heroGradient={projectData.heroGradient} // Optional: uses default if not provided
-      customContent={<OptionalCustomComponent />} // For special cases like NBodySimulation
+      additionalContent={<OptionalCustomComponent />} // For special cases like NBodySimulation
     />
   );
 };

@@ -2,52 +2,6 @@ import { ProjectData } from "../types/project";
 
 export const projectsData: ProjectData[] = [
   {
-    id: "randomizer",
-    title: "Multi-Set Randomizer",
-    tag: "TOOL",
-    tags: ["React", "TypeScript", "Tool"],
-    description:
-      "A powerful web-based randomization tool for managing multiple item sets. Features drag-and-drop file upload, set management, customizable randomization options, and file export/import functionality. Perfect for creating random selections from multiple categories.",
-    technologies: [
-      "React",
-      "TypeScript",
-      "Material-UI",
-      "Context API",
-      "React-Dropzone",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1516849677043-ef67c9557e16?w=800&auto=format&fit=crop",
-    detailPage: "/projects/randomizer",
-    featured: true,
-    year: "2024",
-    links: {
-      live: "/projects/randomizer",
-    },
-  },
-  {
-    id: "nbody-simulation",
-    title: "N-Body Simulation",
-    tag: "PROJ",
-    tags: ["Physics", "3D Graphics", "Interactive"],
-    description:
-      "An interactive 3D physics simulation that models gravitational interactions between multiple bodies in space. The simulation uses the Barnes-Hut algorithm to efficiently approximate gravitational forces between large numbers of particles, making it possible to simulate complex systems like galaxies and star clusters.",
-    technologies: [
-      "React Three Fiber",
-      "React",
-      "TypeScript",
-      "Barnes-Hut Algorithm",
-      "Octree",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&auto=format&fit=crop",
-    detailPage: "/projects/nbody-simulation",
-    featured: true,
-    year: "2024",
-    links: {
-      live: "/projects/nbody-simulation",
-    },
-  },
-  {
     id: "terrain-generator",
     title: "Procedural Terrain Generator",
     tag: "PROJ",
@@ -109,6 +63,52 @@ export const projectsData: ProjectData[] = [
     featured: true,
   },
   {
+    id: "nbody-simulation",
+    title: "N-Body Simulation",
+    tag: "PROJ",
+    tags: ["Physics", "3D Graphics", "Interactive"],
+    description:
+      "An interactive 3D physics simulation that models gravitational interactions between multiple bodies in space. The simulation uses the Barnes-Hut algorithm to efficiently approximate gravitational forces between large numbers of particles, making it possible to simulate complex systems like galaxies and star clusters.",
+    technologies: [
+      "React Three Fiber",
+      "React",
+      "TypeScript",
+      "Barnes-Hut Algorithm",
+      "Octree",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&auto=format&fit=crop",
+    detailPage: "/projects/nbody-simulation",
+    featured: true,
+    year: "2024",
+    links: {
+      live: "/projects/nbody-simulation",
+    },
+  },
+  {
+    id: "randomizer",
+    title: "Multi-Set Randomizer",
+    tag: "TOOL",
+    tags: ["React", "TypeScript", "Tool"],
+    description:
+      "A powerful web-based randomization tool for managing multiple item sets. Features drag-and-drop file upload, set management, customizable randomization options, and file export/import functionality. Perfect for creating random selections from multiple categories.",
+    technologies: [
+      "React",
+      "TypeScript",
+      "Material-UI",
+      "Context API",
+      "React-Dropzone",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1516849677043-ef67c9557e16?w=800&auto=format&fit=crop",
+    detailPage: "/projects/randomizer",
+    featured: true,
+    year: "2024",
+    links: {
+      live: "/projects/randomizer",
+    },
+  },
+  {
     id: "battlesnake",
     title: "Battlesnake 2019",
     tag: "EVNT",
@@ -128,7 +128,7 @@ export const projectsData: ProjectData[] = [
     image:
       "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop",
     detailPage: "/projects/battlesnake",
-    featured: true,
+    featured: false,
     year: "2019",
     links: {
       github: "https://github.com/RyanBarclay/striper-snake",

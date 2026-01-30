@@ -169,37 +169,45 @@ const TerrainGeneratorProject = () => {
           tags={projectData.tags}
           sections={sections}
           technologies={projectData.technologies}
-          customContent={
+          additionalContent={
             <Box
               sx={{
+                position: "relative",
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },
-                gap: 2,
+                gap: { xs: 0, md: 2 },
                 width: "100%",
-                minHeight: "600px",
+                minHeight: { xs: "70vh", md: "600px" },
               }}
             >
               {/* 3D Visualization Canvas */}
               <Box
                 sx={{
                   flex: 1,
-                  height: "600px",
+                  height: { xs: "70vh", md: "600px" },
                   border: "1px solid",
                   borderColor: "divider",
                   borderRadius: 1,
                   overflow: "hidden",
+                  position: "relative",
                 }}
               >
                 <TerrainCanvas />
               </Box>
 
-              {/* Control Panel - No scrolling */}
+              {/* Control Panel - Desktop Only (Mobile uses drawer) */}
               <Box
                 sx={{
-                  width: { xs: "100%", md: "300px" },
+                  display: { xs: "none", md: "block" },
+                  width: "320px",
                   flexShrink: 0,
                 }}
               >
+                <ControlPanel />
+              </Box>
+
+              {/* Mobile Control Panel (rendered inside TerrainCanvas as floating button) */}
+              <Box sx={{ display: { xs: "block", md: "none" } }}>
                 <ControlPanel />
               </Box>
             </Box>

@@ -6,15 +6,11 @@ import {
   Button,
   Container,
   Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Chip,
   Divider,
 } from "@mui/material";
 import { GitHub, LinkedIn } from "@mui/icons-material";
 import Hero from "../components/ui/Hero";
+import ProjectCard from "../components/ui/ProjectCard";
 import { getFeaturedProjects } from "../data/projects";
 import { useNavigation } from "../hooks/useNavigation";
 
@@ -41,59 +37,15 @@ const Home = () => {
             </Typography>
           </Box>
           <Grid container spacing={4} sx={{ mb: 4 }}>
-            {/**
-             * ISSUE: Repeated Card styling pattern across multiple pages
-             * FIX: Create a ProjectCard styled component for reuse
-             * MUI v7: Extract common card styles to theme.components.MuiCard.variants
-             * FE Best Practice: DRY principle - eliminate duplicate hover/transition logic
-             */}
             {featuredProjects.map((project) => (
               <Grid size={{ xs: 12, md: 6, lg: 4 }} key={project.title}>
-                <Card
-                  onClick={() => handleLinkClick(project.detailPage)}
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    cursor: "pointer",
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={project.image}
-                    alt={project.title}
-                    sx={{ objectFit: "cover" }}
-                  />
-                  <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                    <Typography
-                      variant="h6"
-                      component="h3"
-                      gutterBottom
-                      sx={{ fontWeight: 600 }}
-                    >
-                      {project.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      paragraph
-                      sx={{ mb: 2 }}
-                    >
-                      {project.description}
-                    </Typography>
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                      {project.technologies.map((tech) => (
-                        <Chip
-                          key={tech}
-                          label={tech}
-                          size="small"
-                          variant="technology"
-                        />
-                      ))}
-                    </Box>
-                  </CardContent>
-                </Card>
+                <ProjectCard
+                  title={project.title}
+                  description={project.description}
+                  image={project.image}
+                  technologies={project.technologies}
+                  detailPage={project.detailPage}
+                />
               </Grid>
             ))}
           </Grid>
@@ -111,16 +63,10 @@ const Home = () => {
         {/* Connect Section */}
         <Paper
           sx={{
-            /**
-             * ISSUE: Inline gradient not using theme colors
-             * FIX: Define gradient in theme or use theme palette colors
-             * MUI v7: Create theme.palette.gradient object for reusable gradients
-             * PATTERN: background: theme.palette.gradient.primary
-             */
             p: 6,
             textAlign: "center",
-            background:
-              "linear-gradient(135deg, rgba(0,163,161,0.1) 0%, rgba(0,137,123,0.1) 100%)",
+            background: (theme) =>
+              `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.dark}15 100%)`,
           }}
         >
           <Box sx={{ mb: 6 }}>
@@ -135,15 +81,10 @@ const Home = () => {
             </Typography>
           </Box>
           <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
-            {/**
-             * ISSUE: Using Button href instead of Link component
-             * FIX: Use MUI Link component or custom NavLink for accessibility
-             * MUI v7: Button href creates <a> tag, use component="a" for clarity
-             * PATTERN: <Link component={RouterLink} to="..."> for internal navigation
-             */}
             <Button
               variant="contained"
               startIcon={<GitHub />}
+              component="a"
               href="http://www.github.com/ryanbarclay"
               target="_blank"
               rel="noopener noreferrer"
@@ -153,6 +94,7 @@ const Home = () => {
             <Button
               variant="contained"
               startIcon={<LinkedIn />}
+              component="a"
               href="https://www.linkedin.com/in/ryan-barclay"
               target="_blank"
               rel="noopener noreferrer"

@@ -4,7 +4,7 @@ import SpookathonProject from "../pages/projects/spookathon";
 import PersonalServer from "../pages/projects/personal-server";
 import JSChallenge from "../pages/projects/js-challenge";
 import NBodyProject from "../pages/projects/nbody-simulation";
-import Randomizer from "../pages/projects/randomizer/Randomizer";
+import Randomizer from "../pages/projects/Randomizer/Randomizer";
 import TerrainGenerator from "../pages/projects/terrain-generator";
 
 /**

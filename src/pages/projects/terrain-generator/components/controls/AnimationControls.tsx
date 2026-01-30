@@ -7,11 +7,12 @@ import { useTerrainContext } from "../../context/TerrainContext";
 import { useAnimationLoop } from "../../hooks/useAnimationLoop";
 
 export default function AnimationControls() {
-  const { config, updateConfig } = useTerrainContext();
+  const { config, pendingConfig, updateConfig, updatePendingConfig } =
+    useTerrainContext();
 
   const { isPlaying, currentTime, play, pause, reset } = useAnimationLoop({
-    speed: config.animation?.speed || 1,
-    enabled: config.animation?.enabled || false,
+    speed: pendingConfig.animation?.speed || 1,
+    enabled: config.animation?.enabled || false, // Use actual config for animation playback
   });
 
   const togglePlayback = () => {
@@ -20,6 +21,7 @@ export default function AnimationControls() {
     } else {
       play();
     }
+    // Animation playback is immediate, not pending
     updateConfig({
       animation: {
         ...config.animation,
@@ -29,9 +31,10 @@ export default function AnimationControls() {
   };
 
   const handleSpeedChange = (_: Event, value: number | number[]) => {
-    updateConfig({
+    // Speed changes go to pending config
+    updatePendingConfig({
       animation: {
-        ...config.animation,
+        ...pendingConfig.animation,
         speed: value as number,
       },
     });
@@ -39,8 +42,8 @@ export default function AnimationControls() {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-        <Typography variant="body2">
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+        <Typography variant="caption" sx={{ color: "text.secondary" }}>
           Animation gradually morphs terrain over time
         </Typography>
         <Tooltip
@@ -74,10 +77,10 @@ export default function AnimationControls() {
 
       {/* Speed Control */}
       <Typography variant="body2" gutterBottom>
-        Speed: {(config.animation?.speed || 1).toFixed(1)}x
+        Speed: {(pendingConfig.animation?.speed || 1).toFixed(1)}x
       </Typography>
       <Slider
-        value={config.animation?.speed || 1}
+        value={pendingConfig.animation?.speed || 1}
         onChange={handleSpeedChange}
         min={0.1}
         max={5.0}

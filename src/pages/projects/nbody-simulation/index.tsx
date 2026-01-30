@@ -77,7 +77,7 @@ const NBodyProject = () => {
         "Material-UI",
         "Barnes-Hut Algorithm",
       ]}
-      customContent={<NBodySimulation />}
+      additionalContent={<NBodySimulation />}
     />
   );
 };

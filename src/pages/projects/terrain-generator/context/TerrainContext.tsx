@@ -19,7 +19,7 @@ import type { TerrainConfig, TerrainPreset, HeightmapData } from "../types";
  */
 const DEFAULT_CONFIG: TerrainConfig = {
   // Basic parameters
-  size: 128,
+  size: 256,
   heightScale: 20,
   seed: Date.now().toString(),
 
@@ -40,6 +40,13 @@ const DEFAULT_CONFIG: TerrainConfig = {
     speed: 1.0,
     time: 0,
   },
+
+  // Water
+  water: {
+    enabled: false,
+    level: 10,
+    opacity: 0.6,
+  },
 };
 
 /**
@@ -47,7 +54,10 @@ const DEFAULT_CONFIG: TerrainConfig = {
  */
 interface TerrainContextValue {
   config: TerrainConfig;
+  pendingConfig: TerrainConfig; // Draft config for sliders - not applied until Generate
   updateConfig: (partial: Partial<TerrainConfig>) => void;
+  updatePendingConfig: (partial: Partial<TerrainConfig>) => void;
+  applyPendingConfig: () => void; // Commit pending changes to config
   resetConfig: () => void;
   applyPreset: (preset: TerrainPreset) => void;
 
@@ -84,14 +94,56 @@ export const TerrainProvider: React.FC<TerrainProviderProps> = ({
   children,
 }) => {
   const [config, setConfig] = useState<TerrainConfig>(DEFAULT_CONFIG);
+  const [pendingConfig, setPendingConfig] =
+    useState<TerrainConfig>(DEFAULT_CONFIG);
   const [heightmap, setHeightmap] = useState<HeightmapData | null>(null);
   const [geometry, setGeometry] = useState<THREE.BufferGeometry | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [regenerationKey, setRegenerationKey] = useState(0);
 
   /**
-   * Update configuration with partial values
-   * Merges new values with existing config
+   * Update PENDING configuration with partial values
+   * This is for slider changes that don't immediately affect the terrain
+   */
+  const updatePendingConfig = useCallback((partial: Partial<TerrainConfig>) => {
+    setPendingConfig((prev) => {
+      // Deep merge animation config if provided
+      if (partial.animation && prev.animation) {
+        return {
+          ...prev,
+          ...partial,
+          animation: {
+            ...prev.animation,
+            ...partial.animation,
+          },
+        };
+      }
+      // Deep merge water config if provided
+      if (partial.water && prev.water) {
+        return {
+          ...prev,
+          ...partial,
+          water: {
+            ...prev.water,
+            ...partial.water,
+          },
+        };
+      }
+      return { ...prev, ...partial };
+    });
+  }, []);
+
+  /**
+   * Commit pending config to actual config
+   * Called when "Generate" button is clicked
+   */
+  const applyPendingConfig = useCallback(() => {
+    setConfig(pendingConfig);
+  }, [pendingConfig]);
+
+  /**
+   * Update configuration with partial values (direct update - for immediate changes)
+   * This should only be used for visual settings like wireframe
    */
   const updateConfig = useCallback((partial: Partial<TerrainConfig>) => {
     setConfig((prev) => {
@@ -114,36 +166,40 @@ export const TerrainProvider: React.FC<TerrainProviderProps> = ({
    * Reset configuration to defaults
    */
   const resetConfig = useCallback(() => {
-    setConfig({
+    const newConfig = {
       ...DEFAULT_CONFIG,
       seed: Date.now().toString(), // Generate new seed on reset
-    });
+    };
+    setConfig(newConfig);
+    setPendingConfig(newConfig);
     setHeightmap(null);
     setRegenerationKey((prev) => prev + 1);
   }, []);
 
   /**
    * Apply preset configuration
-   * Note: Actual preset values will be loaded from utils/noise/presets.ts
-   * For now, this updates the preset field and triggers regeneration
+   * Updates both pending and actual config, then triggers regeneration
    */
   const applyPreset = useCallback((preset: TerrainPreset) => {
-    setConfig((prev) => ({
+    const newConfig = (prev: TerrainConfig) => ({
       ...prev,
       preset,
       // Preset-specific noise parameters will be applied later
       // when presets.ts is implemented in Phase A Sequential
-    }));
+    });
+    setConfig(newConfig);
+    setPendingConfig(newConfig);
     setRegenerationKey((prev) => prev + 1);
   }, []);
 
   /**
    * Trigger terrain regeneration
-   * Sets loading state and increments regeneration key
-   *
-   * Performance: Disposes old geometry before creating new terrain
+   * Applies pending config and triggers generation
    */
   const generateTerrain = useCallback(() => {
+    // Apply pending config before generating
+    setConfig(pendingConfig);
+
     // Dispose old geometry before regenerating to prevent memory leaks
     if (geometry) {
       geometry.dispose();
@@ -158,11 +214,14 @@ export const TerrainProvider: React.FC<TerrainProviderProps> = ({
     setTimeout(() => {
       setIsGenerating(false);
     }, 100);
-  }, [geometry]);
+  }, [geometry, pendingConfig]);
 
   const value: TerrainContextValue = {
     config,
+    pendingConfig,
     updateConfig,
+    updatePendingConfig,
+    applyPendingConfig,
     resetConfig,
     applyPreset,
     heightmap,

@@ -36,3 +36,28 @@ export const HERO_VARIANTS = {
 } as const;
 
 export type HeroVariant = keyof typeof HERO_VARIANTS;
+
+// N-Body Simulation Configuration
+export const DEFAULT_SIMULATION_BOUNDS = {
+  POSITION: {
+    MIN: -75,
+    MAX: 75,
+  },
+  VELOCITY: {
+    MIN: -0.001,
+    MAX: 0.001,
+  },
+  MASS: {
+    TINY: 0.00001,
+    SMALL: 10,
+    MEDIUM: 100,
+    LARGE: 1000,
+    CENTRAL: 1000000,
+  },
+  RADIUS: {
+    MIN: 0.5,
+    MAX: 2,
+    CENTRAL: 3,
+  },
+  PARTICLE_COUNT: 500,
+} as const;

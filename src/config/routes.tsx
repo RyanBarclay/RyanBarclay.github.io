@@ -14,7 +14,7 @@ import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Home from "../pages/Home";
 import NBodyProject from "../pages/projects/nbody-simulation";
-import Randomizer from "../pages/projects/randomizer/Randomizer";
+import Randomizer from "../pages/projects/Randomizer/Randomizer";
 
 export interface ComponentLinkInfo {
   [key: string]: {

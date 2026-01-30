@@ -14,21 +14,19 @@ import { Box, Typography, Slider } from "@mui/material";
 import { useTerrainContext } from "../../context/TerrainContext";
 
 export default function NoiseSettings() {
-  const { config, updateConfig } = useTerrainContext();
+  const { pendingConfig, updatePendingConfig } = useTerrainContext();
 
   return (
-    <Box sx={{ mb: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Noise Settings
-      </Typography>
-
+    <Box>
       {/* Octaves Slider */}
       <Typography variant="body2" gutterBottom>
-        Octaves: {config.octaves}
+        Octaves: {pendingConfig.octaves}
       </Typography>
       <Slider
-        value={config.octaves}
-        onChange={(_, value) => updateConfig({ octaves: value as number })}
+        value={pendingConfig.octaves}
+        onChange={(_, value) =>
+          updatePendingConfig({ octaves: value as number })
+        }
         min={1}
         max={8}
         step={null}
@@ -44,11 +42,13 @@ export default function NoiseSettings() {
 
       {/* Persistence Slider */}
       <Typography variant="body2" gutterBottom sx={{ mt: 2 }}>
-        Persistence: {config.persistence.toFixed(2)}
+        Persistence: {pendingConfig.persistence.toFixed(2)}
       </Typography>
       <Slider
-        value={config.persistence}
-        onChange={(_, value) => updateConfig({ persistence: value as number })}
+        value={pendingConfig.persistence}
+        onChange={(_, value) =>
+          updatePendingConfig({ persistence: value as number })
+        }
         min={0.1}
         max={1.0}
         step={null}
@@ -64,11 +64,13 @@ export default function NoiseSettings() {
 
       {/* Lacunarity Slider */}
       <Typography variant="body2" gutterBottom sx={{ mt: 2 }}>
-        Lacunarity: {config.lacunarity.toFixed(2)}
+        Lacunarity: {pendingConfig.lacunarity.toFixed(2)}
       </Typography>
       <Slider
-        value={config.lacunarity}
-        onChange={(_, value) => updateConfig({ lacunarity: value as number })}
+        value={pendingConfig.lacunarity}
+        onChange={(_, value) =>
+          updatePendingConfig({ lacunarity: value as number })
+        }
         min={1.5}
         max={4.0}
         step={null}
@@ -84,11 +86,13 @@ export default function NoiseSettings() {
 
       {/* Frequency Slider */}
       <Typography variant="body2" gutterBottom sx={{ mt: 2 }}>
-        Frequency: {config.frequency.toFixed(2)}
+        Frequency: {pendingConfig.frequency.toFixed(2)}
       </Typography>
       <Slider
-        value={config.frequency}
-        onChange={(_, value) => updateConfig({ frequency: value as number })}
+        value={pendingConfig.frequency}
+        onChange={(_, value) =>
+          updatePendingConfig({ frequency: value as number })
+        }
         min={0.5}
         max={5.0}
         step={null}

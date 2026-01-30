@@ -2,8 +2,7 @@
  * PerformanceHUDWrapper.tsx
  *
  * Bridge component that connects R3F usePerformance hook to DOM-based PerformanceHUD.
- * This component lives inside the Canvas and uses useFrame/useThree hooks,
- * then renders the actual HUD as an HTML overlay via the Html component from drei.
+ * Renders the HUD as a properly positioned HTML overlay.
  */
 
 import { Html } from "@react-three/drei";
@@ -17,7 +16,7 @@ interface PerformanceHUDWrapperProps {
 
 /**
  * Performance HUD that lives inside R3F Canvas
- * Uses Html component from drei to render DOM overlay
+ * Uses Html component with transform={false} to prevent 3D positioning
  */
 export default function PerformanceHUDWrapper({
   visible = true,
@@ -29,7 +28,10 @@ export default function PerformanceHUDWrapper({
 
   return (
     <Html
-      position={[0, 0, 0]}
+      transform={false}
+      distanceFactor={0}
+      occlude={false}
+      zIndexRange={[900, 0]}
       style={{
         position: "fixed",
         top: "16px",
@@ -39,16 +41,17 @@ export default function PerformanceHUDWrapper({
     >
       <Paper
         sx={{
-          p: 2,
-          minWidth: 200,
+          p: { xs: 1, sm: 1.5 },
+          minWidth: { xs: 150, sm: 180 },
           backgroundColor: "rgba(0, 0, 0, 0.7)",
           backdropFilter: "blur(10px)",
           color: "white",
           fontFamily: "monospace",
+          fontSize: { xs: "0.7rem", sm: "0.75rem" },
         }}
         elevation={4}
       >
-        <Typography variant="body2" fontWeight="bold" gutterBottom>
+        <Typography variant="caption" fontWeight="bold" gutterBottom>
           Performance
         </Typography>
 

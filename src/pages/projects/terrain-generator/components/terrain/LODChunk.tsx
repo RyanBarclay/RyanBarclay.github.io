@@ -103,19 +103,30 @@ export default function LODChunk({
         // Convert world coordinates to heightmap indices
         // Heightmap is centered at origin, so add halfSize to get [0, terrainSize] range
         const halfSize = terrainSize / 2;
-        const hmapX = Math.floor(
-          ((worldX + halfSize) / terrainSize) * terrainSize,
-        );
-        const hmapZ = Math.floor(
-          ((worldZ + halfSize) / terrainSize) * terrainSize,
-        );
+        const hmapX = ((worldX + halfSize) / terrainSize) * (terrainSize - 1);
+        const hmapZ = ((worldZ + halfSize) / terrainSize) * (terrainSize - 1);
 
-        // Clamp to valid range and sample stored heightmap
-        const clampedX = Math.max(0, Math.min(terrainSize - 1, hmapX));
-        const clampedZ = Math.max(0, Math.min(terrainSize - 1, hmapZ));
-        const hmapIndex = clampedZ * terrainSize + clampedX;
+        // Use bilinear interpolation for smooth sampling at chunk boundaries
+        const x0 = Math.floor(hmapX);
+        const x1 = Math.min(x0 + 1, terrainSize - 1);
+        const z0 = Math.floor(hmapZ);
+        const z1 = Math.min(z0 + 1, terrainSize - 1);
 
-        chunkHeightmap[z * resolution + x] = storedHeightmap.data[hmapIndex];
+        const fx = hmapX - x0;
+        const fz = hmapZ - z0;
+
+        // Sample four corners
+        const h00 = storedHeightmap.data[z0 * terrainSize + x0];
+        const h10 = storedHeightmap.data[z0 * terrainSize + x1];
+        const h01 = storedHeightmap.data[z1 * terrainSize + x0];
+        const h11 = storedHeightmap.data[z1 * terrainSize + x1];
+
+        // Bilinear interpolation
+        const h0 = h00 * (1 - fx) + h10 * fx;
+        const h1 = h01 * (1 - fx) + h11 * fx;
+        const height = h0 * (1 - fz) + h1 * fz;
+
+        chunkHeightmap[z * resolution + x] = height;
       }
     }
 

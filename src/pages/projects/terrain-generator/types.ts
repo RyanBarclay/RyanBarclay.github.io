@@ -48,6 +48,13 @@ export interface TerrainConfig {
 
   // Animation
   animation: AnimationConfig;
+
+  // Water settings
+  water?: {
+    enabled: boolean;
+    level: number; // Water height: 0-100
+    opacity: number; // Water transparency: 0.3-0.9
+  };
 }
 
 /**

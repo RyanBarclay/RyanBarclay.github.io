@@ -36,20 +36,20 @@ const PRESETS = [
  * terrain configurations from Phase A presets.
  */
 export default function PresetSelector() {
-  const { config, updateConfig } = useTerrainContext();
+  const { pendingConfig, updatePendingConfig } = useTerrainContext();
 
   /**
    * Apply a preset configuration to the terrain
    *
    * Loads preset values from presets.ts and updates all
-   * relevant noise parameters in the context.
+   * relevant noise parameters in the pending config.
    *
    * @param presetId - The preset type to apply
    */
   const applyPreset = (presetId: string) => {
     const presetConfig = getPresetConfig(presetId as TerrainPreset);
     if (presetConfig) {
-      updateConfig({
+      updatePendingConfig({
         preset: presetId as TerrainPreset,
         octaves: presetConfig.octaves,
         persistence: presetConfig.persistence,
@@ -61,10 +61,7 @@ export default function PresetSelector() {
   };
 
   return (
-    <Box sx={{ mb: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Presets
-      </Typography>
+    <Box>
       <Box
         sx={{
           display: "grid",
@@ -75,7 +72,9 @@ export default function PresetSelector() {
         {PRESETS.map((preset) => (
           <Button
             key={preset.id}
-            variant={config.preset === preset.id ? "contained" : "outlined"}
+            variant={
+              pendingConfig.preset === preset.id ? "contained" : "outlined"
+            }
             onClick={() => applyPreset(preset.id)}
             startIcon={<span>{preset.icon}</span>}
             fullWidth

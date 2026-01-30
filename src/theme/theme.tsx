@@ -42,13 +42,7 @@ declare module "@mui/material/Chip" {
   }
 }
 
-/**
- * ISSUE: Type safety
- * FIX: Cast sharedTheme as ThemeOptions for proper TypeScript validation
- * MUI v7: Use proper typing to catch configuration errors at compile time
- */
-// TODO: Type sharedTheme as ThemeOptions for better type safety
-const sharedTheme = {
+const sharedTheme: Partial<ThemeOptions> = {
   mixins: {
     toolbar: {
       minHeight: 48,
@@ -58,12 +52,6 @@ const sharedTheme = {
     borderRadius: 12, // Centralized border radius token
   },
   components: {
-    /**
-     * ISSUE: Accessibility violation - All headings map to h2, flattening document structure
-     * FIX: Use semantic HTML hierarchy: h1->h1, h2->h2, h3->h3, etc.
-     * MUI v7: variantMapping should maintain semantic heading levels for screen readers and SEO
-     * IMPACT: Screen readers cannot navigate document outline properly
-     */
     MuiTypography: {
       defaultProps: {
         variantMapping: {
@@ -80,16 +68,9 @@ const sharedTheme = {
         },
       },
     },
-    /**
-     * ISSUE: Magic numbers - Hardcoded borderRadius values repeated across components
-     * FIX: Define theme.shape.borderRadius = 12, use theme.shape.borderRadius in styleOverrides
-     * MUI v7: Centralize design tokens in theme configuration, not component overrides
-     * PATTERN: theme.shape.borderRadius can be overridden per component if needed
-     */
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: "12px",
           textTransform: "none",
         },
       },
@@ -97,7 +78,6 @@ const sharedTheme = {
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: "12px",
           transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
           "&:hover": {
             transform: "translateY(-4px)",
@@ -120,23 +100,8 @@ const sharedTheme = {
     },
   },
   typography: {
-    /**
-     * ISSUE 1: Non-standard base fontSize breaks rem calculations across MUI
-     * FIX: Use default 14px or adjust all components expecting standard sizing
-     * MUI v7: fontSize 12 causes misalignment with default spacing/sizing (based on 14px)
-     *
-     * ISSUE 2: No responsive typography
-     * FIX: Use theme.breakpoints with responsiveFontSizes() or manual breakpoint scales
-     * MUI v7: Theme should define typography behavior across viewport sizes
-     *
-     * ISSUE 3: Mixing px and rem without clear strategy
-     * FIX: Standardize on rem units, adjust htmlFontSize for base scaling
-     * PATTERN: htmlFontSize: 10 makes 1rem = 10px for easy mental math
-     */
-    // TODO: Use rem units consistently instead of mixing rem with base fontSize of 12
-    // MUI best practice: Keep default 14px base and scale with rem units
-    // TODO: Consider adding responsive typography with theme.breakpoints
-    fontSize: 12, // smaller font size
+    // Intentional design choice: 12px base for compact UI
+    fontSize: 12,
     fontFamily: [
       "BC Sans",
       "-apple-system",
@@ -147,12 +112,6 @@ const sharedTheme = {
       "Arial",
       "sans-serif",
     ].join(","),
-    /**
-     * ISSUE: Custom font family with no fallback validation
-     * FIX: Ensure GreatForest is loaded before usage, or provide better fallback
-     * MUI v7: Custom fonts should be registered in theme.typography.fontFamily first
-     * PATTERN: Define fontFamily hierarchy in base typography, reference in variants
-     */
     h1: {
       fontFamily: "GreatForest, sans-serif",
       fontWeight: 400,
@@ -194,25 +153,9 @@ const sharedTheme = {
   },
 };
 
-/**
- * ISSUE: Duplicate theme configuration - dark and light themes manually defined
- * FIX: Use single theme with palette.mode and CSS variables (cssVariables: true)
- * MUI v7: Modern approach uses one theme with dynamic color scheme switching
- * BENEFIT: Reduces bundle size, enables seamless theme transitions, better performance
- *
- * ISSUE: Manual light/dark palette definition without shared tokens
- * FIX: Use augmentColor() to auto-generate light/dark/contrastText from main
- * MUI v7: theme.palette.augmentColor ensures proper tonal offset and contrast ratios
- * PATTERN: Define semantic color tokens once, reuse across both themes
- */
 export const darkTheme = createTheme({
   ...sharedTheme,
   palette: {
-    /**
-     * ISSUE: No semantic colors (error, warning, info, success) defined
-     * FIX: Add full semantic palette for Alert, Chip, Button color variants
-     * MUI v7: Components rely on semantic colors for consistent theming
-     */
     primary: {
       main: "#00A3A1", // BC teal - inspired by coastal waters
       light: "#4DD4D2",
@@ -243,15 +186,9 @@ export const darkTheme = createTheme({
       light: "#8BB47C",
       dark: "#4A6D3E",
     },
-    /**
-     * ISSUE: Low contrast between background.default and background.paper
-     * FIX: Increase contrast for elevation hierarchy (at least 10-15 lightness difference)
-     * MUI v7: Proper elevation shadow requires distinguishable background tones
-     * WCAG: Aim for 3:1 minimum contrast for UI component distinction
-     */
     background: {
-      default: "#1a1a1a", // Dark background
-      paper: "#242424", // Slightly lighter for cards/papers
+      default: "#121212", // Dark background
+      paper: "#1e1e1e", // Better contrast for elevation
     },
     gradient: {
       forest: "linear-gradient(135deg, #2C5530 0%, #4A7C59 100%)",

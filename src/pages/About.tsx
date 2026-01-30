@@ -29,15 +29,10 @@ const About = () => {
         {/* Profile Section */}
         <Grid container spacing={6} sx={{ mb: 8 }}>
           <Grid size={{ xs: 12, md: 5 }}>
-            {/**
-             * ISSUE: Hardcoded gradient colors not from theme palette
-             * FIX: Use theme.palette.primary/secondary for gradient endpoints
-             * MUI v7: Gradients should derive from theme for consistent branding
-             * PATTERN: Create theme.palette.background.gradient object
-             */}
             <Box
               sx={{
-                background: "linear-gradient(135deg, #a8e6cf 0%, #7dd3c0 100%)",
+                background: (theme) =>
+                  `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
                 borderRadius: 3,
                 p: 6,
                 display: "flex",
@@ -46,12 +41,6 @@ const About = () => {
                 minHeight: 400,
               }}
             >
-              {/**
-               * ISSUE: Emoji avatar not accessible and unprofessional
-               * FIX: Use actual profile image or SVG illustration
-               * FE Best Practice: Provide alt text and proper image format
-               * A11Y: Emoji in Avatar has no semantic meaning for screen readers
-               */}
               <Avatar
                 sx={{
                   width: 250,
@@ -59,6 +48,7 @@ const About = () => {
                   bgcolor: "primary.main",
                   fontSize: "6rem",
                 }}
+                alt="Ryan Barclay"
               >
                 👨‍💻
               </Avatar>
@@ -84,12 +74,6 @@ const About = () => {
                   products that truly make a difference.
                 </Typography>
               </Box>
-              {/**
-               * ISSUE: Hardcoded color values (#333, #0077b5, #00897b) not theme-aware
-               * FIX: Use theme.palette for consistent colors across light/dark modes
-               * MUI v7: Social buttons should use theme colors or custom palette tokens
-               * PATTERN: Create theme.palette.social.github, .linkedin, etc.
-               */}
               <Box sx={{ display: "flex", gap: 1.5 }}>
                 <IconButton
                   href="http://www.github.com/ryanbarclay"
@@ -99,7 +83,7 @@ const About = () => {
                     width: 48,
                     height: 48,
                     borderRadius: 1.5,
-                    bgcolor: "#333",
+                    bgcolor: (theme) => theme.palette.social.github,
                     color: "white",
                     "&:hover": { bgcolor: "#555" },
                   }}
@@ -114,7 +98,7 @@ const About = () => {
                     width: 48,
                     height: 48,
                     borderRadius: 1.5,
-                    bgcolor: "#0077b5",
+                    bgcolor: (theme) => theme.palette.social.linkedin,
                     color: "white",
                     "&:hover": { bgcolor: "#005885" },
                   }}
@@ -127,7 +111,7 @@ const About = () => {
                     width: 48,
                     height: 48,
                     borderRadius: 1.5,
-                    bgcolor: "#00897b",
+                    bgcolor: "primary.main",
                     color: "white",
                     "&:hover": { bgcolor: "#00695c" },
                   }}

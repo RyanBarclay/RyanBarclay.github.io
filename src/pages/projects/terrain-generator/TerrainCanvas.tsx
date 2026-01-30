@@ -21,6 +21,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { GridHelper } from "three";
 import TerrainMesh from "./components/terrain/TerrainMesh";
+import WaterPlane from "./components/terrain/WaterPlane";
 import PerformanceHUDWrapper from "./components/ui/PerformanceHUDWrapper";
 import { useTerrainContext } from "./context/TerrainContext";
 import { useTerrainGen } from "./hooks/useTerrainGen";
@@ -87,7 +88,7 @@ export default function TerrainCanvas() {
       {/* Canvas */}
       <Canvas
         camera={{
-          position: [50, 100, 50], // Position above and offset from origin
+          position: [100, 150, 100], // Position higher and further for larger terrain
           fov: 60,
         }}
         style={{
@@ -112,12 +113,15 @@ export default function TerrainCanvas() {
         {/* The procedural terrain mesh */}
         <TerrainMesh />
 
-        {/* Ground grid for spatial reference - fixed at 128 size */}
+        {/* Water plane for flooding low areas */}
+        <WaterPlane />
+
+        {/* Ground grid for spatial reference - scaled to terrain size */}
         <primitive
           object={
             new GridHelper(
-              128, // Fixed grid size at 128
-              8, // Divisions: 16-unit squares
+              config.size, // Match terrain size
+              config.size / 16, // Divisions: 16-unit squares
               0x2c5530, // Center line: Forest Green
               0x444444, // Grid lines: Dark gray
             )

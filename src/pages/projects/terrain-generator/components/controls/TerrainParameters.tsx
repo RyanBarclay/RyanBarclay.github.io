@@ -32,36 +32,36 @@ import { useTerrainContext } from "../../context/TerrainContext";
  * @returns MUI component section for terrain parameters
  */
 export default function TerrainParameters() {
-  const { config, updateConfig } = useTerrainContext();
+  const { pendingConfig, updatePendingConfig } = useTerrainContext();
 
   // Local state for immediate slider feedback
-  const [localSize, setLocalSize] = useState(config.size);
-  const [localHeight, setLocalHeight] = useState(config.heightScale);
+  const [localSize, setLocalSize] = useState(pendingConfig.size);
+  const [localHeight, setLocalHeight] = useState(pendingConfig.heightScale);
 
   // Sync local state when config changes externally (preset selection, reset, etc.)
   useEffect(() => {
-    setLocalSize(config.size);
-    setLocalHeight(config.heightScale);
-  }, [config.size, config.heightScale]);
+    setLocalSize(pendingConfig.size);
+    setLocalHeight(pendingConfig.heightScale);
+  }, [pendingConfig.size, pendingConfig.heightScale]);
 
   /**
    * Handle size slider changes with immediate visual feedback
-   * Updates both local state (instant) and context (for Generate button)
+   * Updates both local state (instant) and pending config
    */
   const handleSizeChange = (_: Event, value: number | number[]) => {
     const newSize = value as number;
     setLocalSize(newSize);
-    updateConfig({ size: newSize });
+    updatePendingConfig({ size: newSize });
   };
 
   /**
    * Handle height scale slider changes with immediate visual feedback
-   * Updates both local state (instant) and context (for Generate button)
+   * Updates both local state (instant) and pending config
    */
   const handleHeightChange = (_: Event, value: number | number[]) => {
     const newHeight = value as number;
     setLocalHeight(newHeight);
-    updateConfig({ heightScale: newHeight });
+    updatePendingConfig({ heightScale: newHeight });
   };
 
   /**
@@ -69,15 +69,11 @@ export default function TerrainParameters() {
    */
   const generateRandomSeed = () => {
     const seed = Math.random().toString(36).substring(2, 10);
-    updateConfig({ seed });
+    updatePendingConfig({ seed });
   };
 
   return (
-    <Box sx={{ mb: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Terrain Parameters
-      </Typography>
-
+    <Box>
       {/* Size Slider */}
       <Typography variant="body2" gutterBottom>
         Size: {localSize}x{localSize}
@@ -85,14 +81,14 @@ export default function TerrainParameters() {
       <Slider
         value={localSize}
         onChange={handleSizeChange}
-        min={16}
+        min={64}
         max={512}
         step={null} // Allow free movement but snap to marks
         marks={[
-          { value: 16, label: "16" },
           { value: 64, label: "64" },
           { value: 128, label: "128" },
           { value: 256, label: "256" },
+          { value: 384, label: "384" },
           { value: 512, label: "512" },
         ]}
         valueLabelDisplay="auto"
@@ -122,8 +118,8 @@ export default function TerrainParameters() {
       <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
         <TextField
           label="Seed"
-          value={config.seed}
-          onChange={(e) => updateConfig({ seed: e.target.value })}
+          value={pendingConfig.seed}
+          onChange={(e) => updatePendingConfig({ seed: e.target.value })}
           size="small"
           fullWidth
         />

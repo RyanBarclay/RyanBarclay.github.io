@@ -14,11 +14,6 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
   Card,
   CardContent,
   Divider,
@@ -40,96 +35,8 @@ import { RandomizerProvider, useRandomizer } from "./RandomizerContext";
 import { parseSetFile, downloadSet } from "./fileUtils";
 import { ItemSet } from "./types";
 import PageHero from "../../../components/ui/PageHero";
-
-/**
- * ISSUE: Multiple sub-components defined in same file (EditDialog, ConfirmDeleteDialog, etc)
- * FIX: Extract to separate files: EditDialog.tsx, ConfirmDeleteDialog.tsx
- * FE Best Practice: One component per file for better code organization
- * PATTERN: components/Randomizer/dialogs/EditDialog.tsx
- */
-interface EditDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onSave: (name: string) => void;
-  initialName?: string;
-  title: string;
-}
-
-const EditDialog: React.FC<EditDialogProps> = ({
-  open,
-  onClose,
-  onSave,
-  initialName = "",
-  title,
-}) => {
-  const [name, setName] = useState(initialName);
-
-  const handleSave = () => {
-    if (name.trim()) {
-      onSave(name.trim());
-      onClose();
-      setName("");
-    }
-  };
-
-  React.useEffect(() => {
-    setName(initialName || "");
-  }, [initialName]);
-
-  return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Name"
-          fullWidth
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSave} disabled={!name.trim()}>
-          Save
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-interface ConfirmDeleteDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  setName: string;
-}
-
-const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
-  open,
-  onClose,
-  onConfirm,
-  setName,
-}) => {
-  return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Confirm Deletion</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Are you sure you want to delete the set "{setName}"? This action
-          cannot be undone.
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onConfirm} color="error">
-          Delete
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
+import EditDialog from "./dialogs/EditDialog";
+import ConfirmDeleteDialog from "./dialogs/ConfirmDeleteDialog";
 
 const RandomizerContent = () => {
   const {

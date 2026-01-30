@@ -21,12 +21,8 @@ import {
 import { useRef, useState, useEffect } from "react";
 import { Particle } from "./nBodyTypes";
 import AnimationViewPort from "./AnimationViewPort";
+import { DEFAULT_SIMULATION_BOUNDS } from "../../../config/constants";
 
-/**
- * ISSUE: Complex type definitions inline instead of in types file
- * FIX: Move SimulationBoundsType to nBodyTypes.ts for reusability
- * FE Best Practice: Centralize type definitions for better maintainability
- */
 // Define the simulation bounds type
 type SimulationBoundsType = {
   POSITION: {
@@ -50,37 +46,6 @@ type SimulationBoundsType = {
     CENTRAL: number;
   };
   PARTICLE_COUNT: number;
-};
-
-/**
- * ISSUE: DEFAULT_SIMULATION_BOUNDS defined in component file
- * FIX: Move to config/constants.ts or separate config file
- * FE Best Practice: Configuration should be centralized and easy to modify
- * PATTERN: Export from config, import where needed for consistency
- */
-// Initial simulation bounds
-const DEFAULT_SIMULATION_BOUNDS: SimulationBoundsType = {
-  POSITION: {
-    MIN: -75,
-    MAX: 75,
-  },
-  VELOCITY: {
-    MIN: -0.001,
-    MAX: 0.001,
-  },
-  MASS: {
-    TINY: 0.00001,
-    SMALL: 10,
-    MEDIUM: 100,
-    LARGE: 1000,
-    CENTRAL: 1000000,
-  },
-  RADIUS: {
-    MIN: 0.5,
-    MAX: 2,
-    CENTRAL: 3,
-  },
-  PARTICLE_COUNT: 500,
 };
 
 // Generate random HSL color for visual distinction
