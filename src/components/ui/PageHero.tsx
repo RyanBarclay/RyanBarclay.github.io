@@ -37,7 +37,7 @@ const PageHero = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        marginTop: -10,
+        marginTop: { xs: -4, md: -10 },
         mb: 4,
       }}
     >

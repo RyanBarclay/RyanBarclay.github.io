@@ -17,7 +17,7 @@ import {
   Typography,
   alpha,
 } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
+import { Menu as MenuIcon, DarkMode, LightMode } from "@mui/icons-material";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import componentLinkInfo from "../../config/routes";
@@ -96,19 +96,15 @@ const Navbar = () => {
               >
                 Ryan Barclay
               </Typography>
-              <Box>
-                <ThemeButton
-                  isDarkTheme={isDarkTheme}
-                  toggleTheme={toggleTheme}
-                />
-                <IconButton
-                  color="inherit"
-                  onClick={() => setMobileOpen(true)}
-                  sx={{ ml: 1 }}
-                >
-                  <MenuIcon />
-                </IconButton>
-              </Box>
+              <IconButton
+                color="inherit"
+                onClick={() => setMobileOpen(true)}
+                sx={{
+                  color: trigger ? "text.primary" : "common.white",
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
             </Toolbar>
           </Container>
         </AppBar>
@@ -154,6 +150,8 @@ const Navbar = () => {
               top: -drawerBleeding,
               borderTopLeftRadius: 8,
               borderTopRightRadius: 8,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
               visibility: "visible",
               right: 0,
               left: 0,
@@ -168,7 +166,7 @@ const Navbar = () => {
                   isDarkTheme
                     ? theme.palette.common.white
                     : theme.palette.common.black,
-                  isDarkTheme ? 0.5 : 0.3,
+                  isDarkTheme ? 0.5 : 0.6,
                 ),
                 borderRadius: 3,
               }}
@@ -176,6 +174,21 @@ const Navbar = () => {
           </Paper>
 
           <List>
+            {/* Theme Toggle as first item */}
+            <ListItemButton
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                py: 2,
+              }}
+            >
+              <ListItemText primary="Theme" />
+              <ThemeButton
+                isDarkTheme={isDarkTheme}
+                toggleTheme={toggleTheme}
+              />
+            </ListItemButton>
             {navItems.map(([key, { to, label, icon }]) => (
               <ListItemButton
                 key={key}

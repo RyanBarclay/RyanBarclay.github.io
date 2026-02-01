@@ -7,8 +7,21 @@
  * Phase F - Complete
  */
 
-import React from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Dialog,
+  IconButton,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import {
+  Fullscreen as FullscreenIcon,
+  Close as CloseIcon,
+  Menu as MenuIcon,
+} from "@mui/icons-material";
 import { TerrainProvider } from "./context/TerrainContext";
 import { ErrorBoundary } from "./components/ui/ErrorBoundary";
 import ProjectDetailLayout from "../../../components/layout/ProjectDetailLayout";
@@ -18,6 +31,10 @@ import ControlPanel from "./components/controls/ControlPanel";
 
 const TerrainGeneratorProject = () => {
   const projectData = getProjectById("terrain-generator");
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [controlsOpen, setControlsOpen] = useState(false);
 
   const sections = [
     {
@@ -170,47 +187,174 @@ const TerrainGeneratorProject = () => {
           sections={sections}
           technologies={projectData.technologies}
           additionalContent={
-            <Box
-              sx={{
-                position: "relative",
-                display: "flex",
-                flexDirection: { xs: "column", md: "row" },
-                gap: { xs: 0, md: 2 },
-                width: "100%",
-                minHeight: { xs: "70vh", md: "600px" },
-              }}
-            >
-              {/* 3D Visualization Canvas */}
-              <Box
-                sx={{
-                  flex: 1,
-                  height: { xs: "70vh", md: "600px" },
-                  border: "1px solid",
-                  borderColor: "divider",
-                  borderRadius: 1,
-                  overflow: "hidden",
-                  position: "relative",
-                }}
-              >
-                <TerrainCanvas />
-              </Box>
+            <>
+              {/* Desktop: Side-by-side layout (unchanged) */}
+              {!isMobile && (
+                <Box
+                  sx={{
+                    position: "relative",
+                    display: "flex",
+                    gap: 2,
+                    width: "100%",
+                    minHeight: "600px",
+                  }}
+                >
+                  {/* 3D Visualization Canvas */}
+                  <Box
+                    sx={{
+                      flex: 1,
+                      height: "600px",
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
+                      overflow: "hidden",
+                      position: "relative",
+                    }}
+                  >
+                    <TerrainCanvas />
+                  </Box>
 
-              {/* Control Panel - Desktop Only (Mobile uses drawer) */}
-              <Box
-                sx={{
-                  display: { xs: "none", md: "block" },
-                  width: "320px",
-                  flexShrink: 0,
-                }}
-              >
-                <ControlPanel />
-              </Box>
+                  {/* Control Panel - Desktop sidebar */}
+                  <Box
+                    sx={{
+                      width: "320px",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <ControlPanel />
+                  </Box>
+                </Box>
+              )}
 
-              {/* Mobile Control Panel (rendered inside TerrainCanvas as floating button) */}
-              <Box sx={{ display: { xs: "block", md: "none" } }}>
-                <ControlPanel />
-              </Box>
-            </Box>
+              {/* Mobile: Preview with full-screen modal */}
+              {isMobile && (
+                <>
+                  {/* Preview Canvas with Open Button */}
+                  <Box
+                    sx={{
+                      position: "relative",
+                      width: "100%",
+                      height: "50vh",
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <TerrainCanvas />
+
+                    {/* Overlay button to open full-screen */}
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        bottom: 72,
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        zIndex: 100,
+                      }}
+                    >
+                      <Button
+                        variant="contained"
+                        size="large"
+                        startIcon={<FullscreenIcon />}
+                        onClick={() => setIsFullScreen(true)}
+                        sx={{
+                          boxShadow: 3,
+                          "&:hover": {
+                            boxShadow: 6,
+                          },
+                        }}
+                      >
+                        Open Full-Screen Demo
+                      </Button>
+                    </Box>
+                  </Box>
+
+                  {/* Full-Screen Modal */}
+                  <Dialog
+                    fullScreen
+                    open={isFullScreen}
+                    onClose={() => setIsFullScreen(false)}
+                    sx={{
+                      "& .MuiDialog-paper": {
+                        backgroundColor: "background.default",
+                      },
+                    }}
+                  >
+                    {/* Close Button */}
+                    <IconButton
+                      onClick={() => setIsFullScreen(false)}
+                      sx={{
+                        position: "absolute",
+                        top: 16,
+                        left: 16,
+                        zIndex: 1300,
+                        backgroundColor: "background.paper",
+                        boxShadow: 2,
+                        "&:hover": {
+                          backgroundColor: "action.hover",
+                        },
+                      }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+
+                    {/* Controls Menu Button */}
+                    <IconButton
+                      onClick={() => setControlsOpen(true)}
+                      sx={{
+                        position: "absolute",
+                        top: 16,
+                        right: 16,
+                        zIndex: 1300,
+                        backgroundColor: "background.paper",
+                        boxShadow: 2,
+                        "&:hover": {
+                          backgroundColor: "action.hover",
+                        },
+                      }}
+                    >
+                      <MenuIcon />
+                    </IconButton>
+
+                    {/* Full-Screen Canvas */}
+                    <Box
+                      sx={{
+                        width: "100%",
+                        height: controlsOpen ? "40vh" : "100vh",
+                        transition: "height 0.3s ease-in-out",
+                      }}
+                    >
+                      <TerrainCanvas />
+                    </Box>
+
+                    {/* Controls Drawer (only shown when controlsOpen is true) */}
+                    {controlsOpen && (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          height: "60vh",
+                          backgroundColor: "background.paper",
+                          borderTopLeftRadius: 16,
+                          borderTopRightRadius: 16,
+                          boxShadow: 24,
+                          zIndex: 1200,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <ControlPanel
+                          hideToggleButton={true}
+                          onClose={() => setControlsOpen(false)}
+                        />
+                      </Box>
+                    )}
+                  </Dialog>
+                </>
+              )}
+            </>
           }
         />
       </TerrainProvider>

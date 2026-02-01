@@ -45,9 +45,17 @@ import ExportPanel from "../ui/ExportPanel";
  * ControlPanel component - Responsive controls for terrain generation
  *
  * Desktop: Fixed sidebar
- * Mobile: Drawer with toggle button
+ * Mobile: Drawer with toggle button (unless hideToggleButton is true)
  */
-export default function ControlPanel() {
+interface ControlPanelProps {
+  hideToggleButton?: boolean;
+  onClose?: () => void;
+}
+
+export default function ControlPanel({
+  hideToggleButton = false,
+  onClose,
+}: ControlPanelProps = {}) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -57,7 +65,10 @@ export default function ControlPanel() {
   const handleGenerate = () => {
     applyPendingConfig(); // Apply pending changes first
     generate(); // Then trigger generation
-    if (isMobile) setDrawerOpen(false);
+    if (isMobile) {
+      setDrawerOpen(false);
+      onClose?.(); // Call parent onClose if provided
+    }
   };
 
   const controlsContent = (
@@ -81,7 +92,13 @@ export default function ControlPanel() {
           }}
         >
           <Typography variant="h6">Terrain Controls</Typography>
-          <IconButton onClick={() => setDrawerOpen(false)} size="small">
+          <IconButton
+            onClick={() => {
+              setDrawerOpen(false);
+              onClose?.(); // Call parent onClose handler
+            }}
+            size="small"
+          >
             <CloseIcon />
           </IconButton>
         </Box>
@@ -200,38 +217,47 @@ export default function ControlPanel() {
   if (isMobile) {
     return (
       <>
-        {/* Floating toggle button */}
-        <IconButton
-          onClick={() => setDrawerOpen(true)}
-          sx={{
-            position: "absolute",
-            top: 16,
-            left: 16,
-            zIndex: 1000,
-            backgroundColor: "background.paper",
-            boxShadow: 2,
-            "&:hover": {
-              backgroundColor: "action.hover",
-            },
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
+        {/* Floating toggle button - only show if not in modal */}
+        {!hideToggleButton && (
+          <IconButton
+            onClick={() => setDrawerOpen(true)}
+            sx={{
+              position: "absolute",
+              top: 16,
+              left: 16,
+              zIndex: 1000,
+              backgroundColor: "background.paper",
+              boxShadow: 2,
+              "&:hover": {
+                backgroundColor: "action.hover",
+              },
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
 
-        {/* Drawer */}
-        <Drawer
-          anchor="left"
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          PaperProps={{
-            sx: {
-              width: "85vw",
-              maxWidth: 400,
-            },
-          }}
-        >
-          {controlsContent}
-        </Drawer>
+        {/* Drawer - only render if not using hideToggleButton (modal controls itself) */}
+        {!hideToggleButton && (
+          <Drawer
+            anchor="bottom"
+            open={drawerOpen}
+            onClose={() => setDrawerOpen(false)}
+            PaperProps={{
+              sx: {
+                width: "100%",
+                height: "90vh",
+                borderTopLeftRadius: 16,
+                borderTopRightRadius: 16,
+              },
+            }}
+          >
+            {controlsContent}
+          </Drawer>
+        )}
+
+        {/* When hideToggleButton is true, just render the controls content directly */}
+        {hideToggleButton && controlsContent}
       </>
     );
   }

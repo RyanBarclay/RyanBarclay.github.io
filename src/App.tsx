@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { HashRouter } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
 import MainContent from "./components/layout/MainContent";
+import ScrollToTop from "./components/layout/ScrollToTop";
 import { ThemeContext } from "./contexts/DarkModeContext";
 import { darkTheme, lightTheme } from "./theme/theme";
 
@@ -14,6 +15,7 @@ function App() {
     <HashRouter>
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
         <CssBaseline />
+        <ScrollToTop />
         <Navbar />
         <MainContent />
       </ThemeProvider>
