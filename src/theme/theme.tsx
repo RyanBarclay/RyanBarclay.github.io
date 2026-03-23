@@ -169,8 +169,7 @@ const sharedTheme: Partial<ThemeOptions> = {
       "sans-serif",
     ].join(","),
     h1: {
-      fontFamily: "GreatForest, sans-serif",
-      fontWeight: 400,
+      fontWeight: 700,
       fontSize: "3rem",
       lineHeight: 1.2,
       letterSpacing: "0.02em",

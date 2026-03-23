@@ -64,9 +64,20 @@ export const resumeData: ResumeData = {
       location: "Vancouver, BC",
       roles: [
         {
-          title: "Software Engineer (BUILDER-2B-CA)",
-          startDate: "Aug 2025",
+          title: "Software Engineer L3A — FDSE",
+          startDate: "Jan 2026",
           endDate: "Present",
+          type: "Hybrid",
+          bullets: [
+            "Driving partner integrations — helping merchants and developers embed Rokt's platform into their existing tech stacks",
+            "Building automation tools for Sales and BD workflows to eliminate manual steps in the go-live process",
+            "Consulting on and implementing fixes to the sales pipeline with a goal of reducing average time-to-launch from 48 days to 4",
+          ],
+        },
+        {
+          title: "Software Engineer L2B",
+          startDate: "Aug 2025",
+          endDate: "Jan 2026",
           type: "Hybrid",
           bullets: [
             "Full-stack engineering on Rokt's e-commerce platform serving enterprise merchants globally",
@@ -75,7 +86,7 @@ export const resumeData: ResumeData = {
           ],
         },
         {
-          title: "Software Engineer (ENGINEERING-2-CA)",
+          title: "Software Engineer L2",
           startDate: "Nov 2024",
           endDate: "Aug 2025",
           type: "Hybrid",
@@ -85,15 +96,13 @@ export const resumeData: ResumeData = {
           ],
         },
         {
-          title: "Operations Engineer (OPERATIONS-3A-CA)",
+          title: "Operations Engineer L3A",
           startDate: "Feb 2024",
           endDate: "Nov 2024",
           type: "Hybrid",
           bullets: [
             "Led technical support for eCommerce merchants on AfterSell / Rokt Shopify apps following acquisition",
             "Expanded role to work closely with engineering team — identifying, scoping, and implementing patches and stability updates",
-            "Maintained high customer satisfaction through direct engagement and proactive problem-solving",
-            "Supported growth of the support team by training new and existing members",
             "Contributed to successful integration of Rokt's network offers within the AfterSell ecosystem",
           ],
         },

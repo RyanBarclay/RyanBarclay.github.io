@@ -40,15 +40,21 @@ const TerrainGeneratorProject = () => {
     {
       title: "Overview",
       content: (
-        <Typography paragraph>
-          A real-time 3D terrain generator showcasing modern AI-assisted
-          development. Built entirely through structured collaboration between
-          human oversight and GitHub Copilot with Claude Sonnet 4.5, this
-          project demonstrates the power of systematic AI-driven software
-          engineering. Features custom implementations of Simplex noise, fractal
-          Brownian motion, and an advanced LOD system with quadtree spatial
-          partitioning for optimal performance.
-        </Typography>
+        <>
+          <Typography paragraph>
+            A real-time 3D terrain generator I designed and built using
+            structured multi-agent AI workflows. I architected the full system —
+            algorithms, data structures, and phased implementation plan — then
+            coordinated specialized Claude Code agents to execute each phase
+            under quality gates. The result: ~3,800 lines across 35+ files, 60
+            FPS on 256×256 meshes, and four export formats.
+          </Typography>
+          <Typography paragraph>
+            Features custom Simplex noise, fractal Brownian motion, and a
+            quadtree LOD system — all implemented from scratch without external
+            algorithm libraries.
+          </Typography>
+        </>
       ),
     },
     {
@@ -56,10 +62,11 @@ const TerrainGeneratorProject = () => {
       content: (
         <>
           <Typography paragraph>
-            This project represents a new paradigm in software development:
-            human-AI collaboration with structured quality gates. The entire
-            codebase (~3,800 lines across 35+ files) was created through
-            systematic coordination of specialized AI sub-agents.
+            I designed the system architecture and directed specialized Claude
+            Code agents through a phased build process with audits between each
+            phase. The codebase (~3,800 lines across 35+ files) was executed by
+            AI agents under my technical oversight — not co-generated, but
+            directed.
           </Typography>
           <Typography paragraph>
             <strong>Development Workflow:</strong>

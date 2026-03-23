@@ -21,6 +21,7 @@ import {
   Tooltip,
   Fab,
   Grid,
+  Container,
 } from "@mui/material";
 import {
   ExpandMore,
@@ -117,10 +118,29 @@ const RandomizerContent = () => {
   return (
     <>
       <PageHero
-        title=""
+        title="Multi-Set Randomizer"
+        subtitle="Randomize selections across multiple independent item sets simultaneously"
         backgroundImage="https://images.unsplash.com/photo-1604223190546-a43e4c7f29d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGxhbmRzY2FwZXxlbnwxfHx8fDE3NjkxNTU5OTZ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
         gradientOverlay="linear-gradient(to bottom, rgba(0,137,123,0.5), rgba(0,137,123,0.8))"
       />
+      <Container maxWidth="lg" sx={{ pt: 4, pb: 2 }}>
+        <Card sx={{ mb: 4, p: 3 }}>
+          <Typography variant="h5" gutterBottom>
+            About This Project
+          </Typography>
+          <Typography variant="body1" color="text.secondary" paragraph>
+            Built to solve a real problem: picking one item from each of several
+            unrelated lists at the same time. Create named sets, add items,
+            toggle individual options on or off, then hit randomize to get one
+            selection per enabled set — all at once.
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Built with React, TypeScript, and MUI. Supports .txt file
+            import/export for sharing sets, persistent state via Context API,
+            and per-item enable/disable toggles for fine-grained control.
+          </Typography>
+        </Card>
+      </Container>
       <Box sx={{ width: "100%", padding: 2, position: "relative", pb: 10 }}>
         <Typography variant="h4" gutterBottom>
           Randomizer

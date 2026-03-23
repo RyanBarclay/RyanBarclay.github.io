@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import { GitHub, LinkedIn } from "@mui/icons-material";
+import { GitHub, LinkedIn, Email } from "@mui/icons-material";
 import Hero from "../components/ui/Hero";
 import ProjectCard from "../components/ui/ProjectCard";
 import SectionHeader from "../components/ui/SectionHeader";
@@ -88,6 +88,14 @@ const Home = () => {
               rel="noopener noreferrer"
             >
               LinkedIn
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Email />}
+              component="a"
+              href="mailto:work@ryanbarclay.ca"
+            >
+              Email
             </Button>
           </Box>
         </Paper>

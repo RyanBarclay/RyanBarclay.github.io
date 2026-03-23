@@ -7,13 +7,53 @@ import { NAVBAR_HEIGHT, NAVBAR_HEIGHT_WITH_PADDING } from "../../config/constant
 
 const HERO_POSTER = "/assets/images/hero-poster.jpg";
 
+const HERO_SLIDES = [
+  {
+    title: "Software Engineer",
+    subtitle:
+      "Building partner integrations, full-stack systems, and AI workflows — from concept to deployment.",
+  },
+  {
+    title: "Full Stack Developer",
+    subtitle:
+      "React frontends, Node backends, DevOps pipelines — and the glue that holds it all together.",
+  },
+  {
+    title: "Agentic Coordinator",
+    subtitle:
+      "Designing multi-agent AI workflows that turn days of work into hours. Velocity is the product.",
+  },
+  {
+    title: "Forward Deployed\nSoftware Engineer",
+    subtitle:
+      "Embedded at the intersection of engineering and GTM. I close the gap between what's possible and what ships.",
+  },
+];
+
+const SLIDE_INTERVAL = 4000;
+const FADE_DURATION = 400;
+
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const rafRef = useRef<number>(0);
   const { isDarkTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisible(false);
+      const timeout = setTimeout(() => {
+        setActiveIndex((i) => (i + 1) % HERO_SLIDES.length);
+        setVisible(true);
+      }, FADE_DURATION);
+      return () => clearTimeout(timeout);
+    }, SLIDE_INTERVAL);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -124,32 +164,41 @@ const Hero = () => {
           },
         }}
       >
-        <Typography
-          variant="h1"
+        <Box
           sx={{
-            fontWeight: 700,
-            fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4.5rem" },
-            mb: 2,
-            textShadow: "2px 2px 8px rgba(0,0,0,0.8)",
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(8px)",
+            transition: `opacity ${FADE_DURATION}ms ease, transform ${FADE_DURATION}ms ease`,
           }}
         >
-          Full-Stack Developer
-        </Typography>
-        <Box sx={{ width: 60, height: 3, bgcolor: "primary.main", mx: "auto", my: 2 }} />
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 300,
-            fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
-            maxWidth: "800px",
-            mx: "auto",
-            mb: 4,
-            textShadow: "1px 1px 4px rgba(0,0,0,0.8)",
-          }}
-        >
-          Building scalable applications and intelligent systems—from concept to
-          deployment
-        </Typography>
+          <Typography
+            variant="h1"
+            sx={{
+              fontFamily: "GreatForest, sans-serif",
+              fontWeight: 400,
+              fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4.5rem" },
+              mb: 2,
+              textShadow: "2px 2px 8px rgba(0,0,0,0.8)",
+              whiteSpace: "pre-line",
+            }}
+          >
+            {HERO_SLIDES[activeIndex].title}
+          </Typography>
+          <Box sx={{ width: 60, height: 3, bgcolor: "primary.main", mx: "auto", my: 2 }} />
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 300,
+              fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
+              maxWidth: "800px",
+              mx: "auto",
+              mb: 4,
+              textShadow: "1px 1px 4px rgba(0,0,0,0.8)",
+            }}
+          >
+            {HERO_SLIDES[activeIndex].subtitle}
+          </Typography>
+        </Box>
 
         {/* Action Buttons */}
         <Box sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 8 }}>

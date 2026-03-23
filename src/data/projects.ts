@@ -13,10 +13,10 @@ export const projectsData: ProjectData[] = [
   {
     id: "terrain-generator",
     title: "Procedural Terrain Generator",
-    tag: "PROJ",
-    tags: ["React Three Fiber", "WebGL", "Algorithms", "AI-Generated"],
+    tag: "",
+    tags: ["React Three Fiber", "WebGL", "Algorithms"],
     description:
-      "Real-time 3D terrain generator featuring custom Simplex noise, fractal Brownian motion, and quadtree LOD with O(log n) spatial queries — achieving 60 FPS on 256×256 meshes with 75% triangle reduction at distance. Architected and directed the implementation through structured parallel AI agents coordinated via a PRD-driven workflow, demonstrating best practices for AI-assisted development at production scale. Four export formats: OBJ, STL, PNG heightmap, RAW binary.",
+      "Real-time 3D terrain generator with custom Simplex noise, fractal Brownian motion, and quadtree LOD — achieving 60 FPS on 256×256 meshes with 75% triangle reduction at distance. Architected and directed through structured parallel AI agents with full quality gates. Exports to OBJ, STL, PNG heightmap, and RAW binary.",
     image:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop",
     heroImage: "/assets/images/terrain-hero.jpg",
@@ -31,7 +31,7 @@ export const projectsData: ProjectData[] = [
       {
         title: "AI-Driven Development Process",
         content:
-          "This project demonstrates modern AI-assisted software development using GitHub Copilot with Claude Sonnet 4.5. The entire codebase (~3,800 lines across 35+ files) was created through structured collaboration between human oversight and AI agents.",
+          "This project demonstrates architecting and directing a production-scale AI workflow. I designed the entire system — algorithms, data structures, and phased implementation plan — then coordinated specialized AI sub-agents to execute each phase under structured quality gates. The result: ~3,800 lines across 35+ files with full TypeScript strict mode and comprehensive documentation.",
       },
       {
         title: "Development Workflow",
@@ -56,17 +56,10 @@ export const projectsData: ProjectData[] = [
     ],
     technologies: [
       "React Three Fiber",
-      "@react-three/drei",
       "Three.js",
       "TypeScript",
-      "Material-UI v7",
-      "Custom Simplex Noise",
-      "Fractal Brownian Motion",
-      "Quadtree LOD",
       "WebGL",
-      "BufferGeometry",
-      "GitHub Copilot (Claude Sonnet 4.5)",
-      "Google Gemini (PRD Generation)",
+      "Quadtree LOD",
     ],
     year: "2026",
     featured: true,
@@ -74,7 +67,7 @@ export const projectsData: ProjectData[] = [
   {
     id: "nbody-simulation",
     title: "N-Body Simulation",
-    tag: "PROJ",
+    tag: "",
     tags: ["Physics", "3D Graphics", "Interactive"],
     description:
       "An interactive 3D physics simulation that models gravitational interactions between multiple bodies in space. The simulation uses the Barnes-Hut algorithm to efficiently approximate gravitational forces between large numbers of particles, making it possible to simulate complex systems like galaxies and star clusters.",
@@ -97,7 +90,7 @@ export const projectsData: ProjectData[] = [
   {
     id: "randomizer",
     title: "Multi-Set Randomizer",
-    tag: "TOOL",
+    tag: "",
     tags: ["React", "TypeScript", "Tool"],
     description:
       "A powerful web-based randomization tool for managing multiple item sets. Features drag-and-drop file upload, set management, customizable randomization options, and file export/import functionality. Perfect for creating random selections from multiple categories.",
@@ -120,7 +113,7 @@ export const projectsData: ProjectData[] = [
   {
     id: "battlesnake",
     title: "Battlesnake 2019",
-    tag: "EVNT",
+    tag: "ARCHIVED",
     tags: ["Python", "AI", "Web Server"],
     description:
       "A competitive programming game where you build an AI web server to play snake against other players. Used AI, web servers, deployment, and networking.",
@@ -146,7 +139,7 @@ export const projectsData: ProjectData[] = [
   {
     id: "personal-server",
     title: "Personal Server",
-    tag: "PROJ",
+    tag: "ARCHIVED",
     tags: ["Server", "RAID", "Linux"],
     description:
       "Built and configured a personal server for NAS, SFTP, SSH and ML training. Features 4TB RAID 5 storage, 6 core CPU and serves as a development environment.",
@@ -166,7 +159,7 @@ export const projectsData: ProjectData[] = [
   {
     id: "spookathon",
     title: "Spookathon 2019",
-    tag: "HACK",
+    tag: "ARCHIVED",
     tags: ["2nd Place", "Hackathon", "Machine Learning"],
     description:
       "Won 2nd place at UVic's 3-hour hackathon. Built a movie recommendation system that filters out movies containing disliked actors using facial recognition.",
@@ -191,7 +184,7 @@ export const projectsData: ProjectData[] = [
   {
     id: "js-challenge",
     title: "21 Day JavaScript Challenge",
-    tag: "CHAL",
+    tag: "ARCHIVED",
     tags: ["JavaScript", "Team Competition", "Top 8"],
     description:
       "Participated in Lighthouse Labs' JavaScript challenge. Team ranked in top 8 while building fundamental JS skills.",

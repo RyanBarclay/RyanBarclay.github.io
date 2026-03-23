@@ -18,7 +18,7 @@ const Contact = () => {
       name: "GitHub",
       icon: <GitHub />,
       link: "http://www.github.com/ryanbarclay",
-      description: "Check out my code repositories and open source contributions",
+      description: "Check out my code repositories and projects",
       color: "social.github",
     },
     {

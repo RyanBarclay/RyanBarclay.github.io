@@ -76,8 +76,10 @@ const ProjectCard = ({
               position: "absolute",
               top: 12,
               left: 12,
-              bgcolor: "primary.main",
-              color: "primary.contrastText",
+              bgcolor: tag === "ARCHIVED"
+                ? (theme) => alpha(theme.palette.text.secondary, 0.25)
+                : "primary.main",
+              color: tag === "ARCHIVED" ? "text.secondary" : "primary.contrastText",
               fontWeight: 700,
               fontSize: "0.65rem",
               letterSpacing: "0.06em",

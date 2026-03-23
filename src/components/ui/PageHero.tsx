@@ -1,5 +1,5 @@
 import { Box, Container, Typography } from "@mui/material";
-import { HERO_VARIANTS, HeroVariant } from "../../config/constants";
+import { HERO_VARIANTS, HeroVariant, NAVBAR_HEIGHT_WITH_PADDING } from "../../config/constants";
 
 /**
  * PageHero component displays a full-width hero section with background image and gradient overlay.
@@ -37,7 +37,7 @@ const PageHero = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        marginTop: { xs: -4, md: -10 },
+        marginTop: `-${NAVBAR_HEIGHT_WITH_PADDING}px`,
         mb: 4,
       }}
     >

@@ -7,8 +7,6 @@ import {
   Button,
   Container,
   Card,
-  CardContent,
-  IconButton,
   Avatar,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
@@ -16,13 +14,12 @@ import {
   GitHub,
   LinkedIn,
   Email,
-  Palette,
-  Storage,
-  Cloud,
-  Lightbulb,
+  IntegrationInstructions,
+  Speed,
+  RecordVoiceOver,
+  Verified,
   Groups,
-  AutoStories,
-  EnergySavingsLeaf,
+  EmojiEvents,
 } from "@mui/icons-material";
 import PageHero from "../components/ui/PageHero";
 import FeatureIconBox from "../components/ui/FeatureIconBox";
@@ -62,69 +59,62 @@ const About = () => {
                   Hello, I'm Ryan Barclay
                 </Typography>
                 <Typography variant="body1" color="text.secondary" paragraph>
-                  I'm a full-stack software engineer based in beautiful British
-                  Columbia. With a deep appreciation for both technology and
-                  nature, I strive to create digital experiences that are as
-                  elegant and functional as the natural world around us.
+                  I'm a full-stack software engineer currently building at Rokt
+                  — a global e-commerce tech company — after navigating two
+                  acquisitions (AfterSell by Rokt, Beanworks by Quadient). I
+                  operate across the stack: from React frontends and Node
+                  backends to DevOps pipelines and the AI workflows that tie
+                  them together.
                 </Typography>
                 <Typography variant="body1" color="text.secondary" paragraph>
-                  My journey in software development began over 5 years ago, and
-                  since then, I've had the privilege of working on diverse
-                  projects ranging from startups to enterprise applications. I
-                  believe in writing clean, maintainable code and creating
-                  products that truly make a difference.
+                  Based in North Vancouver, I work at the intersection of
+                  engineering depth and cross-functional communication. In the
+                  current AI landscape, I focus on being a force multiplier —
+                  bringing the architecture instincts and quality gates that
+                  turn AI tooling from a curiosity into a production accelerant.
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", gap: 1.5 }}>
-                <IconButton
+              <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
+                <Button
+                  variant="contained"
+                  startIcon={<GitHub />}
                   href="http://www.github.com/ryanbarclay"
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 1.5,
                     bgcolor: (theme) => theme.palette.social.github,
-                    color: "white",
-                    "&:hover": {
-                      bgcolor: (theme) => theme.palette.social.githubHover,
-                    },
+                    borderRadius: 6,
+                    "&:hover": { bgcolor: (theme) => theme.palette.social.githubHover },
                   }}
                 >
-                  <GitHub sx={{ fontSize: 24 }} />
-                </IconButton>
-                <IconButton
+                  GitHub
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<LinkedIn />}
                   href="https://www.linkedin.com/in/ryan-barclay"
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 1.5,
                     bgcolor: (theme) => theme.palette.social.linkedin,
-                    color: "white",
-                    "&:hover": {
-                      bgcolor: (theme) => theme.palette.social.linkedinHover,
-                    },
+                    borderRadius: 6,
+                    "&:hover": { bgcolor: (theme) => theme.palette.social.linkedinHover },
                   }}
                 >
-                  <LinkedIn sx={{ fontSize: 24 }} />
-                </IconButton>
-                <IconButton
+                  LinkedIn
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<Email />}
                   href="mailto:work@ryanbarclay.ca"
                   sx={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 1.5,
                     bgcolor: "primary.main",
-                    color: "white",
-                    "&:hover": {
-                      bgcolor: (theme) => theme.palette.social.emailHover,
-                    },
+                    borderRadius: 6,
+                    "&:hover": { bgcolor: (theme) => theme.palette.social.emailHover },
                   }}
                 >
-                  <Email sx={{ fontSize: 24 }} />
-                </IconButton>
+                  Email
+                </Button>
               </Box>
             </Box>
           </Grid>
@@ -138,23 +128,23 @@ const About = () => {
           <Grid container spacing={4}>
             <Grid size={{ xs: 12, md: 4 }}>
               <FeatureIconBox
-                icon={<Palette sx={{ fontSize: 28, color: "primary.main" }} />}
-                title="UI/UX Development"
-                description="Creating beautiful, intuitive interfaces that users love. I focus on accessibility and responsive design principles."
+                icon={<IntegrationInstructions sx={{ fontSize: 28, color: "primary.main" }} />}
+                title="Partner Integrations"
+                description="Embedding Rokt's platform into merchant tech stacks — from Shopify apps to custom API integrations. I own the full integration lifecycle: scoping, implementation, and go-live."
               />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
               <FeatureIconBox
-                icon={<Storage sx={{ fontSize: 28, color: "primary.main" }} />}
-                title="Backend Systems"
-                description="Building scalable, secure backend systems with clean architecture and efficient databases."
+                icon={<Speed sx={{ fontSize: 28, color: "primary.main" }} />}
+                title="Full-Stack Velocity"
+                description="React frontends, Node backends, DevOps pipelines — and now the AI workflows that multiply all of it. I move fast without breaking things that matter."
               />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
               <FeatureIconBox
-                icon={<Cloud sx={{ fontSize: 28, color: "primary.main" }} />}
-                title="Cloud Solutions"
-                description="Deploying and managing cloud infrastructure for high availability applications."
+                icon={<RecordVoiceOver sx={{ fontSize: 28, color: "primary.main" }} />}
+                title="Technical Discovery"
+                description="Primary technical voice bridging engineering and GTM. I translate architecture decisions into partner value and turn a hard 'no' into a scoped 'yes' in a single call."
               />
             </Grid>
           </Grid>
@@ -187,15 +177,44 @@ const About = () => {
                       flexShrink: 0,
                     }}
                   >
-                    <Lightbulb sx={{ fontSize: 20, color: "primary.main" }} />
+                    <Speed sx={{ fontSize: 20, color: "primary.main" }} />
                   </Box>
                   <Typography variant="h6" gutterBottom sx={{ mb: 0 }}>
-                    Innovation
+                    Move Fast
                   </Typography>
                 </Box>
                 <Typography variant="body2" color="text.secondary">
-                  Always exploring new technologies and approaches to solve
-                  problems in creative ways.
+                  Fast development is a feature. I ship quickly, iterate in
+                  production, and use AI tooling to multiply output — without
+                  sacrificing the architecture that keeps things moving at speed.
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Paper sx={{ p: 3, height: "100%" }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 1.5,
+                      bgcolor: (theme) => alpha(theme.palette.primary.main, 0.12),
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Verified sx={{ fontSize: 20, color: "primary.main" }} />
+                  </Box>
+                  <Typography variant="h6" gutterBottom sx={{ mb: 0 }}>
+                    Best Practices First
+                  </Typography>
+                </Box>
+                <Typography variant="body2" color="text.secondary">
+                  Speed without discipline is just chaos. I bring the quality
+                  gates, code review instincts, and architecture patterns that
+                  make fast sustainable.
                 </Typography>
               </Paper>
             </Grid>
@@ -217,12 +236,13 @@ const About = () => {
                     <Groups sx={{ fontSize: 20, color: "primary.main" }} />
                   </Box>
                   <Typography variant="h6" gutterBottom sx={{ mb: 0 }}>
-                    Collaboration
+                    In-Person Energy
                   </Typography>
                 </Box>
                 <Typography variant="body2" color="text.secondary">
-                  Believing that the best solutions come from diverse teams
-                  working together.
+                  The best alignment happens face-to-face. Sometimes a 10-minute
+                  whiteboard conversation closes what 30 Slack threads couldn't.
+                  I show up, push back, and get to yes.
                 </Typography>
               </Paper>
             </Grid>
@@ -241,42 +261,16 @@ const About = () => {
                       flexShrink: 0,
                     }}
                   >
-                    <AutoStories sx={{ fontSize: 20, color: "primary.main" }} />
+                    <EmojiEvents sx={{ fontSize: 20, color: "primary.main" }} />
                   </Box>
                   <Typography variant="h6" gutterBottom sx={{ mb: 0 }}>
-                    Continuous Learning
+                    Compete to Win
                   </Typography>
                 </Box>
                 <Typography variant="body2" color="text.secondary">
-                  Committed to staying current with industry trends and
-                  expanding my skill set.
-                </Typography>
-              </Paper>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Paper sx={{ p: 3, height: "100%" }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
-                  <Box
-                    sx={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 1.5,
-                      bgcolor: (theme) => alpha(theme.palette.primary.main, 0.12),
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                    }}
-                  >
-                    <EnergySavingsLeaf sx={{ fontSize: 20, color: "primary.main" }} />
-                  </Box>
-                  <Typography variant="h6" gutterBottom sx={{ mb: 0 }}>
-                    Sustainability
-                  </Typography>
-                </Box>
-                <Typography variant="body2" color="text.secondary">
-                  Writing efficient code and considering the environmental
-                  impact of technology.
+                  From university rowing to production incidents: I'm wired to
+                  go fast, break the right rules, and finish first. I bring that
+                  competitive edge into every sprint and every partnership.
                 </Typography>
               </Paper>
             </Grid>
@@ -314,23 +308,21 @@ const About = () => {
               <Box
                 sx={{
                   height: 250,
-                  background: (theme) => theme.palette.gradient.hero,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundImage:
+                    "url(https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&auto=format&fit=crop)",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
                   borderRadius: 2,
                   mb: 2,
                 }}
-              >
-                <AutoStories sx={{ fontSize: 120, color: "primary.contrastText", opacity: 0.9 }} />
-              </Box>
+              />
               <Typography variant="h6" gutterBottom>
                 Lifelong Learner
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 When I'm not coding, you'll find me reading tech blogs,
-                experimenting with new frameworks, or contributing to open
-                source projects.
+                experimenting with new frameworks, or exploring what's possible
+                with AI-assisted development.
               </Typography>
             </Grid>
           </Grid>
@@ -353,19 +345,39 @@ const About = () => {
             I'm always interested in hearing about new projects and
             opportunities
           </Typography>
-          <Button
-            variant="contained"
-            size="large"
-            startIcon={<Email />}
-            href="/contact"
-            sx={{
-              bgcolor: "white",
-              color: "primary.main",
-              "&:hover": { bgcolor: "grey.100" },
-            }}
-          >
-            Get In Touch
-          </Button>
+          <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<GitHub />}
+              href="http://www.github.com/ryanbarclay"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ bgcolor: "white", color: "grey.900", borderRadius: 6, "&:hover": { bgcolor: "grey.100" } }}
+            >
+              GitHub
+            </Button>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<LinkedIn />}
+              href="https://www.linkedin.com/in/ryan-barclay"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ bgcolor: "white", color: "grey.900", borderRadius: 6, "&:hover": { bgcolor: "grey.100" } }}
+            >
+              LinkedIn
+            </Button>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<Email />}
+              href="mailto:work@ryanbarclay.ca"
+              sx={{ bgcolor: "white", color: "grey.900", borderRadius: 6, "&:hover": { bgcolor: "grey.100" } }}
+            >
+              Email
+            </Button>
+          </Box>
         </Paper>
       </Container>
     </>
