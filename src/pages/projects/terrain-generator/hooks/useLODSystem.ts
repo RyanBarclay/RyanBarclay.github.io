@@ -13,7 +13,7 @@
  * Phase C - Sequential: useLODSystem Hook
  */
 
-import { useState, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Quadtree, type QuadtreeNode } from "../utils/lod/quadtree";
 import { getDefaultLODLevels } from "../utils/lod/lodCalculator";
@@ -124,17 +124,20 @@ export function useLODSystem(options: UseLODSystemOptions): UseLODSystemReturn {
     enabled = true,
   } = options;
 
-  // Initialize quadtree once (persists for component lifetime)
-  const [quadtree] = useState(() => {
+  // Recreate quadtree whenever terrainSize or maxLODLevel changes
+  const quadtree = useMemo(() => {
     const tree = new Quadtree(terrainSize, maxLODLevel);
     tree.buildFullTree();
     return tree;
-  });
+  }, [terrainSize, maxLODLevel]);
 
   // Track visible chunks for rendering
-  const [visibleChunks, setVisibleChunks] = useState<QuadtreeNode[]>(() =>
-    quadtree.getVisibleChunks(),
-  );
+  const [visibleChunks, setVisibleChunks] = useState<QuadtreeNode[]>([]);
+
+  // Sync visible chunks whenever the quadtree is recreated
+  useEffect(() => {
+    setVisibleChunks(quadtree.getVisibleChunks());
+  }, [quadtree]);
 
   // Frame counter for update interval
   const frameCountRef = useRef(0);

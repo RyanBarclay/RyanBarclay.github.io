@@ -71,6 +71,12 @@ interface TerrainContextValue {
   generateTerrain: () => void;
 
   regenerationKey: number; // Trigger for terrain regeneration
+
+  showStats: boolean;
+  setShowStats: (value: boolean) => void;
+
+  perfStats: { fps: number; triangles: number; drawCalls: number; memoryUsage: number; geometries: number };
+  setPerfStats: (stats: { fps: number; triangles: number; drawCalls: number; memoryUsage: number; geometries: number }) => void;
 }
 
 /**
@@ -100,6 +106,8 @@ export const TerrainProvider: React.FC<TerrainProviderProps> = ({
   const [geometry, setGeometry] = useState<THREE.BufferGeometry | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [regenerationKey, setRegenerationKey] = useState(0);
+  const [showStats, setShowStats] = useState(false);
+  const [perfStats, setPerfStats] = useState({ fps: 0, triangles: 0, drawCalls: 0, memoryUsage: 0, geometries: 0 });
 
   /**
    * Update PENDING configuration with partial values
@@ -231,6 +239,10 @@ export const TerrainProvider: React.FC<TerrainProviderProps> = ({
     isGenerating,
     generateTerrain,
     regenerationKey,
+    showStats,
+    setShowStats,
+    perfStats,
+    setPerfStats,
   };
 
   return (

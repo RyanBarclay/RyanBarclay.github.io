@@ -59,12 +59,12 @@ export default function ControlPanel({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { config, updateConfig, applyPendingConfig } = useTerrainContext();
+  const { config, pendingConfig, updateConfig, applyPendingConfig, showStats, setShowStats } = useTerrainContext();
   const { generate, isGenerating } = useTerrainGen();
 
   const handleGenerate = () => {
-    applyPendingConfig(); // Apply pending changes first
-    generate(); // Then trigger generation
+    applyPendingConfig(); // Sync context state for other consumers
+    generate(pendingConfig); // Pass pendingConfig directly to avoid stale closure
     if (isMobile) {
       setDrawerOpen(false);
       onClose?.(); // Call parent onClose if provided
@@ -176,7 +176,7 @@ export default function ControlPanel({
           </AccordionDetails>
         </Accordion>
 
-        {/* Wireframe Toggle */}
+        {/* Wireframe + Stats Toggles */}
         <Box sx={{ mt: 2 }}>
           <Divider sx={{ mb: 2 }} />
           <FormControlLabel
@@ -187,6 +187,15 @@ export default function ControlPanel({
               />
             }
             label="Wireframe Mode"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={showStats}
+                onChange={(e) => setShowStats(e.target.checked)}
+              />
+            }
+            label="Show Performance Stats"
           />
         </Box>
       </Box>

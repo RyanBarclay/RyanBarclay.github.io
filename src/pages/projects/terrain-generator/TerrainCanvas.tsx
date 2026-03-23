@@ -16,7 +16,7 @@
  */
 
 import React, { useEffect, useRef } from "react";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography, Paper } from "@mui/material";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { GridHelper } from "three";
@@ -41,7 +41,7 @@ import { useTerrainGen } from "./hooks/useTerrainGen";
  * </TerrainProvider>
  */
 export default function TerrainCanvas() {
-  const { geometry, config } = useTerrainContext();
+  const { geometry, config, showStats, perfStats } = useTerrainContext();
   const { generate } = useTerrainGen();
   const hasGenerated = useRef(false);
   const isLoading = geometry === null;
@@ -60,6 +60,34 @@ export default function TerrainCanvas() {
 
   return (
     <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
+      {/* Performance Stats Overlay */}
+      {showStats && (
+        <Paper
+          sx={{
+            position: "absolute",
+            top: 12,
+            left: 12,
+            p: 1.5,
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            backdropFilter: "blur(10px)",
+            color: "white",
+            zIndex: 10,
+            pointerEvents: "none",
+            fontFamily: "monospace",
+          }}
+          elevation={4}
+        >
+          <Typography variant="caption" fontWeight="bold" display="block" gutterBottom>
+            Performance
+          </Typography>
+          <Typography variant="caption" display="block">FPS: <strong>{perfStats.fps}</strong></Typography>
+          <Typography variant="caption" display="block">Triangles: <strong>{perfStats.triangles.toLocaleString()}</strong></Typography>
+          <Typography variant="caption" display="block">Draw Calls: <strong>{perfStats.drawCalls}</strong></Typography>
+          <Typography variant="caption" display="block">Memory: <strong>{perfStats.memoryUsage.toFixed(1)} MB</strong></Typography>
+          <Typography variant="caption" display="block">Geometries: <strong>{perfStats.geometries}</strong></Typography>
+        </Paper>
+      )}
+
       {/* Loading Overlay */}
       {isLoading && (
         <Box
@@ -130,7 +158,7 @@ export default function TerrainCanvas() {
         />
 
         {/* Performance HUD (inside Canvas - uses Html from drei) */}
-        <PerformanceHUDWrapper visible={true} updateInterval={30} />
+        <PerformanceHUDWrapper updateInterval={30} />
       </Canvas>
     </Box>
   );

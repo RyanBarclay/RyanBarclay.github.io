@@ -6,15 +6,10 @@ import {
   Info,
 } from "@mui/icons-material";
 import Projects from "../pages/projects/index";
-import BattlesnakeProject from "../pages/projects/battlesnake";
-import SpookathonProject from "../pages/projects/spookathon";
-import PersonalServer from "../pages/projects/personal-server";
-import JSChallenge from "../pages/projects/js-challenge";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Home from "../pages/Home";
-import NBodyProject from "../pages/projects/nbody-simulation";
-import Randomizer from "../pages/projects/randomizer/Randomizer";
+import Resume from "../pages/Resume";
 
 export interface ComponentLinkInfo {
   [key: string]: {
@@ -42,7 +37,7 @@ const componentLinkInfo: ComponentLinkInfo = {
     to: "/resume",
     label: "Resume",
     icon: <HistoryEdu />,
-    component: <HistoryEdu />,
+    component: <Resume />,
   },
   About: {
     to: "/about",

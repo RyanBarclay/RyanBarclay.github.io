@@ -20,7 +20,7 @@ import { SimplexNoise } from "../utils/noise/simplexNoise";
 import { getFractalNoise } from "../utils/noise/fractalNoise";
 import { createColorArray, applyRadialMask } from "../utils/color/colorMapper";
 import { buildTerrainGeometry } from "../utils/mesh/geometryBuilder";
-import type { HeightmapData } from "../types";
+import type { HeightmapData, TerrainConfig } from "../types";
 
 /**
  * Hook return type
@@ -29,7 +29,7 @@ interface UseTerrainGenReturn {
   heightmap: Float32Array | null;
   geometry: THREE.BufferGeometry | null;
   isGenerating: boolean;
-  generate: () => void;
+  generate: (overrideConfig?: TerrainConfig) => void;
 }
 
 /**
@@ -68,7 +68,7 @@ export function useTerrainGen(): UseTerrainGenReturn {
    * 5. Build geometry with positions, normals, and colors
    * 6. Update context
    */
-  const generate = useCallback(() => {
+  const generate = useCallback((overrideConfig?: TerrainConfig) => {
     setIsGenerating(true);
 
     // Use setTimeout to allow UI to update (show loading state)
@@ -85,7 +85,7 @@ export function useTerrainGen(): UseTerrainGenReturn {
           preset,
           colorScheme,
           animation,
-        } = config;
+        } = overrideConfig ?? config;
 
         // Step 1: Initialize noise generator with seed
         const simplex = new SimplexNoise(seed);

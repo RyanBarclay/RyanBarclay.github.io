@@ -1,82 +1,55 @@
 /**
  * PerformanceHUDWrapper.tsx
  *
- * Bridge component that connects R3F usePerformance hook to DOM-based PerformanceHUD.
- * Renders the HUD as a properly positioned HTML overlay.
+ * Collects R3F scene performance stats inside the Canvas context and stores
+ * them in TerrainContext so the overlay can be rendered as a regular DOM element.
  */
 
-import { Html } from "@react-three/drei";
-import { Paper, Typography, Box } from "@mui/material";
-import { usePerformance } from "../../hooks/usePerformance";
+import { useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useTerrainContext } from "../../context/TerrainContext";
 
 interface PerformanceHUDWrapperProps {
-  visible?: boolean;
   updateInterval?: number;
 }
 
-/**
- * Performance HUD that lives inside R3F Canvas
- * Uses Html component with transform={false} to prevent 3D positioning
- */
 export default function PerformanceHUDWrapper({
-  visible = true,
   updateInterval = 30,
 }: PerformanceHUDWrapperProps) {
-  const stats = usePerformance({ updateInterval, enabled: visible });
+  const { showStats, setPerfStats } = useTerrainContext();
+  const { gl } = useThree();
 
-  if (!visible) return null;
+  const frameCountRef = useRef(0);
+  const lastTimeRef = useRef(Date.now());
+  const framesRef = useRef(0);
 
-  return (
-    <Html
-      transform={false}
-      distanceFactor={0}
-      occlude={false}
-      zIndexRange={[900, 0]}
-      style={{
-        position: "fixed",
-        top: "16px",
-        right: "16px",
-        pointerEvents: "none",
-      }}
-    >
-      <Paper
-        sx={{
-          p: { xs: 1, sm: 1.5 },
-          minWidth: { xs: 150, sm: 180 },
-          backgroundColor: "rgba(0, 0, 0, 0.7)",
-          backdropFilter: "blur(10px)",
-          color: "white",
-          fontFamily: "monospace",
-          fontSize: { xs: "0.7rem", sm: "0.75rem" },
-        }}
-        elevation={4}
-      >
-        <Typography variant="caption" fontWeight="bold" gutterBottom>
-          Performance
-        </Typography>
+  useFrame(() => {
+    if (!showStats) return;
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-          <Typography variant="caption">
-            FPS: <strong>{stats.fps}</strong>
-          </Typography>
+    frameCountRef.current++;
+    framesRef.current++;
 
-          <Typography variant="caption">
-            Triangles: <strong>{stats.triangles.toLocaleString()}</strong>
-          </Typography>
+    if (frameCountRef.current % updateInterval !== 0) return;
 
-          <Typography variant="caption">
-            Draw Calls: <strong>{stats.drawCalls}</strong>
-          </Typography>
+    const now = Date.now();
+    const delta = (now - lastTimeRef.current) / 1000;
+    const fps = Math.round(framesRef.current / delta);
 
-          <Typography variant="caption">
-            Memory: <strong>{stats.memoryUsage.toFixed(1)} MB</strong>
-          </Typography>
+    const info = gl.info;
+    const memory = info.memory;
+    const render = info.render;
 
-          <Typography variant="caption">
-            Geometries: <strong>{stats.geometries}</strong>
-          </Typography>
-        </Box>
-      </Paper>
-    </Html>
-  );
+    setPerfStats({
+      fps,
+      triangles: memory.geometries * 1000,
+      drawCalls: render.calls,
+      memoryUsage: memory.geometries * 0.5 + memory.textures * 2,
+      geometries: memory.geometries,
+    });
+
+    lastTimeRef.current = now;
+    framesRef.current = 0;
+  });
+
+  return null;
 }

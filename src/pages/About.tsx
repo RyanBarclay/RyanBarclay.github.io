@@ -11,6 +11,7 @@ import {
   IconButton,
   Avatar,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import {
   GitHub,
   LinkedIn,
@@ -18,8 +19,14 @@ import {
   Palette,
   Storage,
   Cloud,
+  Lightbulb,
+  Groups,
+  AutoStories,
+  EnergySavingsLeaf,
 } from "@mui/icons-material";
 import PageHero from "../components/ui/PageHero";
+import FeatureIconBox from "../components/ui/FeatureIconBox";
+import SectionHeader from "../components/ui/SectionHeader";
 
 const About = () => {
   return (
@@ -42,22 +49,16 @@ const About = () => {
               }}
             >
               <Avatar
-                sx={{
-                  width: 250,
-                  height: 250,
-                  bgcolor: "primary.main",
-                  fontSize: "6rem",
-                }}
+                src="/assets/images/ryan-headshot.jpg"
+                sx={{ width: 250, height: 250 }}
                 alt="Ryan Barclay"
-              >
-                👨‍💻
-              </Avatar>
+              />
             </Box>
           </Grid>
           <Grid size={{ xs: 12, md: 7 }}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
               <Box>
-                <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
+                <Typography variant="h4" gutterBottom>
                   Hello, I'm Ryan Barclay
                 </Typography>
                 <Typography variant="body1" color="text.secondary" paragraph>
@@ -85,7 +86,9 @@ const About = () => {
                     borderRadius: 1.5,
                     bgcolor: (theme) => theme.palette.social.github,
                     color: "white",
-                    "&:hover": { bgcolor: "#555" },
+                    "&:hover": {
+                      bgcolor: (theme) => theme.palette.social.githubHover,
+                    },
                   }}
                 >
                   <GitHub sx={{ fontSize: 24 }} />
@@ -100,7 +103,9 @@ const About = () => {
                     borderRadius: 1.5,
                     bgcolor: (theme) => theme.palette.social.linkedin,
                     color: "white",
-                    "&:hover": { bgcolor: "#005885" },
+                    "&:hover": {
+                      bgcolor: (theme) => theme.palette.social.linkedinHover,
+                    },
                   }}
                 >
                   <LinkedIn sx={{ fontSize: 24 }} />
@@ -113,7 +118,9 @@ const About = () => {
                     borderRadius: 1.5,
                     bgcolor: "primary.main",
                     color: "white",
-                    "&:hover": { bgcolor: "#00695c" },
+                    "&:hover": {
+                      bgcolor: (theme) => theme.palette.social.emailHover,
+                    },
                   }}
                 >
                   <Email sx={{ fontSize: 24 }} />
@@ -125,109 +132,67 @@ const About = () => {
 
         {/* What I Do Section */}
         <Card sx={{ mb: 8, p: 4 }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: 600 }}>
+          <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
             What I Do
           </Typography>
           <Grid container spacing={4}>
             <Grid size={{ xs: 12, md: 4 }}>
-              <Box
-                sx={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: 2,
-                  bgcolor: "rgba(0, 163, 158, 0.15)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  mb: 2,
-                }}
-              >
-                <Palette sx={{ fontSize: 28, color: "primary.main" }} />
-              </Box>
-              <Typography
-                variant="h6"
-                gutterBottom
-                sx={{ fontWeight: 600, mb: 1 }}
-              >
-                UI/UX Development
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Creating beautiful, intuitive interfaces that users love. I
-                focus on accessibility and responsive design principles.
-              </Typography>
+              <FeatureIconBox
+                icon={<Palette sx={{ fontSize: 28, color: "primary.main" }} />}
+                title="UI/UX Development"
+                description="Creating beautiful, intuitive interfaces that users love. I focus on accessibility and responsive design principles."
+              />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
-              <Box
-                sx={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: 2,
-                  bgcolor: "rgba(0, 163, 158, 0.15)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  mb: 2,
-                }}
-              >
-                <Storage sx={{ fontSize: 28, color: "primary.main" }} />
-              </Box>
-              <Typography
-                variant="h6"
-                gutterBottom
-                sx={{ fontWeight: 600, mb: 1 }}
-              >
-                Backend Systems
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Building scalable, secure backend systems with clean
-                architecture and efficient databases.
-              </Typography>
+              <FeatureIconBox
+                icon={<Storage sx={{ fontSize: 28, color: "primary.main" }} />}
+                title="Backend Systems"
+                description="Building scalable, secure backend systems with clean architecture and efficient databases."
+              />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
-              <Box
-                sx={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: 2,
-                  bgcolor: "rgba(0, 163, 158, 0.15)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  mb: 2,
-                }}
-              >
-                <Cloud sx={{ fontSize: 28, color: "primary.main" }} />
-              </Box>
-              <Typography
-                variant="h6"
-                gutterBottom
-                sx={{ fontWeight: 600, mb: 1 }}
-              >
-                Cloud Solutions
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Deploying and managing cloud infrastructure for high
-                availability applications.
-              </Typography>
+              <FeatureIconBox
+                icon={<Cloud sx={{ fontSize: 28, color: "primary.main" }} />}
+                title="Cloud Solutions"
+                description="Deploying and managing cloud infrastructure for high availability applications."
+              />
             </Grid>
           </Grid>
         </Card>
 
         {/* My Core Values Section */}
-        <Card sx={{ mb: 8, p: 4, bgcolor: "rgba(168, 230, 207, 0.2)" }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: 600 }}>
+        <Card
+          sx={{
+            mb: 8,
+            p: 4,
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+          }}
+        >
+          <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
             My Core Values
           </Typography>
           <Grid container spacing={3}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Paper sx={{ p: 3, height: "100%" }}>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                >
-                  💡 Innovation
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 1.5,
+                      bgcolor: (theme) => alpha(theme.palette.primary.main, 0.12),
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Lightbulb sx={{ fontSize: 20, color: "primary.main" }} />
+                  </Box>
+                  <Typography variant="h6" gutterBottom sx={{ mb: 0 }}>
+                    Innovation
+                  </Typography>
+                </Box>
                 <Typography variant="body2" color="text.secondary">
                   Always exploring new technologies and approaches to solve
                   problems in creative ways.
@@ -236,13 +201,25 @@ const About = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Paper sx={{ p: 3, height: "100%" }}>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                >
-                  🤝 Collaboration
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 1.5,
+                      bgcolor: (theme) => alpha(theme.palette.primary.main, 0.12),
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Groups sx={{ fontSize: 20, color: "primary.main" }} />
+                  </Box>
+                  <Typography variant="h6" gutterBottom sx={{ mb: 0 }}>
+                    Collaboration
+                  </Typography>
+                </Box>
                 <Typography variant="body2" color="text.secondary">
                   Believing that the best solutions come from diverse teams
                   working together.
@@ -251,13 +228,25 @@ const About = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Paper sx={{ p: 3, height: "100%" }}>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                >
-                  📚 Continuous Learning
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 1.5,
+                      bgcolor: (theme) => alpha(theme.palette.primary.main, 0.12),
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <AutoStories sx={{ fontSize: 20, color: "primary.main" }} />
+                  </Box>
+                  <Typography variant="h6" gutterBottom sx={{ mb: 0 }}>
+                    Continuous Learning
+                  </Typography>
+                </Box>
                 <Typography variant="body2" color="text.secondary">
                   Committed to staying current with industry trends and
                   expanding my skill set.
@@ -266,13 +255,25 @@ const About = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Paper sx={{ p: 3, height: "100%" }}>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                >
-                  🌱 Sustainability
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 1.5,
+                      bgcolor: (theme) => alpha(theme.palette.primary.main, 0.12),
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <EnergySavingsLeaf sx={{ fontSize: 20, color: "primary.main" }} />
+                  </Box>
+                  <Typography variant="h6" gutterBottom sx={{ mb: 0 }}>
+                    Sustainability
+                  </Typography>
+                </Box>
                 <Typography variant="body2" color="text.secondary">
                   Writing efficient code and considering the environmental
                   impact of technology.
@@ -284,7 +285,7 @@ const About = () => {
 
         {/* Beyond Code Section */}
         <Card sx={{ mb: 8, p: 4 }}>
-          <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: 600 }}>
+          <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
             Beyond Code
           </Typography>
           <Grid container spacing={3}>
@@ -300,7 +301,7 @@ const About = () => {
                   mb: 2,
                 }}
               />
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+              <Typography variant="h6" gutterBottom>
                 Outdoor Enthusiast
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -313,8 +314,7 @@ const About = () => {
               <Box
                 sx={{
                   height: 250,
-                  background:
-                    "linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)",
+                  background: (theme) => theme.palette.gradient.hero,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -322,9 +322,9 @@ const About = () => {
                   mb: 2,
                 }}
               >
-                <Typography sx={{ fontSize: "8rem" }}>📖</Typography>
+                <AutoStories sx={{ fontSize: 120, color: "primary.contrastText", opacity: 0.9 }} />
               </Box>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+              <Typography variant="h6" gutterBottom>
                 Lifelong Learner
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -341,14 +341,15 @@ const About = () => {
           sx={{
             p: 6,
             textAlign: "center",
-            background: "linear-gradient(135deg, #00a39e 0%, #00897b 100%)",
+            background: (theme) =>
+              `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
             color: "white",
           }}
         >
-          <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
+          <Typography variant="h4" gutterBottom>
             Let's Work Together
           </Typography>
-          <Typography variant="body1" sx={{ mb: 3, opacity: 0.9 }}>
+          <Typography variant="body1" sx={{ mb: 3, opacity: 0.9, display: "block" }}>
             I'm always interested in hearing about new projects and
             opportunities
           </Typography>

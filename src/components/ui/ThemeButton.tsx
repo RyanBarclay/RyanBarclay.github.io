@@ -16,7 +16,7 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
     padding: 0,
     transform: "translateX(6px)",
     "&.Mui-checked": {
-      color: "#fff",
+      color: theme.palette.common.white,
       transform: "translateX(22px)",
       "& .MuiSwitch-thumb:before": {
         backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
@@ -25,12 +25,12 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
       },
       "& + .MuiSwitch-track": {
         opacity: 1,
-        backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
+        backgroundColor: theme.palette.ui.switchTrack,
       },
     },
   },
   "& .MuiSwitch-thumb": {
-    backgroundColor: theme.palette.mode === "dark" ? "#003892" : "#5C9EAD",
+    backgroundColor: theme.palette.mode === "dark" ? theme.palette.ui.switchThumbDark : theme.palette.ui.switchThumbLight,
     width: 32,
     height: 32,
     "&::before": {
@@ -49,7 +49,7 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
   },
   "& .MuiSwitch-track": {
     opacity: 1,
-    backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
+    backgroundColor: theme.palette.ui.switchTrack,
     borderRadius: 20 / 2,
   },
 }));

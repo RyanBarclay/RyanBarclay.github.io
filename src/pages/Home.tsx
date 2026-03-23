@@ -8,9 +8,11 @@ import {
   Grid,
   Divider,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import { GitHub, LinkedIn } from "@mui/icons-material";
 import Hero from "../components/ui/Hero";
 import ProjectCard from "../components/ui/ProjectCard";
+import SectionHeader from "../components/ui/SectionHeader";
 import { getFeaturedProjects } from "../data/projects";
 import { useNavigation } from "../hooks/useNavigation";
 
@@ -24,18 +26,10 @@ const Home = () => {
       <Container maxWidth="xl" sx={{ py: 8 }}>
         {/* Featured Projects Section */}
         <Box sx={{ mb: 8 }}>
-          <Box sx={{ textAlign: "center", mb: 6 }}>
-            <Typography variant="h3" gutterBottom sx={{ mb: 2 }}>
-              Featured Projects
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: "text.secondary", maxWidth: "800px", mx: "auto" }}
-            >
-              Explore some of my latest work in software development, from
-              interactive simulations to practical tools
-            </Typography>
-          </Box>
+          <SectionHeader
+            title="Featured Projects"
+            subtitle="Explore some of my latest work in software development, from interactive simulations to practical tools"
+          />
           <Grid container spacing={4} sx={{ mb: 4 }}>
             {featuredProjects.map((project) => (
               <Grid size={{ xs: 12, md: 6, lg: 4 }} key={project.title}>
@@ -45,6 +39,7 @@ const Home = () => {
                   image={project.image}
                   technologies={project.technologies}
                   detailPage={project.detailPage}
+                  tag={project.tag}
                 />
               </Grid>
             ))}
@@ -66,20 +61,13 @@ const Home = () => {
             p: 6,
             textAlign: "center",
             background: (theme) =>
-              `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.dark}15 100%)`,
+              `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.08)} 0%, ${alpha(theme.palette.primary.dark, 0.08)} 100%)`,
           }}
         >
-          <Box sx={{ mb: 6 }}>
-            <Typography variant="h3" gutterBottom sx={{ mb: 2 }}>
-              Let's Connect
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: "text.secondary", maxWidth: "800px", mx: "auto" }}
-            >
-              I'm always open to discussing new projects and opportunities
-            </Typography>
-          </Box>
+          <SectionHeader
+            title="Let's Connect"
+            subtitle="Open to interesting projects and conversations."
+          />
           <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
             <Button
               variant="contained"

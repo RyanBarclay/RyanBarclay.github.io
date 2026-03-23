@@ -1,21 +1,32 @@
 import { Box, Container, Typography, Button } from "@mui/material";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/DarkModeContext";
 import { KeyboardArrowDown, ArrowForward } from "@mui/icons-material";
+import { NAVBAR_HEIGHT, NAVBAR_HEIGHT_WITH_PADDING } from "../../config/constants";
+
+const HERO_POSTER = "/assets/images/hero-poster.jpg";
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const rafRef = useRef<number>(0);
   const { isDarkTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        setScrollY(window.scrollY);
+      });
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   return (
@@ -28,8 +39,8 @@ const Hero = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        marginTop: "-64px",
-        paddingTop: "64px",
+        marginTop: `-${NAVBAR_HEIGHT_WITH_PADDING}px`,
+        paddingTop: `${NAVBAR_HEIGHT}px`,
       }}
     >
       {/* Video Background with Parallax */}
@@ -40,16 +51,39 @@ const Hero = () => {
           left: 0,
           width: "100%",
           height: "120%", // Slightly taller for parallax movement
-          transform: `translateY(${scrollY * 0.5}px)`, // Parallax effect
+          transform: `translate3d(0, ${scrollY * 0.3}px, 0)`,
+          willChange: "transform",
           zIndex: 0,
         }}
       >
+        {/* Poster image shown until video is ready */}
+        <Box
+          component="img"
+          src={HERO_POSTER}
+          alt=""
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: videoLoaded ? 0 : 1,
+            transition: (theme) =>
+              theme.transitions.create("opacity", {
+                duration: theme.transitions.duration.slow,
+                easing: theme.transitions.easing.easeInOut,
+              }),
+            pointerEvents: "none",
+          }}
+        />
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          poster="https://images.unsplash.com/photo-1735508729860-c9a4752585eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxicml0aXNoJTIwY29sdW1iaWElMjBtb3VudGFpbnN8ZW58MXx8fHwxNzY5MTk4MjU3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+          onCanPlay={() => setVideoLoaded(true)}
           style={{
             width: "100%",
             height: "100%",
@@ -71,8 +105,7 @@ const Hero = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6))",
+          background: (theme) => theme.palette.overlay.hero,
           zIndex: 1,
         }}
       />
@@ -84,6 +117,11 @@ const Hero = () => {
           zIndex: 2,
           textAlign: "center",
           color: "white",
+          animation: "fadeInUp 0.8s ease-out 0.3s both",
+          "@keyframes fadeInUp": {
+            from: { opacity: 0, transform: "translateY(20px)" },
+            to: { opacity: 1, transform: "translateY(0)" },
+          },
         }}
       >
         <Typography
@@ -97,6 +135,7 @@ const Hero = () => {
         >
           Full-Stack Developer
         </Typography>
+        <Box sx={{ width: 60, height: 3, bgcolor: "primary.main", mx: "auto", my: 2 }} />
         <Typography
           variant="h5"
           sx={{
@@ -124,9 +163,9 @@ const Hero = () => {
               py: 1.5,
               fontSize: "1.1rem",
               textTransform: "none",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+              boxShadow: (theme) => theme.shadows[4],
               "&:hover": {
-                boxShadow: "0 6px 16px rgba(0,0,0,0.4)",
+                boxShadow: (theme) => theme.shadows[5],
               },
             }}
           >
@@ -158,7 +197,7 @@ const Hero = () => {
       <Box
         sx={{
           position: "absolute",
-          bottom: 32,
+          bottom: (theme) => theme.spacing(4),
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 2,

@@ -37,6 +37,13 @@ export const HERO_VARIANTS = {
 
 export type HeroVariant = keyof typeof HERO_VARIANTS;
 
+// Layout Constants
+export const NAVBAR_HEIGHT = 64;
+export const NAVBAR_HEIGHT_WITH_PADDING = 80;
+
+// Glassmorphism
+export const GLASS_BORDER = "1px solid rgba(255, 255, 255, 0.2)";
+
 // N-Body Simulation Configuration
 export const DEFAULT_SIMULATION_BOUNDS = {
   POSITION: {

@@ -21,6 +21,7 @@ import { Menu as MenuIcon, DarkMode, LightMode } from "@mui/icons-material";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import componentLinkInfo from "../../config/routes";
+import { GLASS_BORDER } from "../../config/constants";
 import ThemeButton from "../ui/ThemeButton";
 import { useContext } from "react";
 import { ThemeContext } from "../../contexts/DarkModeContext";
@@ -60,20 +61,20 @@ const Navbar = () => {
         {/* Top Bar for Mobile - just branding and theme toggle */}
         <AppBar
           position="fixed"
-          elevation={trigger ? 4 : 0}
+          elevation={trigger ? 2 : 0}
           color="transparent"
           sx={{
-            backdropFilter: trigger ? "none" : "blur(20px) saturate(180%)",
+            backdropFilter: trigger ? "blur(20px) saturate(180%)" : "none",
             backgroundColor: trigger
-              ? theme.palette.background.paper
-              : alpha(theme.palette.common.white, 0.08),
+              ? alpha(theme.palette.background.paper, 0.85)
+              : "transparent",
             transition: theme.transitions.create(
               ["background-color", "backdrop-filter"],
               {
                 duration: theme.transitions.duration.standard,
               },
             ),
-            border: trigger ? "none" : "1px solid rgba(255, 255, 255, 0.2)",
+            border: trigger ? "none" : GLASS_BORDER,
           }}
         >
           <Container maxWidth="xl">
@@ -88,7 +89,7 @@ const Navbar = () => {
                   color: trigger ? "text.primary" : "common.white",
                   cursor: "pointer",
                   letterSpacing: "0.02em",
-                  fontFamily: "CustomHeader, sans-serif",
+                  fontFamily: "GreatForest, sans-serif",
                   "&:hover": {
                     opacity: 0.8,
                   },
@@ -212,13 +213,13 @@ const Navbar = () => {
   return (
     <AppBar
       position="fixed"
-      elevation={trigger ? 4 : 0}
+      elevation={trigger ? 2 : 0}
       color="transparent"
       sx={{
-        backdropFilter: trigger ? "none" : "blur(20px) saturate(180%)",
+        backdropFilter: trigger ? "blur(20px) saturate(180%)" : "none",
         backgroundColor: trigger
-          ? theme.palette.background.paper
-          : alpha(theme.palette.common.white, 0.08),
+          ? alpha(theme.palette.background.paper, 0.85)
+          : "transparent",
         borderRadius: trigger ? "24px 24px 24px 24px" : "0",
         transition: theme.transitions.create(
           ["background-color", "border-radius", "backdrop-filter"],
@@ -226,7 +227,7 @@ const Navbar = () => {
             duration: theme.transitions.duration.standard,
           },
         ),
-        border: trigger ? "none" : "1px solid rgba(255, 255, 255, 0.2)",
+        border: trigger ? "none" : GLASS_BORDER,
       }}
     >
       <Container maxWidth="xl">

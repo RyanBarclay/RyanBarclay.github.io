@@ -1,24 +1,29 @@
 import React from "react";
-import BattlesnakeProject from "../pages/projects/battlesnake";
-import SpookathonProject from "../pages/projects/spookathon";
-import PersonalServer from "../pages/projects/personal-server";
-import JSChallenge from "../pages/projects/js-challenge";
-import NBodyProject from "../pages/projects/nbody-simulation";
-import Randomizer from "../pages/projects/randomizer/Randomizer";
-import TerrainGenerator from "../pages/projects/terrain-generator";
+import type { ProjectId } from "../data/projects";
 
 /**
  * Centralized project route configuration
- * Maps project IDs to their component implementations
+ * Maps project IDs to their lazy-loaded component implementations
  */
-export const projectRouteComponents: Record<string, React.ReactElement> = {
-  randomizer: <Randomizer />,
-  "nbody-simulation": <NBodyProject />,
-  "terrain-generator": <TerrainGenerator />,
-  battlesnake: <BattlesnakeProject />,
-  spookathon: <SpookathonProject />,
-  "personal-server": <PersonalServer />,
-  "js-challenge": <JSChallenge />,
+export const projectRouteComponents: Record<
+  ProjectId,
+  React.LazyExoticComponent<React.ComponentType>
+> = {
+  randomizer: React.lazy(
+    () => import("../pages/projects/Randomizer/Randomizer")
+  ),
+  "nbody-simulation": React.lazy(
+    () => import("../pages/projects/nbody-simulation")
+  ),
+  "terrain-generator": React.lazy(
+    () => import("../pages/projects/terrain-generator")
+  ),
+  battlesnake: React.lazy(() => import("../pages/projects/battlesnake")),
+  spookathon: React.lazy(() => import("../pages/projects/spookathon")),
+  "personal-server": React.lazy(
+    () => import("../pages/projects/personal-server")
+  ),
+  "js-challenge": React.lazy(() => import("../pages/projects/js-challenge")),
 };
 
 /**
@@ -26,9 +31,9 @@ export const projectRouteComponents: Record<string, React.ReactElement> = {
  * This ensures routes stay in sync with project data
  */
 export const generateProjectRoutes = () => {
-  return Object.entries(projectRouteComponents).map(([id, component]) => ({
+  return Object.entries(projectRouteComponents).map(([id, Component]) => ({
     path: `/projects/${id}`,
-    element: component,
+    element: <Component />,
     key: id,
   }));
 };

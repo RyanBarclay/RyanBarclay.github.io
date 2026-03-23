@@ -1,5 +1,14 @@
 import { ProjectData } from "../types/project";
 
+export type ProjectId =
+  | "terrain-generator"
+  | "nbody-simulation"
+  | "randomizer"
+  | "battlesnake"
+  | "personal-server"
+  | "spookathon"
+  | "js-challenge";
+
 export const projectsData: ProjectData[] = [
   {
     id: "terrain-generator",
@@ -7,7 +16,7 @@ export const projectsData: ProjectData[] = [
     tag: "PROJ",
     tags: ["React Three Fiber", "WebGL", "Algorithms", "AI-Generated"],
     description:
-      "A showcase of AI-assisted development: Real-time 3D terrain generator built entirely through structured AI collaboration. Features custom Simplex noise, LOD optimization with quadtree spatial partitioning, and multi-format export. Developed using parallel sub-agents coordinated through a comprehensive PRD created by Google's Gemini.",
+      "Real-time 3D terrain generator featuring custom Simplex noise, fractal Brownian motion, and quadtree LOD with O(log n) spatial queries — achieving 60 FPS on 256×256 meshes with 75% triangle reduction at distance. Architected and directed the implementation through structured parallel AI agents coordinated via a PRD-driven workflow, demonstrating best practices for AI-assisted development at production scale. Four export formats: OBJ, STL, PNG heightmap, RAW binary.",
     image:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop",
     heroImage: "/assets/images/terrain-hero.jpg",

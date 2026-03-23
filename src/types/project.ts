@@ -1,4 +1,5 @@
 import { NavigationUrl } from "../hooks/useNavigation";
+import type { ProjectId } from "../data/projects";
 
 export interface ProjectSection {
   title: string;
@@ -6,7 +7,7 @@ export interface ProjectSection {
 }
 
 export interface ProjectData {
-  id: string;
+  id: ProjectId;
   title: string;
   tag: string;
   tags: string[];
