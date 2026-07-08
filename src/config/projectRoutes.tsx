@@ -18,6 +18,9 @@ export const projectRouteComponents: Record<
   "terrain-generator": React.lazy(
     () => import("../pages/projects/terrain-generator")
   ),
+  "investment-calculator": React.lazy(
+    () => import("../pages/projects/investment-calculator")
+  ),
   battlesnake: React.lazy(() => import("../pages/projects/battlesnake")),
   spookathon: React.lazy(() => import("../pages/projects/spookathon")),
   "personal-server": React.lazy(

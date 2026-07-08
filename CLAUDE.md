@@ -8,11 +8,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev        # Start dev server (http://localhost:5174)
 npm run build      # TypeScript check + Vite build
 npm run tsc        # TypeScript type-check only (no emit)
+npm test           # Run unit tests (Vitest)
 npm run preview    # Preview production build locally
 npm run deploy     # Build + deploy to GitHub Pages via gh-pages
 ```
 
-No test suite is configured. TypeScript (`npm run tsc`) is the primary correctness check.
+Tests are Vitest, colocated as `*.test.ts` next to the code they cover (currently the investment-calculator financial math). TypeScript (`npm run tsc`) remains the correctness check for everything untested.
 
 ## Architecture Overview
 

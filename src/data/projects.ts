@@ -2,6 +2,7 @@ import { ProjectData } from "../types/project";
 
 export type ProjectId =
   | "terrain-generator"
+  | "investment-calculator"
   | "nbody-simulation"
   | "randomizer"
   | "battlesnake"
@@ -65,6 +66,25 @@ export const projectsData: ProjectData[] = [
     featured: true,
   },
   {
+    id: "investment-calculator",
+    title: "Investment & Mortgage Calculator",
+    tag: "",
+    tags: ["Finance", "Data Viz", "Tool"],
+    description:
+      "Three-mode financial calculator built for Canadian investors: compound investment growth with TFSA/RRSP contribution-room modeling, a mortgage calculator with semi-annual compounding, CMHC insurance, and accelerated payment schedules, plus a rent-vs-buy comparison — one monthly budget, two universes, with the breakeven point where buying overtakes renting. Interactive multi-line charts with inflation-adjusted views and CSV export.",
+    technologies: ["React", "TypeScript", "Material-UI", "MUI X Charts"],
+    image:
+      "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&auto=format&fit=crop",
+    detailPage: "/projects/investment-calculator",
+    featured: true,
+    year: "2026",
+    links: {
+      live: "/projects/investment-calculator",
+      github:
+        "https://github.com/RyanBarclay/RyanBarclay.github.io/tree/master/src/pages/projects/investment-calculator",
+    },
+  },
+  {
     id: "nbody-simulation",
     title: "N-Body Simulation",
     tag: "",
@@ -104,7 +124,7 @@ export const projectsData: ProjectData[] = [
     image:
       "https://images.unsplash.com/photo-1516849677043-ef67c9557e16?w=800&auto=format&fit=crop",
     detailPage: "/projects/randomizer",
-    featured: true,
+    featured: false,
     year: "2024",
     links: {
       live: "/projects/randomizer",
