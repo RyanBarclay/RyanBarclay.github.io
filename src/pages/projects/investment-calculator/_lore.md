@@ -14,7 +14,7 @@ A three-mode financial calculator (Investment, Mortgage, Combined) for the Canad
 - `components/ResultsTable.tsx` — Year-by-year table below the chart (also the chart's accessible table view).
 - `components/{Investment,Mortgage,Combined}Controls.tsx` — Per-mode input panels, fully wired. CombinedControls nests the other two in accordions plus combined-only settings.
 - `components/AccountConfig.tsx` — TFSA/RRSP/taxable sub-panel embedded in InvestmentControls (inputs wired; consumed by the engines in the implementation phase).
-- `components/ResultsChart.tsx` — Multi-line `@mui/x-charts` LineChart with per-series chip toggles. Holds the **validated series palette** (see Chart decision below). x-charts v9 quirk: per-series line styling targets `.MuiLineChart-line[data-series="<id>"]` — the older `.MuiLineElement-series-<id>` classes no longer exist.
+- `components/ResultsChart.tsx` — Multi-line `@mui/x-charts` LineChart with per-series chip toggles. Holds the **validated series palette** (see Chart decision below). x-charts v9 quirk: per-series line styling targets `.MuiLineChart-line[data-series="<id>"]` — the older `.MuiLineElement-series-<id>` classes no longer exist. Below the `sm` breakpoint the chart goes compact (height 280, y-axis width 52, 11px tick labels, tight right margin) — at 390px the desktop axis ate ~40% of the plot width.
 - `components/ResultsSummary.tsx` — Headline stat tiles per mode.
 - `components/ExportButton.tsx` — CSV export trigger.
 - `hooks/useInvestmentCalc.ts`, `hooks/useMortgageCalc.ts`, `hooks/useCombinedCalc.ts` — Memoized wrappers over the pure engines in `utils/calculations.ts`.

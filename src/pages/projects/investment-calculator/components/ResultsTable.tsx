@@ -107,7 +107,7 @@ const ResultsTable = (props: ResultsTableProps) => {
   const { headers, rows } = buildTable(props);
 
   return (
-    <Paper sx={{ p: 3 }}>
+    <Paper sx={{ p: { xs: 2, sm: 3 } }}>
       <Typography variant="h6" gutterBottom>
         Year by year
       </Typography>

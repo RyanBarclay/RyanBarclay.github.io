@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Box, Chip, Paper, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Paper,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { LineChart } from "@mui/x-charts/LineChart";
 import {
   CalculatorMode,
@@ -189,6 +196,9 @@ const ResultsChart = ({
 }: ResultsChartProps) => {
   const theme = useTheme();
   const paletteMode = theme.palette.mode;
+  // Phones: reclaim horizontal room from the y-axis and shorten the
+  // chart so the plot doesn't render as a tall sliver.
+  const isNarrow = useMediaQuery(theme.breakpoints.down("sm"));
   const [hidden, setHidden] = useState<Record<string, boolean>>({});
 
   const { xYears, defs } = buildSeries(mode, investment, mortgage, combined);
@@ -205,7 +215,7 @@ const ResultsChart = ({
   );
 
   return (
-    <Paper sx={{ p: 3 }}>
+    <Paper sx={{ p: { xs: 2, sm: 3 } }}>
       <Box
         sx={{
           display: "flex",
@@ -251,12 +261,16 @@ const ResultsChart = ({
       </Box>
 
       <LineChart
-        height={360}
+        height={isNarrow ? 280 : 360}
+        // x-charts reserves a default left margin on top of the y-axis
+        // width — zero it out so the plot uses the full card width.
+        margin={{ left: 0, right: isNarrow ? 8 : 16 }}
         xAxis={[
           {
             data: xYears,
             label: "Years",
             min: 0,
+            tickLabelStyle: isNarrow ? { fontSize: 11 } : undefined,
             // The x data is monthly (fractional years) — show clean
             // "N yrs M mo" in the tooltip instead of 3.9166666….
             valueFormatter: (years: number, context: { location: string }) =>
@@ -267,7 +281,10 @@ const ResultsChart = ({
         ]}
         yAxis={[
           {
-            width: 72,
+            // Sized to the widest compact tick ("$1.5M"-style) — ticks
+            // land on round numbers so labels stay short.
+            width: isNarrow ? 44 : 56,
+            tickLabelStyle: isNarrow ? { fontSize: 11 } : undefined,
             valueFormatter: (value: number | null) =>
               formatCurrencyCompact(value ?? 0),
           },

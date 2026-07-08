@@ -128,7 +128,7 @@ const ResultsSummary = (props: ResultsSummaryProps) => {
   }
 
   return (
-    <Paper sx={{ p: 3 }}>
+    <Paper sx={{ p: { xs: 2, sm: 3 } }}>
       {shortfalls.length > 0 && (
         <Alert severity="warning" sx={{ mb: 2 }}>
           Budget shortfall: {shortfalls.join("; ")}. Investing is paused in

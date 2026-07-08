@@ -163,7 +163,11 @@ const CalculatorContainer = () => {
         }}
       >
         <Paper
-          sx={{ p: 3, width: { xs: "100%", md: 380 }, flexShrink: 0 }}
+          sx={{
+            p: { xs: 2, sm: 3 },
+            width: { xs: "100%", md: 380 },
+            flexShrink: 0,
+          }}
         >
           <Typography variant="h6" gutterBottom>
             Inputs
