@@ -54,6 +54,10 @@ The most complex project — a WebGL 3D terrain renderer using React Three Fiber
 
 When adding a new control parameter: add to `TerrainConfig` in `types.ts` → initialize in `TerrainContext.tsx` → wire up in `useTerrainGen.ts` → add control component → import in `ControlPanel.tsx`.
 
+### Analytics
+
+PostHog (`posthog-js`), initialized in `src/config/analytics.ts`, configured via the **committed `.env`** (`VITE_POSTHOG_*`). Convention: `VITE_`-prefixed values are inlined into the public bundle — only ever public values in `.env` (the PostHog key is a public write-only ingest key); secrets never go there (backend secrets → GCP Secret Manager per `docs/backend-plan.md`). A missing key = analytics no-ops entirely. Analytics is production-build-gated (`import.meta.env.PROD`): `npm run dev` never sends events; `npm run preview` does (deliberate end-to-end verification). Products in use: Web Analytics, Product Analytics, Session Replay (`maskAllInputs` pinned — never unmask, the calculator holds personal finances), and Error Tracking. SPA pageviews are captured manually per HashRouter route change via `AnalyticsPageviews` in `App.tsx`; named intent events go through `captureEvent` (`resume_downloaded`, `calculator_csv_exported`). Tracking topology and the backend/monorepo roadmap live in `docs/backend-plan.md`.
+
 ### Deployment
 
 The site deploys to `RyanBarclay.github.io` via `npm run deploy` (uses `gh-pages` to push `dist/` to the `gh-pages` branch). The `CNAME` file is copied into `dist/` during deploy to preserve the custom domain.

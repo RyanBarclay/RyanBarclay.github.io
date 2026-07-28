@@ -2,7 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import AppProvider from "./contexts/AppProvider";
+import { initAnalytics } from "./config/analytics";
 import "./index.css";
+
+initAnalytics();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

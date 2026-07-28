@@ -8,6 +8,7 @@ import {
   MortgageConfig,
 } from "../types";
 import { useCombinedCalc } from "../hooks/useCombinedCalc";
+import { captureEvent } from "../../../../config/analytics";
 import { downloadCsv, toCsv } from "../utils/export";
 import { PAYMENT_FREQUENCY_LABELS } from "../utils/labels";
 import {
@@ -68,6 +69,7 @@ const CalculatorContainer = () => {
     combinedResult;
 
   const handleExport = () => {
+    captureEvent("calculator_csv_exported", { mode });
     if (mode === "investment") {
       downloadCsv(
         "investment-projection.csv",

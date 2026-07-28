@@ -9,6 +9,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import { captureEvent } from "../config/analytics";
 import { alpha } from "@mui/material/styles";
 import {
   Download,
@@ -25,6 +26,7 @@ import { resumeData } from "../data/resume";
 
 const Resume = () => {
   const handleDownload = () => {
+    captureEvent("resume_downloaded");
     window.print();
   };
 
