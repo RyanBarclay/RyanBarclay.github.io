@@ -31,6 +31,7 @@ const UNLIMITED_ACCOUNTS: AccountConfig = {
   tfsaRoom: 1e12,
   rrspRoom: 0,
   fhsaRoom: 0,
+  fhsaOpeningYear: 2026,
   annualIncome: 0,
   rrspAnnualNewRoom: 0,
   priority: "tfsa-first",
@@ -375,6 +376,8 @@ describe("runCombinedProjection — rent vs buy", () => {
       monthlyRent: 2500,
       rentGrowthPct: 0,
       ownershipCostPct: 0,
+      purchaseYears: 0,
+      downPaymentGift: 0,
       downPaymentFromFhsa: 0,
       downPaymentFromTfsa: 0,
       downPaymentFromRrsp: 0,
@@ -468,6 +471,7 @@ describe("runCombinedProjection — rent vs buy", () => {
       { accounts: { ...UNLIMITED_ACCOUNTS, tfsaBalance: 30000 } }
     );
     expect(result.downPaymentFunding).toEqual({
+      gift: 0,
       fhsa: 0,
       tfsa: 20000,
       rrsp: 0,
@@ -479,6 +483,110 @@ describe("runCombinedProjection — rent vs buy", () => {
     expect(start.netWorth).toBeCloseTo(35000, 6);
     expect(start.rentNetWorth).toBeCloseTo(35000, 6);
     expect(start.investmentsTotal).toBeCloseTo(10000, 6);
+  });
+
+  it("a gift funds the buyer only — the renter never sees it", () => {
+    const result = run({ downPaymentGift: 10000 });
+    expect(result.downPaymentFunding.gift).toBe(10000);
+    expect(result.downPaymentFunding.cash).toBe(15000);
+    // Buyer's net worth leads by exactly the gift at purchase.
+    const start = result.timeline[0];
+    expect(start.netWorth - start.rentNetWorth).toBeCloseTo(10000, 6);
+  });
+
+  it("clamps the gift to the down payment and applies it before accounts", () => {
+    const result = run(
+      { downPaymentGift: 999999, downPaymentFromTfsa: 999999 },
+      { accounts: { ...UNLIMITED_ACCOUNTS, tfsaBalance: 50000 } }
+    );
+    expect(result.downPaymentFunding.gift).toBe(25000);
+    expect(result.downPaymentFunding.tfsa).toBe(0);
+    expect(result.downPaymentFunding.cash).toBe(0);
+  });
+
+  it("extends the timeline by the saving-up phase", () => {
+    const result = run({ purchaseYears: 3 });
+    // 25-year horizon of ownership analysis + 3 years of waiting
+    expect(result.timeline.length).toBe((25 + 3) * 12 + 1);
+  });
+
+  it("delayed purchase: both universes rent identically until buying", () => {
+    const result = run({ purchaseYears: 3 });
+    expect(result.purchaseMonth).toBe(36);
+    const before = result.timeline[35];
+    expect(before.mortgageBalance).toBe(0);
+    expect(before.homeEquity).toBe(0);
+    expect(before.netWorth).toBeCloseTo(before.rentNetWorth, 6);
+    // At purchase (20% down, no CMHC) the conversion is net-worth
+    // neutral — the universes diverge only from the cash flows after.
+    const at = result.timeline[36];
+    expect(at.mortgageBalance).toBeGreaterThan(0);
+    expect(at.homeEquity).toBeCloseTo(25000, 4);
+    expect(at.netWorth).toBeCloseTo(at.rentNetWorth, 4);
+  });
+
+  it("delayed purchase pays the THEN-price for the house", () => {
+    const result = run(
+      { purchaseYears: 5, homeAppreciationPct: 3 },
+      {},
+      { downPaymentMode: "percent", downPaymentValue: 20 }
+    );
+    const at = result.timeline[60];
+    const priceThen = 125000 * Math.pow(1.03, 5);
+    // Percent-mode down payment scales to 20% of the appreciated price
+    expect(at.homeEquity).toBeCloseTo(0.2 * priceThen, 2);
+    expect(at.mortgageBalance).toBeCloseTo(0.8 * priceThen, 2);
+  });
+
+  it("saves into the FHSA while waiting, then uses it at purchase", () => {
+    // $1,000/mo surplus flows FHSA-first at $8k/yr; after 3 years of
+    // saving the buyer pulls the accumulated $24k for the down payment.
+    const result = run(
+      { purchaseYears: 3, downPaymentFromFhsa: 40000 },
+      {
+        annualReturnPct: 0,
+        contributionAmount: 1000,
+        accounts: { ...UNLIMITED_ACCOUNTS, fhsaRoom: 40000 },
+      }
+    );
+    expect(result.downPaymentFunding.fhsa).toBeCloseTo(24000, 6);
+    expect(result.downPaymentFunding.cash).toBeCloseTo(1000, 6);
+  });
+
+  it("FHSA opening mid-wait: saves from eligibility, funds at purchase", () => {
+    // Not a first-time buyer until 2028 (start 2026), buying in 2030:
+    // the FHSA fills only during 2028–2029 → 2 years × $8k available.
+    const result = run(
+      { purchaseYears: 4, downPaymentFromFhsa: 40000 },
+      {
+        annualReturnPct: 0,
+        contributionAmount: 1000,
+        accounts: {
+          ...UNLIMITED_ACCOUNTS,
+          fhsaRoom: 40000,
+          fhsaOpeningYear: 2028,
+        },
+      }
+    );
+    expect(result.downPaymentFunding.fhsa).toBeCloseTo(16000, 6);
+  });
+
+  it("can't fund the down payment from an FHSA that isn't open yet", () => {
+    const result = run(
+      { downPaymentFromFhsa: 10000 },
+      {
+        accounts: {
+          ...UNLIMITED_ACCOUNTS,
+          fhsaBalance: 10000,
+          fhsaOpeningYear: 2028, // startYear is 2026 — not eligible yet
+        },
+      }
+    );
+    expect(result.downPaymentFunding.fhsa).toBe(0);
+    expect(result.downPaymentFunding.cash).toBe(25000);
+    // Fairness invariant holds: both universes start equal.
+    const start = result.timeline[0];
+    expect(start.netWorth).toBeCloseTo(start.rentNetWorth, 6);
   });
 
   it("clamps HBP withdrawals to $60k and requests to balances", () => {

@@ -186,6 +186,8 @@ const CalculatorContainer = () => {
               onMortgageChange={setMortgage}
               settings={combinedSettings}
               onSettingsChange={setCombinedSettings}
+              funding={combinedResult.downPaymentFunding}
+              purchaseDownPayment={combinedResult.purchaseDownPayment}
             />
           )}
         </Paper>
@@ -214,6 +216,7 @@ const CalculatorContainer = () => {
             investment={investmentResult}
             mortgage={mortgageResult}
             combined={combinedResult}
+            inflationPct={investment.inflationPct}
           />
           <ResultsTable
             mode={mode}

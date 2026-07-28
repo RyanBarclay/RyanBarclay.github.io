@@ -61,6 +61,13 @@ export interface AccountConfig {
    */
   fhsaRoom: number;
   /**
+   * Calendar year the FHSA is (or can be) opened. First-time-buyer
+   * eligibility lands on a January 1 — four full calendar years must
+   * pass since you last lived in a home you owned. Before this year no
+   * FHSA contributions flow and any entered balance is ignored.
+   */
+  fhsaOpeningYear: number;
+  /**
    * Yearly earned income ($) — optional UI convenience: editing it
    * auto-fills `rrspAnnualNewRoom` as 18% of income capped at the CRA
    * dollar limit. The engine never reads this field.
@@ -155,12 +162,27 @@ export interface CombinedConfig {
    */
   ownershipCostPct: number;
   /**
+   * Years from now the buy universe purchases (0 = today). While
+   * waiting, BOTH universes rent and invest from the same budget — and
+   * the house price keeps appreciating. At purchase the mortgage is
+   * taken on the then-price.
+   */
+  purchaseYears: number;
+  /**
+   * Down-payment help from family/a partner ($), applied first. It
+   * exists ONLY in the buy universe — nobody gifts you rent money — so
+   * the renter does not invest it, and the since-purchase verdict
+   * excludes its head start.
+   */
+  downPaymentGift: number;
+  /**
    * How much of the down payment the buyer pulls from investments at
-   * purchase ($ per source). Clamped to balances (and the $60k HBP cap
-   * for RRSP); anything not covered is external cash — which the renter
-   * invests instead. FHSA closes after purchase (remainder → RRSP);
-   * withdrawn TFSA room comes back at the next anniversary; HBP repays
-   * 1/15th per year (years 2–16) out of the buyer's budget.
+   * purchase ($ per source). Clamped to the balances AT PURCHASE TIME
+   * (and the $60k HBP cap for RRSP); anything not covered is external
+   * cash — which the renter invests instead, at the same moment. FHSA
+   * closes after purchase (remainder → RRSP); withdrawn TFSA room comes
+   * back at the next anniversary; HBP repays 1/15th per year (years
+   * 2–16 after purchase) out of the buyer's budget.
    */
   downPaymentFromFhsa: number;
   downPaymentFromTfsa: number;
@@ -241,11 +263,13 @@ export interface CombinedPoint {
 
 /** Where the down payment actually came from, after clamping. */
 export interface DownPaymentFunding {
+  /** Family/partner gift — buy universe only; the renter never sees it. */
+  gift: number;
   fhsa: number;
   tfsa: number;
   rrsp: number;
   taxable: number;
-  /** External cash — the portion the renter invests instead. */
+  /** The buyer's own external cash — the portion the renter invests instead. */
   cash: number;
 }
 
@@ -254,6 +278,10 @@ export interface CombinedResult {
   mortgage: MortgageResult;
   timeline: CombinedPoint[];
   downPaymentFunding: DownPaymentFunding;
+  /** Month the buy universe purchases (0 = today). */
+  purchaseMonth: number;
+  /** Down payment in dollars at the then-price. */
+  purchaseDownPayment: number;
   /** Shared monthly budget in today's dollars: rent + monthly-ized contribution. */
   monthlyBudget: number;
   /**

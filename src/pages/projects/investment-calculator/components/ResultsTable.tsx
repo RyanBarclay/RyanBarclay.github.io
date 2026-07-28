@@ -83,11 +83,11 @@ const buildTable = ({
   return {
     headers: [
       "Year",
-      "Net worth (buy)",
-      "Net worth (rent)",
-      "Investments (buy)",
-      "Mortgage balance",
-      "Home equity",
+      "Buy: net worth",
+      "Rent: net worth",
+      "Buy: investments",
+      "Buy: mortgage balance",
+      "Buy: home equity",
     ],
     rows: combined.timeline
       .filter((p) => p.month % 12 === 0)

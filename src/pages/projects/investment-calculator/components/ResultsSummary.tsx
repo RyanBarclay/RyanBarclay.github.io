@@ -76,6 +76,15 @@ const buildStats = ({
   const last = combined.timeline[combined.timeline.length - 1];
   const buy = last?.netWorth ?? 0;
   const rent = last?.rentNetWorth ?? 0;
+  // Measure the verdict from the purchase month onward: level
+  // differences at purchase (e.g. a family gift, buy-universe only)
+  // don't get credited — only what each path builds afterwards.
+  const atPurchase =
+    combined.timeline[
+      Math.min(combined.purchaseMonth, combined.timeline.length - 1)
+    ];
+  const growthDiff =
+    buy - (atPurchase?.netWorth ?? 0) - (rent - (atPurchase?.rentNetWorth ?? 0));
   return [
     {
       label: "Buying — net worth",
@@ -88,9 +97,12 @@ const buildStats = ({
       sub: `${formatCurrency(last?.realRentNetWorth ?? 0)} in today's dollars`,
     },
     {
-      label: "Difference",
-      value: formatCurrency(Math.abs(buy - rent)),
-      sub: buy >= rent ? "buying comes out ahead" : "renting comes out ahead",
+      label: "Difference (since purchase)",
+      value: formatCurrency(Math.abs(growthDiff)),
+      sub:
+        growthDiff >= 0
+          ? "buying builds more from the moment you buy"
+          : "renting builds more from the moment you buy",
     },
     {
       label: "Breakeven",

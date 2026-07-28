@@ -112,7 +112,12 @@ export const resolveDownPayment = (
 };
 
 /** Portfolio at the given MER, with tax drag on the taxable account. */
-const makePortfolio = (config: InvestmentConfig, merPct: number, periodsPerYear: number) =>
+const makePortfolio = (
+  config: InvestmentConfig,
+  merPct: number,
+  periodsPerYear: number,
+  horizonYears = config.years
+) =>
   createAccountPortfolio({
     accounts: config.accounts,
     registeredRate: effectivePeriodicRate(
@@ -125,7 +130,7 @@ const makePortfolio = (config: InvestmentConfig, merPct: number, periodsPerYear:
       periodsPerYear
     ),
     inflationPct: config.inflationPct,
-    horizonYears: config.years,
+    horizonYears,
   });
 
 /** Route a lump sum through the room-filling logic; overflow → taxable. */
@@ -329,49 +334,28 @@ export const sampleMortgageMonthly = (
 };
 
 /**
- * How the down payment is funded, clamped to reality: each requested
- * source is limited by its balance (RRSP additionally by the $60k HBP
- * cap) and by what the down payment still needs, in FHSA → TFSA →
- * RRSP → taxable order. The unfunded remainder is external cash.
- */
-export const resolveDownPaymentFunding = (
-  config: CombinedConfig,
-  downPaymentDollars: number
-): DownPaymentFunding => {
-  const { accounts } = config.investment;
-  let need = downPaymentDollars;
-  const take = (requested: number, available: number) => {
-    const taken = Math.max(0, Math.min(requested, available, need));
-    need -= taken;
-    return taken;
-  };
-  const fhsa = take(config.downPaymentFromFhsa, accounts.fhsaBalance);
-  const tfsa = take(config.downPaymentFromTfsa, accounts.tfsaBalance);
-  const rrsp = take(
-    Math.min(config.downPaymentFromRrsp, HBP_MAX_WITHDRAWAL),
-    accounts.rrspBalance
-  );
-  const taxable = take(
-    config.downPaymentFromTaxable,
-    accounts.taxableBalance
-  );
-  return { fhsa, tfsa, rrsp, taxable, cash: need };
-};
-
-/**
  * Rent-vs-buy projection: two universes sharing one monthly budget
  * (rent + monthly-ized contribution).
  *
  * The budget steps up annually with inflation (income keeps pace);
  * `monthlyBudget` in the result is today's value.
  * RENT: pays rent (stepping up annually at rentGrowthPct), invests the
- * remainder; the down-payment cash is invested from day one.
- * BUY: pays the mortgage (monthly-equivalent of the chosen frequency's
- * payment, fixed in nominal terms) and ownership costs (scaling with
- * home value), invests the remainder; overflow beyond registered room
- * goes to taxable or extra mortgage principal per
- * `overflowDestination`. After payoff the whole budget (minus
- * ownership costs) invests.
+ * remainder.
+ * BUY: identical to RENT until `purchaseYears` — both universes rent
+ * and invest from the same budget while the buyer saves up (and the
+ * house price keeps appreciating). At purchase, the mortgage is taken
+ * on the THEN-price; the down payment pulls from the buyer's
+ * then-current balances per the funding requests (FHSA → TFSA →
+ * RRSP/HBP → taxable, each clamped, HBP capped at $60k), the FHSA
+ * closes (remainder → RRSP), and the external-cash remainder is
+ * invested by the renter at that same moment — so the two universes
+ * are exactly equal until purchase (fairness invariant). From then on
+ * the buyer pays the mortgage (fixed nominal — the inflation hedge)
+ * plus ownership costs (scaling with home value) and invests the rest;
+ * overflow beyond registered room goes to taxable or extra mortgage
+ * principal per `overflowDestination`. TFSA room withdrawn for the
+ * down payment re-credits at the next anniversary; HBP repays 1/15th
+ * per year (years 2–16 after purchase) out of the buyer's budget.
  *
  * The buy scenario walks the mortgage monthly (so prepayments can
  * change its path) — its balance can differ slightly from the mortgage
@@ -383,48 +367,97 @@ export const runCombinedProjection = (
   mortgage: MortgageResult
 ): CombinedResult => {
   const inv = config.investment;
-  const months = Math.round(inv.years * 12);
+  // The horizon means "years of ownership analysis": the timeline
+  // extends by the saving-up phase so a delayed purchase doesn't eat
+  // the comparison window.
+  const purchaseMonth = Math.max(0, Math.round(config.purchaseYears * 12));
+  const months = Math.round(inv.years * 12) + purchaseMonth;
+  const horizonYears = months / 12;
   const monthlyContribution =
     (inv.contributionAmount * PERIODS_PER_YEAR[inv.contributionFrequency]) /
     12;
   const monthlyBudget = config.monthlyRent + monthlyContribution;
-  const { dollars: downDollars } = resolveDownPayment(config.mortgage);
 
-  // Both universes start with the existing account balances (placed
-  // without consuming room). The buyer pulls the investment-funded part
-  // of the down payment out at purchase and closes the FHSA (home
-  // bought — remainder transfers to the RRSP). The renter keeps those
-  // investments untouched and instead invests the CASH portion the
-  // buyer would have spent — new money, so it routes through room.
-  const funding = resolveDownPaymentFunding(config, downDollars);
-  const renter = makePortfolio(inv, inv.merPct, 12);
-  seedPortfolio(renter, funding.cash);
-  const buyer = makePortfolio(inv, inv.merPct, 12);
-  buyer.withdraw("fhsa", funding.fhsa);
-  buyer.withdraw("tfsa", funding.tfsa);
-  buyer.withdraw("rrsp", funding.rrsp);
-  buyer.withdraw("taxable", funding.taxable);
-  buyer.closeFhsa();
+  // The house is bought at its price in `purchaseYears`, not today's.
+  const purchaseYearIndex = Math.floor(purchaseMonth / 12);
+  const purchaseMortgageConfig: MortgageConfig = {
+    ...config.mortgage,
+    // Percent-mode down payments scale with the price automatically;
+    // dollar-mode stays fixed (and may newly trigger CMHC).
+    homePrice:
+      config.mortgage.homePrice *
+      Math.pow(1 + config.homeAppreciationPct / 100, purchaseMonth / 12),
+  };
+  const purchaseMortgage = runMortgageProjection(purchaseMortgageConfig);
+  const purchaseDownPayment = resolveDownPayment(purchaseMortgageConfig).dollars;
 
-  // HBP: repay 1/15th per year over 15 years, starting the 2nd year
-  // after withdrawal (years 2–16). Comes out of the buyer's budget and
-  // goes back into the RRSP without consuming room.
-  const hbpMonthlyRepayment = funding.rrsp / HBP_REPAYMENT_YEARS / 12;
+  const renter = makePortfolio(inv, inv.merPct, 12, horizonYears);
+  const buyer = makePortfolio(inv, inv.merPct, 12, horizonYears);
 
   const monthlyRate = mortgagePeriodicRate(config.mortgage.annualRatePct, 12);
   const monthlyMortgageOutflow =
-    (mortgage.paymentAmount *
+    (purchaseMortgage.paymentAmount *
       PAYMENTS_PER_YEAR[config.mortgage.paymentFrequency]) /
     12;
-  let balance = mortgage.loanAmount;
+  let balance = 0; // no mortgage until purchase
+  let funding: DownPaymentFunding = {
+    gift: 0,
+    fhsa: 0,
+    tfsa: 0,
+    rrsp: 0,
+    taxable: 0,
+    cash: purchaseDownPayment,
+  };
+  let hbpMonthlyRepayment = 0;
+
+  // Executed at the purchase month: apply the gift first (buy-universe
+  // only — nobody gifts you rent money), pull the funded portion from
+  // the buyer's THEN-current balances (an unopened FHSA simply holds
+  // $0), close the FHSA, take on the mortgage, and hand the renter the
+  // buyer's OWN external-cash portion to invest.
+  const executePurchase = () => {
+    let need = purchaseDownPayment;
+    const gift = Math.max(0, Math.min(config.downPaymentGift, need));
+    need -= gift;
+    const takeFrom = (
+      account: "fhsa" | "tfsa" | "rrsp" | "taxable",
+      requested: number,
+      cap = Infinity
+    ) => {
+      const taken = buyer.withdraw(
+        account,
+        Math.max(0, Math.min(requested, cap, need))
+      );
+      need -= taken;
+      return taken;
+    };
+    funding = {
+      gift,
+      fhsa: takeFrom("fhsa", config.downPaymentFromFhsa),
+      tfsa: takeFrom("tfsa", config.downPaymentFromTfsa),
+      rrsp: takeFrom("rrsp", config.downPaymentFromRrsp, HBP_MAX_WITHDRAWAL),
+      taxable: takeFrom("taxable", config.downPaymentFromTaxable),
+      cash: 0,
+    };
+    funding.cash = need;
+    buyer.closeFhsa();
+    seedPortfolio(renter, funding.cash);
+    balance = purchaseMortgage.loanAmount;
+    // 1/15th per year, starting the 2nd year after withdrawal.
+    hbpMonthlyRepayment = funding.rrsp / HBP_REPAYMENT_YEARS / 12;
+  };
+
+  if (purchaseMonth === 0) executePurchase();
 
   let buyShortfallMonth: number | null = null;
   let rentShortfallMonth: number | null = null;
 
   const point = (month: number): CombinedPoint => {
     const homeValue =
-      config.mortgage.homePrice *
-      Math.pow(1 + config.homeAppreciationPct / 100, month / 12);
+      month >= purchaseMonth
+        ? config.mortgage.homePrice *
+          Math.pow(1 + config.homeAppreciationPct / 100, month / 12)
+        : 0;
     const homeEquity = homeValue - balance;
     const netWorth = buyer.total + homeEquity;
     const rentNetWorth = renter.total;
@@ -452,8 +485,10 @@ export const runCombinedProjection = (
       renter.grantAnnualRoom(yearIndex);
       buyer.grantAnnualRoom(yearIndex);
       // TFSA room withdrawn for the down payment comes back the
-      // following January.
-      if (yearIndex === 1) buyer.addTfsaRoom(funding.tfsa);
+      // January after the purchase.
+      if (yearIndex === purchaseYearIndex + 1) {
+        buyer.addTfsaRoom(funding.tfsa);
+      }
     }
 
     const yearIndex = Math.floor((month - 1) / 12);
@@ -464,10 +499,6 @@ export const runCombinedProjection = (
       monthlyBudget * Math.pow(1 + inv.inflationPct / 100, yearIndex);
     const rent =
       config.monthlyRent * Math.pow(1 + config.rentGrowthPct / 100, yearIndex);
-    const homeValue =
-      config.mortgage.homePrice *
-      Math.pow(1 + config.homeAppreciationPct / 100, month / 12);
-    const ownershipCost = (homeValue * config.ownershipCostPct) / 100 / 12;
 
     // Rent universe
     renter.grow();
@@ -479,26 +510,47 @@ export const runCombinedProjection = (
 
     // Buy universe
     buyer.grow();
-    let outflow = 0;
-    if (balance > 0) {
-      const interest = balance * monthlyRate;
-      const principal = Math.min(monthlyMortgageOutflow - interest, balance);
-      balance = Math.max(0, balance - principal);
-      outflow = interest + principal;
+    if (month === purchaseMonth) executePurchase();
+
+    let buyerInvest: number;
+    if (month <= purchaseMonth) {
+      // Still renting while saving up — same outflow as the renter.
+      buyerInvest = budget - rent;
+    } else {
+      let outflow = 0;
+      if (balance > 0) {
+        const interest = balance * monthlyRate;
+        const principal = Math.min(
+          monthlyMortgageOutflow - interest,
+          balance
+        );
+        balance = Math.max(0, balance - principal);
+        outflow = interest + principal;
+      }
+      const homeValue =
+        config.mortgage.homePrice *
+        Math.pow(1 + config.homeAppreciationPct / 100, month / 12);
+      const ownershipCost = (homeValue * config.ownershipCostPct) / 100 / 12;
+      const hbpRepayment =
+        yearIndex >= purchaseYearIndex + 2 &&
+        yearIndex < purchaseYearIndex + 2 + HBP_REPAYMENT_YEARS
+          ? hbpMonthlyRepayment
+          : 0;
+      if (hbpRepayment > 0) buyer.repayRrsp(hbpRepayment);
+      buyerInvest = budget - outflow - ownershipCost - hbpRepayment;
     }
-    const hbpRepayment =
-      yearIndex >= 2 && yearIndex < 2 + HBP_REPAYMENT_YEARS
-        ? hbpMonthlyRepayment
-        : 0;
-    if (hbpRepayment > 0) buyer.repayRrsp(hbpRepayment);
-    const buyerInvest = budget - outflow - ownershipCost - hbpRepayment;
+
     if (buyerInvest < 0 && buyShortfallMonth === null) {
       buyShortfallMonth = month;
     }
     if (buyerInvest > 0) {
       const split = buyer.contribute(buyerInvest);
       if (split.overflow > 0) {
-        if (config.overflowDestination === "mortgage" && balance > 0) {
+        if (
+          config.overflowDestination === "mortgage" &&
+          month > purchaseMonth &&
+          balance > 0
+        ) {
           const prepay = Math.min(split.overflow, balance);
           balance -= prepay;
           buyer.depositTaxable(split.overflow - prepay);
@@ -511,23 +563,28 @@ export const runCombinedProjection = (
     timeline.push(point(month));
   }
 
-  // Breakeven: the month from which buying stays ahead through the horizon.
+  // Breakeven: the month from which buying stays ahead through the
+  // horizon. The universes are identical until purchase, so report the
+  // divergence point rather than "immediately" when buy never trails.
   let lastBehind = -1;
   for (let i = 0; i < timeline.length; i++) {
     if (timeline[i].netWorth < timeline[i].rentNetWorth) lastBehind = i;
   }
   const breakevenMonth =
-    lastBehind === -1
-      ? 0
-      : lastBehind === timeline.length - 1
-        ? null
-        : timeline[lastBehind + 1].month;
+    lastBehind === timeline.length - 1
+      ? null
+      : Math.max(
+          lastBehind === -1 ? 0 : timeline[lastBehind + 1].month,
+          purchaseMonth
+        );
 
   return {
     investment,
     mortgage,
     timeline,
     downPaymentFunding: funding,
+    purchaseMonth,
+    purchaseDownPayment,
     monthlyBudget,
     breakevenMonth,
     buyShortfallMonth,

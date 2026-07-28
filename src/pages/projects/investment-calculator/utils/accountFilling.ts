@@ -90,8 +90,10 @@ export const createAccountPortfolio = (options: {
 
   // Starting balances go straight in — money already inside an account
   // consumed its room when originally contributed, so the user's entered
-  // room stays fully available for new contributions.
-  let fhsa = accounts.fhsaBalance;
+  // room stays fully available for new contributions. An FHSA that
+  // hasn't been opened yet can't hold a balance.
+  const fhsaOpenAtStart = accounts.fhsaOpeningYear <= accounts.startYear;
+  let fhsa = fhsaOpenAtStart ? accounts.fhsaBalance : 0;
   let tfsa = accounts.tfsaBalance;
   let rrsp = accounts.rrspBalance;
   let taxable = accounts.taxableBalance;
@@ -100,6 +102,7 @@ export const createAccountPortfolio = (options: {
   let fhsaLifetimeRoom = Math.min(accounts.fhsaRoom, FHSA_LIFETIME_CAP);
   let fhsaContributedThisYear = 0;
   let fhsaClosed = false;
+  let currentYear = accounts.startYear;
 
   return {
     grow() {
@@ -109,7 +112,8 @@ export const createAccountPortfolio = (options: {
       taxable *= 1 + taxableRate;
     },
     grantAnnualRoom(yearIndex: number) {
-      tfsaRoom += tfsaLimits.get(accounts.startYear + yearIndex) ?? 0;
+      currentYear = accounts.startYear + yearIndex;
+      tfsaRoom += tfsaLimits.get(currentYear) ?? 0;
       rrspRoom += accounts.rrspAnnualNewRoom;
       fhsaContributedThisYear = 0;
     },
@@ -117,7 +121,8 @@ export const createAccountPortfolio = (options: {
       const split: ContributionSplit = { fhsa: 0, tfsa: 0, rrsp: 0, overflow: 0 };
       let remaining = amount;
 
-      if (!fhsaClosed && remaining > 0) {
+      const fhsaOpen = !fhsaClosed && currentYear >= accounts.fhsaOpeningYear;
+      if (fhsaOpen && remaining > 0) {
         const take = Math.min(
           remaining,
           fhsaLifetimeRoom,

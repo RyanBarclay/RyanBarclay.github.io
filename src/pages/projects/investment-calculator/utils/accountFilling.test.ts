@@ -10,6 +10,7 @@ const accounts = (overrides: Partial<AccountConfig> = {}): AccountConfig => ({
   tfsaRoom: 0,
   rrspRoom: 0,
   fhsaRoom: 0,
+  fhsaOpeningYear: 2026,
   annualIncome: 0,
   rrspAnnualNewRoom: 0,
   priority: "tfsa-first",
@@ -44,6 +45,26 @@ describe("createAccountPortfolio", () => {
     p.grantAnnualRoom(1); // new year
     expect(p.contribute(8000).fhsa).toBe(2000); // lifetime pool exhausted
     expect(p.fhsa).toBe(10000);
+  });
+
+  it("blocks FHSA contributions until the opening year", () => {
+    // Not a first-time buyer until Jan 1, 2028 — contributions fall
+    // through to TFSA until then.
+    const p = portfolio({
+      fhsaRoom: 40000,
+      fhsaOpeningYear: 2028,
+      tfsaRoom: 100000,
+    });
+    expect(p.contribute(8000).fhsa).toBe(0); // 2026
+    p.grantAnnualRoom(1); // 2027
+    expect(p.contribute(8000).fhsa).toBe(0);
+    p.grantAnnualRoom(2); // 2028 — eligible now
+    expect(p.contribute(8000).fhsa).toBe(8000);
+  });
+
+  it("ignores a balance entered for an unopened FHSA", () => {
+    const p = portfolio({ fhsaBalance: 5000, fhsaOpeningYear: 2027 });
+    expect(p.fhsa).toBe(0);
   });
 
   it("withdraw clamps to the balance and reduces it", () => {

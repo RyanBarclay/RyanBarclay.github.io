@@ -27,6 +27,7 @@ export const DEFAULT_ACCOUNTS: AccountConfig = {
   tfsaRoom: 7000,
   rrspRoom: 10000,
   fhsaRoom: 40000,
+  fhsaOpeningYear: new Date().getFullYear(),
   annualIncome: 0,
   rrspAnnualNewRoom: 10000,
   priority: "tfsa-first",
@@ -66,6 +67,8 @@ export const DEFAULT_COMBINED_SETTINGS: CombinedSettings = {
   rentGrowthPct: 2.3,
   // ~0.32% property tax + strata/maintenance + insurance.
   ownershipCostPct: 1.5,
+  purchaseYears: 0,
+  downPaymentGift: 0,
   downPaymentFromFhsa: 0,
   downPaymentFromTfsa: 0,
   downPaymentFromRrsp: 0,

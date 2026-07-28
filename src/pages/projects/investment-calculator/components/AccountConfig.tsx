@@ -10,6 +10,7 @@ import {
   rrspNewRoomFromIncome,
 } from "../utils/calculations";
 import { formatCurrency } from "../utils/labels";
+import NumberField from "./NumberField";
 import SliderField from "./SliderField";
 
 interface AccountConfigProps {
@@ -66,16 +67,31 @@ const AccountConfig = ({ value, onChange }: AccountConfigProps) => (
       unit="$"
       helperText="Unused deduction room for NEW contributions, not the lifetime total"
     />
-    <SliderField
-      label="FHSA balance"
-      value={value.fhsaBalance}
-      onChange={(fhsaBalance) => onChange({ ...value, fhsaBalance })}
-      min={0}
-      max={60000}
-      step={500}
-      unit="$"
-      helperText="First Home Savings Account — deductible in, tax-free out for a first home"
+    <NumberField
+      label="FHSA opening year"
+      value={value.fhsaOpeningYear}
+      onChange={(fhsaOpeningYear) => onChange({ ...value, fhsaOpeningYear })}
+      step={1}
+      fullWidth
+      helperText="Eligibility lands on a Jan 1 — four full calendar years must pass since you last lived in a home you owned"
     />
+    {value.fhsaOpeningYear <= value.startYear ? (
+      <SliderField
+        label="FHSA balance"
+        value={value.fhsaBalance}
+        onChange={(fhsaBalance) => onChange({ ...value, fhsaBalance })}
+        min={0}
+        max={60000}
+        step={500}
+        unit="$"
+        helperText="First Home Savings Account — deductible in, tax-free out for a first home"
+      />
+    ) : (
+      <Typography variant="caption" color="text.secondary">
+        FHSA opens in {value.fhsaOpeningYear} — it starts empty, and
+        contributions begin flowing that January.
+      </Typography>
+    )}
     <SliderField
       label="FHSA lifetime room left"
       value={value.fhsaRoom}

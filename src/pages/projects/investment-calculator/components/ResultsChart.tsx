@@ -3,6 +3,8 @@ import {
   Box,
   Chip,
   Paper,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   useMediaQuery,
   useTheme,
@@ -46,7 +48,6 @@ interface SeriesDef {
   key: string;
   label: string;
   color: { light: string; dark: string };
-  dashed?: boolean;
   data: number[];
 }
 
@@ -55,6 +56,8 @@ interface ResultsChartProps {
   investment: InvestmentResult;
   mortgage: MortgageResult;
   combined: CombinedResult;
+  /** For the nominal ↔ today's-$ toggle. */
+  inflationPct: number;
 }
 
 const buildSeries = (
@@ -103,13 +106,6 @@ const buildSeries = (
           color: COLOR.gray,
           data: investment.timeline.map((p) => p.totalContributions),
         },
-        {
-          key: "realTotalValue",
-          label: "Total value (today's $)",
-          color: COLOR.blue,
-          dashed: true,
-          data: investment.timeline.map((p) => p.realTotalValue),
-        },
       ],
     };
   }
@@ -138,50 +134,36 @@ const buildSeries = (
     defs: [
       {
         key: "netWorth",
-        label: "Net worth — buy",
+        label: "Buy: net worth",
         color: COLOR.magenta,
         data: combined.timeline.map((p) => p.netWorth),
       },
       {
-        // For the renter, net worth IS their investments (they hold no
-        // other assets) — labeled so it reads as the direct comparable
-        // to "Investments (buy)".
+        // The renter holds no property, so their net worth IS their
+        // investment portfolio — one line, explained by the caption
+        // under the chart.
         key: "rentNetWorth",
-        label: "Investments = net worth — rent",
+        label: "Rent: net worth",
         color: COLOR.yellow,
         data: combined.timeline.map((p) => p.rentNetWorth),
       },
       {
         key: "investmentsTotal",
-        label: "Investments (buy)",
+        label: "Buy: investments",
         color: COLOR.blue,
         data: combined.timeline.map((p) => p.investmentsTotal),
       },
       {
         key: "mortgageBalance",
-        label: "Mortgage balance",
+        label: "Buy: mortgage balance",
         color: COLOR.red,
         data: combined.timeline.map((p) => p.mortgageBalance),
       },
       {
         key: "homeEquity",
-        label: "Home equity",
+        label: "Buy: home equity",
         color: COLOR.green,
         data: combined.timeline.map((p) => p.homeEquity),
-      },
-      {
-        key: "realNetWorth",
-        label: "Buy (today's $)",
-        color: COLOR.magenta,
-        dashed: true,
-        data: combined.timeline.map((p) => p.realNetWorth),
-      },
-      {
-        key: "realRentNetWorth",
-        label: "Rent (today's $)",
-        color: COLOR.yellow,
-        dashed: true,
-        data: combined.timeline.map((p) => p.realRentNetWorth),
       },
     ],
   };
@@ -193,6 +175,7 @@ const ResultsChart = ({
   investment,
   mortgage,
   combined,
+  inflationPct,
 }: ResultsChartProps) => {
   const theme = useTheme();
   const paletteMode = theme.palette.mode;
@@ -200,19 +183,21 @@ const ResultsChart = ({
   // chart so the plot doesn't render as a tall sliver.
   const isNarrow = useMediaQuery(theme.breakpoints.down("sm"));
   const [hidden, setHidden] = useState<Record<string, boolean>>({});
+  const [dollarMode, setDollarMode] = useState<"nominal" | "real">("nominal");
 
   const { xYears, defs } = buildSeries(mode, investment, mortgage, combined);
-  const visible = defs.filter((d) => !hidden[d.key]);
-
-  // x-charts v9 exposes lines as .MuiLineChart-line[data-series="<id>"]
-  const dashedSx = Object.fromEntries(
-    visible
-      .filter((d) => d.dashed)
-      .map((d) => [
-        `& .MuiLineChart-line[data-series="${d.key}"]`,
-        { strokeDasharray: "6 4" },
-      ])
-  );
+  // Today's-$ mode discounts EVERY series by inflation — one mental
+  // model for the whole chart instead of dashed twin lines.
+  const deflated =
+    dollarMode === "real"
+      ? defs.map((d) => ({
+          ...d,
+          data: d.data.map(
+            (v, i) => v / Math.pow(1 + inflationPct / 100, xYears[i])
+          ),
+        }))
+      : defs;
+  const visible = deflated.filter((d) => !hidden[d.key]);
 
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 } }}>
@@ -225,9 +210,8 @@ const ResultsChart = ({
           alignItems: "center",
         }}
       >
-        {defs.map((d) => {
+        {deflated.map((d) => {
           const isHidden = Boolean(hidden[d.key]);
-          const dotColor = d.color[paletteMode];
           return (
             <Chip
               key={d.key}
@@ -244,12 +228,7 @@ const ResultsChart = ({
                     height: 10,
                     borderRadius: "50%",
                     ml: 0.5,
-                    ...(d.dashed
-                      ? {
-                          border: `2px solid ${dotColor}`,
-                          bgcolor: "transparent",
-                        }
-                      : { bgcolor: dotColor }),
+                    bgcolor: d.color[paletteMode],
                     opacity: isHidden ? 0.4 : 1,
                   }}
                 />
@@ -258,6 +237,22 @@ const ResultsChart = ({
             />
           );
         })}
+        <ToggleButtonGroup
+          value={dollarMode}
+          exclusive
+          onChange={(_, value: "nominal" | "real" | null) => {
+            if (value) setDollarMode(value);
+          }}
+          size="small"
+          sx={{ ml: "auto" }}
+        >
+          <ToggleButton value="nominal" sx={{ px: 1, py: 0.25 }}>
+            Nominal
+          </ToggleButton>
+          <ToggleButton value="real" sx={{ px: 1, py: 0.25 }}>
+            Today's $
+          </ToggleButton>
+        </ToggleButtonGroup>
       </Box>
 
       <LineChart
@@ -301,8 +296,14 @@ const ResultsChart = ({
         }))}
         hideLegend
         grid={{ horizontal: true }}
-        sx={dashedSx}
       />
+      {mode === "combined" && (
+        <Typography variant="caption" color="text.secondary" display="block">
+          The renter holds no property, so their net worth is simply their
+          investment portfolio — compare it with "Buy: investments" to see
+          where each universe's money lives.
+        </Typography>
+      )}
     </Paper>
   );
 };

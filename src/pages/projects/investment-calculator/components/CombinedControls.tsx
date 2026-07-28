@@ -11,6 +11,7 @@ import {
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 import {
   CombinedSettings,
+  DownPaymentFunding,
   InvestmentConfig,
   MortgageConfig,
   OverflowDestination,
@@ -19,11 +20,7 @@ import {
   HBP_MAX_WITHDRAWAL,
   HBP_REPAYMENT_YEARS,
 } from "../utils/accountFilling";
-import {
-  PERIODS_PER_YEAR,
-  resolveDownPayment,
-  resolveDownPaymentFunding,
-} from "../utils/calculations";
+import { PERIODS_PER_YEAR } from "../utils/calculations";
 import { formatCurrency } from "../utils/labels";
 import InvestmentControls from "./InvestmentControls";
 import MortgageControls from "./MortgageControls";
@@ -46,6 +43,10 @@ interface CombinedControlsProps {
   onMortgageChange: (config: MortgageConfig) => void;
   settings: CombinedSettings;
   onSettingsChange: (settings: CombinedSettings) => void;
+  /** Engine truth: how the down payment actually resolves at purchase. */
+  funding: DownPaymentFunding;
+  /** Down payment in dollars at the then-price. */
+  purchaseDownPayment: number;
 }
 
 /**
@@ -60,6 +61,8 @@ const CombinedControls = ({
   onMortgageChange,
   settings,
   onSettingsChange,
+  funding,
+  purchaseDownPayment,
 }: CombinedControlsProps) => {
   const monthlyContribution =
     (investment.contributionAmount *
@@ -67,16 +70,14 @@ const CombinedControls = ({
     12;
   const monthlyBudget = settings.monthlyRent + monthlyContribution;
 
-  const { dollars: downDollars } = resolveDownPayment(mortgage);
-  const funding = resolveDownPaymentFunding(
-    { investment, mortgage, ...settings },
-    downDollars
-  );
   const fundingRequested =
+    settings.downPaymentGift +
     settings.downPaymentFromFhsa +
     settings.downPaymentFromTfsa +
     settings.downPaymentFromRrsp +
     settings.downPaymentFromTaxable;
+  const fundingTotal =
+    funding.fhsa + funding.tfsa + funding.rrsp + funding.taxable;
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
@@ -84,6 +85,17 @@ const CombinedControls = ({
         Defaults reflect North Vancouver, BC (mid-2026) — adjust for your
         market.
       </Typography>
+      <SliderField
+        label="Buying in"
+        value={settings.purchaseYears}
+        onChange={(purchaseYears) =>
+          onSettingsChange({ ...settings, purchaseYears })
+        }
+        min={0}
+        max={15}
+        step={1}
+        helperText="Years from now — 0 buys today. While saving up, both universes rent and invest from the same budget, and the house price keeps appreciating. The chart extends to cover the wait plus your time horizon."
+      />
       <SliderField
         label="Monthly rent"
         value={settings.monthlyRent}
@@ -171,10 +183,25 @@ const CombinedControls = ({
           sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}
         >
           <Typography variant="caption" color="text.secondary">
-            Pull part of the {formatCurrency(downDollars)} down payment from
-            your accounts at purchase. Whatever isn't funded here is external
-            cash — which the rent scenario invests instead.
+            Pull part of the {formatCurrency(purchaseDownPayment)} down
+            payment
+            {settings.purchaseYears > 0
+              ? ` (at purchase, ${settings.purchaseYears} yrs from now — sized to the then-price)`
+              : ""}{" "}
+            from whatever's in your accounts at that moment. Whatever isn't
+            funded here is external cash — which the rent scenario invests
+            instead.
           </Typography>
+          <NumberField
+            label="Gift toward down payment"
+            value={settings.downPaymentGift}
+            onChange={(downPaymentGift) =>
+              onSettingsChange({ ...settings, downPaymentGift })
+            }
+            unit="$"
+            fullWidth
+            helperText="From family or a partner — exists only if you buy, so the rent universe never invests it and the since-purchase verdict excludes its head start"
+          />
           <NumberField
             label="From FHSA"
             value={settings.downPaymentFromFhsa}
@@ -217,22 +244,19 @@ const CombinedControls = ({
 
           {fundingRequested > 0 && (
             <Alert severity="info" sx={{ py: 0.5 }}>
+              {funding.gift > 0 && (
+                <>
+                  Gift: <strong>{formatCurrency(funding.gift)}</strong> ·{" "}
+                </>
+              )}
               Funded from investments:{" "}
-              <strong>
-                {formatCurrency(
-                  funding.fhsa + funding.tfsa + funding.rrsp + funding.taxable
-                )}
-              </strong>{" "}
-              · external cash: <strong>{formatCurrency(funding.cash)}</strong>
-              {fundingRequested >
-                funding.fhsa +
-                  funding.tfsa +
-                  funding.rrsp +
-                  funding.taxable && (
+              <strong>{formatCurrency(fundingTotal)}</strong> · external
+              cash: <strong>{formatCurrency(funding.cash)}</strong>
+              {fundingRequested > fundingTotal + funding.gift && (
                 <>
                   {" "}
-                  (requests were clamped to balances, the HBP cap, and the
-                  down payment itself)
+                  (requests were clamped to the balances at purchase, the
+                  HBP cap, and the down payment itself)
                 </>
               )}
               {funding.fhsa > 0 && (
