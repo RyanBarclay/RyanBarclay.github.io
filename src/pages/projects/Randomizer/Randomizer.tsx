@@ -420,8 +420,12 @@ const RandomizerContent = () => {
             aria-label="randomize"
             sx={{
               position: "fixed",
-              bottom: 32,
-              right: 32,
+              // Clear the bottom compass nav on mobile.
+              bottom: {
+                xs: "calc(84px + env(safe-area-inset-bottom))",
+                md: 32,
+              },
+              right: { xs: 16, md: 32 },
               height: 64,
               width: 64,
             }}

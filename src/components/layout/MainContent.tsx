@@ -22,7 +22,14 @@ const MainContent = (): React.JSX.Element => {
   const projectRoutes = generateProjectRoutes();
 
   return (
-    <Box sx={{ pt: `${NAVBAR_HEIGHT_WITH_PADDING}px` }}>
+    <Box
+      sx={{
+        pt: `${NAVBAR_HEIGHT_WITH_PADDING}px`,
+        // Clear the bottom compass nav on mobile so it never blocks
+        // the tail of the page content.
+        pb: { xs: "calc(88px + env(safe-area-inset-bottom))", md: 0 },
+      }}
+    >
       <Routes>
         {/* Top-level routes from config */}
         {Object.entries(componentLinkInfo).map(([key, { to, component }]) => (

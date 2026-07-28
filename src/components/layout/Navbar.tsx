@@ -3,32 +3,22 @@ import {
   Box,
   Button,
   Container,
+  IconButton,
   Toolbar,
+  Typography,
+  alpha,
   useMediaQuery,
   useScrollTrigger,
   useTheme,
-  SwipeableDrawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  IconButton,
-  Paper,
-  Typography,
-  alpha,
 } from "@mui/material";
-import { Menu as MenuIcon, DarkMode, LightMode } from "@mui/icons-material";
-import { useState } from "react";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import componentLinkInfo from "../../config/routes";
 import { GLASS_BORDER } from "../../config/constants";
 import ThemeButton from "../ui/ThemeButton";
-import { useContext } from "react";
 import { ThemeContext } from "../../contexts/DarkModeContext";
-import { Global } from "@emotion/react";
-import { grey } from "@mui/material/colors";
-
-const drawerBleeding = 56;
+import CompassNav from "./CompassNav";
 
 const Navbar = () => {
   const theme = useTheme();
@@ -36,7 +26,6 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const location = useLocation();
   const navigate = useNavigate();
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   // Detect scroll for styling changes
   const trigger = useScrollTrigger({
@@ -46,19 +35,12 @@ const Navbar = () => {
 
   const navItems = Object.entries(componentLinkInfo);
 
-  // Mobile Layout: Top bar + Bottom navigation
+  // Mobile: top bar (brand + hamburger fallback menu) + bottom compass.
+  // No theme toggle on mobile — the theme follows the system preference
+  // (prefers-color-scheme) by default.
   if (isMobile) {
     return (
       <>
-        <Global
-          styles={{
-            ".MuiDrawer-root > .MuiPaper-root": {
-              height: `calc(50% - ${drawerBleeding}px)`,
-              overflow: "visible",
-            },
-          }}
-        />
-        {/* Top Bar for Mobile - just branding and theme toggle */}
         <AppBar
           position="fixed"
           elevation={trigger ? 2 : 0}
@@ -97,9 +79,15 @@ const Navbar = () => {
               >
                 Ryan Barclay
               </Typography>
+              {/* The hamburger is a discovery point, not a second menu:
+                  it sweeps every option through the compass so the user
+                  sees it's a horizontal scrubber. */}
               <IconButton
                 color="inherit"
-                onClick={() => setMobileOpen(true)}
+                aria-label="Show navigation options"
+                onClick={() =>
+                  window.dispatchEvent(new Event("compass:sweep"))
+                }
                 sx={{
                   color: trigger ? "text.primary" : "common.white",
                 }}
@@ -109,102 +97,7 @@ const Navbar = () => {
             </Toolbar>
           </Container>
         </AppBar>
-        {/* Swipeable Drawer from Bottom */}
-        <SwipeableDrawer
-          anchor="bottom"
-          open={mobileOpen}
-          onClose={() => setMobileOpen(false)}
-          onOpen={() => setMobileOpen(true)}
-          swipeAreaWidth={drawerBleeding}
-          disableSwipeToOpen={false}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          slotProps={{
-            paper: {
-              sx: {
-                backgroundColor: alpha(
-                  isDarkTheme
-                    ? theme.palette.common.black
-                    : theme.palette.common.white,
-                  0.75,
-                ),
-                backdropFilter: "blur(20px) saturate(180%)",
-              },
-            },
-          }}
-        >
-          <Paper
-            sx={{
-              backgroundColor: alpha(
-                isDarkTheme
-                  ? theme.palette.common.black
-                  : theme.palette.common.white,
-                0.75,
-              ),
-              backdropFilter: "blur(20px) saturate(180%)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 1,
-              position: "absolute",
-              top: -drawerBleeding,
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-              borderBottomLeftRadius: 0,
-              borderBottomRightRadius: 0,
-              visibility: "visible",
-              right: 0,
-              left: 0,
-              height: drawerBleeding,
-            }}
-          >
-            <Box
-              sx={{
-                width: 30,
-                height: 6,
-                backgroundColor: alpha(
-                  isDarkTheme
-                    ? theme.palette.common.white
-                    : theme.palette.common.black,
-                  isDarkTheme ? 0.5 : 0.6,
-                ),
-                borderRadius: 3,
-              }}
-            />
-          </Paper>
-
-          <List>
-            {/* Theme Toggle as first item */}
-            <ListItemButton
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                py: 2,
-              }}
-            >
-              <ListItemText primary="Theme" />
-              <ThemeButton
-                isDarkTheme={isDarkTheme}
-                toggleTheme={toggleTheme}
-              />
-            </ListItemButton>
-            {navItems.map(([key, { to, label, icon }]) => (
-              <ListItemButton
-                key={key}
-                onClick={() => {
-                  navigate(to);
-                  setMobileOpen(false);
-                }}
-                selected={location.pathname === to}
-              >
-                {icon && <ListItemIcon>{icon}</ListItemIcon>}
-                <ListItemText primary={label} />
-              </ListItemButton>
-            ))}
-          </List>
-        </SwipeableDrawer>
+        <CompassNav />
       </>
     );
   }

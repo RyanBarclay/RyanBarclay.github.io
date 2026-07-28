@@ -5,7 +5,8 @@ This layer owns the structural shell of the application: the persistent navigati
 
 ## Files in this Layer
 - `MainContent.tsx` — consumes both route configs (`routes.tsx` and `projectRoutes.tsx`) and renders the top-level `<Routes>` tree inside a top-padding Box
-- `Navbar.tsx` — fixed app bar with glass-morphism on scroll, splits into a top-bar + swipeable bottom drawer on mobile and a three-column grid layout on desktop
+- `Navbar.tsx` — fixed app bar with glass-morphism on scroll, splits into a top-bar + bottom compass nav on mobile and a three-column grid layout on desktop
+- `CompassNav.tsx` — the mobile bottom "compass": a squat squircle pill whose nav options scrub horizontally through a center detent (see contract below)
 - `ProjectDetailLayout.tsx` — reusable scaffold for project detail pages: renders a `PageHero`, a title + tag row, an array of titled `<Paper>` sections, a technology stack chip list, and an optional extra content slot
 - `ScrollToTop.tsx` — renderless component that calls `window.scrollTo(0, 0)` on every `pathname` change
 
@@ -29,7 +30,17 @@ Adding a new top-level page: add to `routes.tsx`. Adding a new project page: add
 On desktop the bar additionally animates `border-radius` to `24px` when scrolled, creating a pill shape. Mobile skips this and uses a flat top bar.
 
 ### Mobile vs desktop split
-The breakpoint is `theme.breakpoints.down("md")` — below `md` the Navbar renders a completely different layout: a minimal top bar (branding + hamburger) and a `SwipeableDrawer` anchored to the bottom with 56 px of bleed visible at all times. Navigation items and the theme toggle live inside the drawer list. Desktop renders a three-column CSS grid toolbar: name left, nav links center, theme toggle right.
+The breakpoint is `theme.breakpoints.down("md")` — below `md` the Navbar renders a completely different layout: a minimal top bar (branding + hamburger) and the bottom `CompassNav`. Desktop renders a three-column CSS grid toolbar: name left, nav links center, theme toggle right.
+
+**CompassNav contract** (replaced the old bottom `SwipeableDrawer`, which fought iOS/Android bottom-edge gestures, covered content, and was fragile):
+- **Horizontal-only.** No vertical gesture anywhere — that constraint is the whole point; never reintroduce a drag-up.
+- **Scrubbing ≠ navigating.** Dragging only moves the visual detent. Commit happens on settle: ~100ms after finger-up on a detent (lift = confident intent), or after a ~1.5s dwell while the finger is still down. Flick-throughs never mount pages.
+- **Physics**: underdamped spring (stiffness 170 / damping 18 → slight overshoot) in a rAF loop, rubber-band resistance past the ends, velocity exponentially smoothed with flicks capped at +1 slot. Frame styles are written imperatively to DOM refs — React never re-renders per frame.
+- **Taps on visible neighbor labels** scrub-and-commit to them.
+- **Discoverability**: a one-time self-playing nudge on first load (localStorage `compass-hint-played`, skipped under `prefers-reduced-motion`), and the top-bar hamburger dispatches a `compass:sweep` window event that parades every option through the center — it does NOT open a second menu.
+- **No theme toggle on mobile** — the theme follows `prefers-color-scheme` (DarkModeContext's default). Desktop toggle unchanged.
+- **Clearance**: `MainContent` reserves `calc(88px + env(safe-area-inset-bottom))` bottom padding on mobile, and floating controls (Resume download button, Randomizer FAB) raise their `bottom` offset on `xs` to sit above the pill. Any NEW fixed bottom-anchored control must do the same.
+- **No morphing on touch** — the bar stays a bar; the only occlusion concession is the center slot's scale-up (1.18×) so the active label clears the thumb.
 
 ### ProjectDetailLayout contract
 Callers pass a `sections` array of `{ title, content }` objects. Each section becomes a `<Paper>` block, so content is open-ended (`React.ReactNode`). The `technologies` array always renders last as a fixed "Technology Stack" section — callers cannot reorder it. The `additionalContent` slot appends below the stack section and is the escape hatch for interactive project canvases or other non-section content.
