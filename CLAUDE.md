@@ -5,15 +5,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev        # Start dev server (http://localhost:5174)
-npm run build      # TypeScript check + Vite build
-npm run tsc        # TypeScript type-check only (no emit)
-npm test           # Run unit tests (Vitest)
-npm run preview    # Preview production build locally
-npm run deploy     # Build + deploy to GitHub Pages via gh-pages
+pnpm install       # Install all workspace packages
+pnpm dev           # Dev servers via Turborepo (frontend on http://localhost:5173)
+pnpm build         # Build all packages (Turbo-cached)
+pnpm tsc           # Type-check all packages (no emit)
+pnpm test          # Run unit tests (Vitest)
+pnpm preview       # Preview frontend production build locally
+pnpm run deploy    # Build frontend + deploy to GitHub Pages (must be "run" — pnpm has a builtin "deploy")
 ```
 
-Tests are Vitest, colocated as `*.test.ts` next to the code they cover (currently the investment-calculator financial math). TypeScript (`npm run tsc`) remains the correctness check for everything untested.
+Run a single package's task with `npx turbo run build --filter=frontend` (or `pnpm --filter frontend dev`).
+
+Tests are Vitest, colocated as `*.test.ts` next to the code they cover (currently the investment-calculator financial math). TypeScript (`pnpm tsc`) remains the correctness check for everything untested.
+
+## Monorepo Layout
+
+pnpm workspaces + Turborepo (task runner/cache). See `docs/backend-plan.md` for the full architecture plan and locked decisions.
+
+- `apps/frontend/` — the portfolio site (all `src/` paths in this file live under it)
+- `packages/shared-types/` — DTOs/Zod schemas shared FE↔BE (consumed as TS source, no build step)
+- `packages/config/` — shared tsconfig base (`@repo/config/tsconfig.base.json`)
+- `apps/backend/` — Cloud Run service (Phase 2, not yet created)
+
+pnpm is strict by design: a package may only import what its own `package.json` declares (no phantom dependencies). Internal packages are wired with `workspace:*`.
 
 ## Architecture Overview
 
@@ -60,4 +74,4 @@ PostHog (`posthog-js`), initialized in `src/config/analytics.ts`, configured via
 
 ### Deployment
 
-The site deploys to `RyanBarclay.github.io` via `npm run deploy` (uses `gh-pages` to push `dist/` to the `gh-pages` branch). The `CNAME` file is copied into `dist/` during deploy to preserve the custom domain.
+The site deploys to `RyanBarclay.github.io` via `pnpm run deploy` from the repo root (the `run` is required — pnpm has a built-in `deploy` command that shadows the script) (builds via Turbo, copies `apps/frontend/CNAME` into `apps/frontend/dist/`, then `gh-pages` pushes that dist to the `gh-pages` branch to preserve the custom domain).

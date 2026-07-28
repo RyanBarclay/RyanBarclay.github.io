@@ -1,0 +1,8 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# pnpm blocks dependency postinstall scripts by default (good); these
+# are explicitly trusted to run theirs.
+onlyBuiltDependencies:
+  - esbuild
