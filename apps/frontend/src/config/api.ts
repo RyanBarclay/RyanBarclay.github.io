@@ -6,7 +6,7 @@
 export const API_URL: string = import.meta.env.VITE_API_URL ?? "";
 
 /**
- * Fire-and-forget warm-up ping (docs/backend-plan.md cold-start
+ * Fire-and-forget warm-up ping (apps/backend/_lore.md cold-start
  * strategy): hitting /health the moment a visitor lands starts the
  * scale-to-zero Cloud Run container while they're still reading the
  * hero — any later real API call finds a warm instance.

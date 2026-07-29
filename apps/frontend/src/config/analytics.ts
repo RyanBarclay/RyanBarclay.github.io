@@ -1,7 +1,7 @@
 import posthog from "posthog-js";
 
 /**
- * PostHog product analytics — FE-direct topology per docs/backend-plan.md.
+ * PostHog product analytics — FE-direct topology per apps/backend/_lore.md.
  *
  * Config comes from the COMMITTED .env file (VITE_POSTHOG_*): the project
  * key (phc_…) is a write-only ingest key that is public by design — it can
@@ -41,7 +41,7 @@ export const initAnalytics = (): void => {
     capture_pageleave: true,
     autocapture: true,
     // Error Tracking: capture unhandled FE exceptions (BE errors go to
-    // GCP Error Reporting — see docs/backend-plan.md observability split).
+    // GCP Error Reporting — see apps/backend/_lore.md observability split).
     capture_exceptions: true,
     // Session Replay is on in the FE-direct topology (revisit before any
     // proxy adoption — replay payloads would eat proxy egress). Masking

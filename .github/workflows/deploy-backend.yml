@@ -1,18 +1,13 @@
 name: Deploy Backend
 
-# Deploys apps/backend to Cloud Run when backend-relevant files change.
+# Deploys apps/backend to Cloud Run — MANUALLY triggered only, matching
+# the frontend's deliberate-deploy model (pnpm run deploy). Trigger from
+# the Actions tab or:  gh workflow run deploy-backend.yml
 # Auth is Workload Identity Federation — GitHub's own OIDC token is
 # exchanged for ~1h GCP credentials scoped to the deployer service
 # account. There are NO stored secrets anywhere in this pipeline.
 
 on:
-  push:
-    branches: [master]
-    paths:
-      - "apps/backend/**"
-      - "packages/**"
-      - "pnpm-lock.yaml"
-      - ".github/workflows/deploy-backend.yml"
   workflow_dispatch: {}
 
 env:

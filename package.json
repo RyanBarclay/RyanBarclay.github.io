@@ -8,7 +8,9 @@
     "test": "turbo run test",
     "tsc": "turbo run tsc",
     "preview": "turbo run preview --filter=frontend",
-    "deploy": "turbo run build --filter=frontend && cp apps/frontend/CNAME apps/frontend/dist/ && gh-pages -d apps/frontend/dist"
+    "deploy": "pnpm run deploy:backend && pnpm run deploy:frontend",
+    "deploy:frontend": "turbo run build --filter=frontend && cp apps/frontend/CNAME apps/frontend/dist/ && gh-pages -d apps/frontend/dist",
+    "deploy:backend": "./scripts/deploy-backend.sh"
   },
   "devDependencies": {
     "gh-pages": "^5.0.0",

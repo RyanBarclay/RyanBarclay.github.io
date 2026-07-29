@@ -11,7 +11,9 @@ pnpm build         # Build all packages (Turbo-cached)
 pnpm tsc           # Type-check all packages (no emit)
 pnpm test          # Run unit tests (Vitest)
 pnpm preview       # Preview frontend production build locally
-pnpm run deploy    # Build frontend + deploy to GitHub Pages (must be "run" — pnpm has a builtin "deploy")
+pnpm run deploy    # Deploy BOTH: backend (CI, watched) then frontend (must be "run" — pnpm builtin shadows)
+pnpm run deploy:frontend   # gh-pages only
+pnpm run deploy:backend    # dispatch + watch the Cloud Run workflow (requires pushed master)
 ```
 
 Run a single package's task with `npx turbo run build --filter=frontend` (or `pnpm --filter frontend dev`).
@@ -20,7 +22,7 @@ Tests are Vitest, colocated as `*.test.ts` next to the code they cover (currentl
 
 ## Monorepo Layout
 
-pnpm workspaces + Turborepo (task runner/cache). See `docs/backend-plan.md` for the full architecture plan and locked decisions.
+pnpm workspaces + Turborepo (task runner/cache). See `apps/backend/_lore.md` for the full architecture plan and locked decisions.
 
 - `apps/frontend/` — the portfolio site (all `src/` paths in this file live under it)
 - `apps/backend/` — Hono service for Cloud Run: `/health` only for now; tsup-bundled to a single file, distroless Dockerfile. See `apps/backend/_lore.md`
@@ -70,7 +72,7 @@ When adding a new control parameter: add to `TerrainConfig` in `types.ts` → in
 
 ### Analytics
 
-PostHog (`posthog-js`), initialized in `src/config/analytics.ts`, configured via the **committed `.env`** (`VITE_POSTHOG_*`). Convention: `VITE_`-prefixed values are inlined into the public bundle — only ever public values in `.env` (the PostHog key is a public write-only ingest key); secrets never go there (backend secrets → GCP Secret Manager per `docs/backend-plan.md`). A missing key = analytics no-ops entirely. Analytics is production-build-gated (`import.meta.env.PROD`): `npm run dev` never sends events; `npm run preview` does (deliberate end-to-end verification). Products in use: Web Analytics, Product Analytics, Session Replay (`maskAllInputs` pinned — never unmask, the calculator holds personal finances), and Error Tracking. SPA pageviews are captured manually per HashRouter route change via `AnalyticsPageviews` in `App.tsx`; named intent events go through `captureEvent` (`resume_downloaded`, `calculator_csv_exported`). Tracking topology and the backend/monorepo roadmap live in `docs/backend-plan.md`.
+PostHog (`posthog-js`), initialized in `src/config/analytics.ts`, configured via the **committed `.env`** (`VITE_POSTHOG_*`). Convention: `VITE_`-prefixed values are inlined into the public bundle — only ever public values in `.env` (the PostHog key is a public write-only ingest key); secrets never go there (backend secrets → GCP Secret Manager per `apps/backend/_lore.md`). A missing key = analytics no-ops entirely. Analytics is production-build-gated (`import.meta.env.PROD`): `npm run dev` never sends events; `npm run preview` does (deliberate end-to-end verification). Products in use: Web Analytics, Product Analytics, Session Replay (`maskAllInputs` pinned — never unmask, the calculator holds personal finances), and Error Tracking. SPA pageviews are captured manually per HashRouter route change via `AnalyticsPageviews` in `App.tsx`; named intent events go through `captureEvent` (`resume_downloaded`, `calculator_csv_exported`). Tracking topology and the backend/monorepo roadmap live in `apps/backend/_lore.md`.
 
 ### Deployment
 

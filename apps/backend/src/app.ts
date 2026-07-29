@@ -22,7 +22,7 @@ app.use("*", cors({ origin: ALLOWED_ORIGINS }));
 /**
  * Health check — also the target of the frontend's warm-up ping, which
  * starts this container while a visitor is still reading the hero
- * section (see docs/backend-plan.md cold-start strategy).
+ * section (see apps/backend/_lore.md cold-start strategy).
  *
  * The response is parsed through the shared schema — the reference
  * pattern for all future endpoints: responses conform to
