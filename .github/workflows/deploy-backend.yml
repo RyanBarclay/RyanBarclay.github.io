@@ -1,0 +1,74 @@
+name: Deploy Backend
+
+# Deploys apps/backend to Cloud Run when backend-relevant files change.
+# Auth is Workload Identity Federation — GitHub's own OIDC token is
+# exchanged for ~1h GCP credentials scoped to the deployer service
+# account. There are NO stored secrets anywhere in this pipeline.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "apps/backend/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/deploy-backend.yml"
+  workflow_dispatch: {}
+
+env:
+  PROJECT_ID: portfolio-491515
+  REGION: us-west1
+  SERVICE: backend
+  IMAGE: us-west1-docker.pkg.dev/portfolio-491515/backend/backend
+
+permissions:
+  # Required for WIF: lets the workflow mint its GitHub OIDC token.
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to GCP (WIF — keyless)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/904728242302/locations/global/workloadIdentityPools/github/providers/github-oidc
+          service_account: github-deployer@portfolio-491515.iam.gserviceaccount.com
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      # The Dockerfile builds the workspace inside the image (pnpm
+      # filter install + tsup single-file bundle); .dockerignore keeps
+      # the context lean. `turbo prune --docker` remains an optimization
+      # for when the repo grows.
+      - name: Build image
+        run: docker build -f apps/backend/Dockerfile -t "$IMAGE:${{ github.sha }}" .
+
+      - name: Push image
+        run: docker push "$IMAGE:${{ github.sha }}"
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy "$SERVICE" \
+            --project="$PROJECT_ID" \
+            --region="$REGION" \
+            --image="$IMAGE:${{ github.sha }}" \
+            --service-account=backend-runtime@portfolio-491515.iam.gserviceaccount.com \
+            --allow-unauthenticated \
+            --port=8080 \
+            --memory=512Mi \
+            --cpu=1 \
+            --min-instances=0 \
+            --max-instances=2 \
+            --cpu-boost \
+            --quiet
+
+      - name: Show service URL
+        run: gcloud run services describe "$SERVICE" --project="$PROJECT_ID" --region="$REGION" --format="value(status.url)"

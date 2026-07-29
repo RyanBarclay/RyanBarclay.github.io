@@ -23,9 +23,9 @@ Tests are Vitest, colocated as `*.test.ts` next to the code they cover (currentl
 pnpm workspaces + Turborepo (task runner/cache). See `docs/backend-plan.md` for the full architecture plan and locked decisions.
 
 - `apps/frontend/` — the portfolio site (all `src/` paths in this file live under it)
-- `packages/shared-types/` — DTOs/Zod schemas shared FE↔BE (consumed as TS source, no build step)
+- `apps/backend/` — Hono service for Cloud Run: `/health` only for now; tsup-bundled to a single file, distroless Dockerfile. See `apps/backend/_lore.md`
+- `packages/shared-types/` — DTOs/Zod schemas shared FE↔BE (consumed as TS source, no build step). Backend responses parse through these schemas by construction
 - `packages/config/` — shared tsconfig base (`@repo/config/tsconfig.base.json`)
-- `apps/backend/` — Cloud Run service (Phase 2, not yet created)
 
 pnpm is strict by design: a package may only import what its own `package.json` declares (no phantom dependencies). Internal packages are wired with `workspace:*`.
 

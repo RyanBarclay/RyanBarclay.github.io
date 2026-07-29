@@ -50,8 +50,9 @@ lockfile swap. Vitest stays per-app. GH Pages is indifferent to all of this.
 
 ## Backend v1 (Phase 2)
 
-- **Endpoints**: `/health` + **one real endpoint (TBD — leading candidate:
-  contact form)**. Deliberately tiny; v1's job is proving the pipeline.
+- **Endpoints**: `/health` only (decided — contact form rejected; the first
+  real endpoint arrives when a project needs one). Deliberately tiny; v1's
+  job is proving the pipeline.
 - **Explicitly NOT in v1**: PostHog proxy, database, auth, staging, custom
   domain, load balancer.
 - **CI/CD**: two GitHub Actions workflows, graph-filtered:
@@ -120,8 +121,26 @@ The four ways this accidentally costs money — all avoided by decision:
 Database, auth, staging env, preview deploys, Turbo remote caching (GH Actions
 cache suffices), session replay, PostHog proxy, custom domain.
 
+## GCP State (set up July 2026 — all verified via gcloud read-backs)
+
+- Project `portfolio-491515` (number 904728242302), billing-linked, budget
+  tripwire $1 CAD/mo with alerts at 50/90/100/150%.
+- APIs: run, artifactregistry, iamcredentials, billingbudgets.
+- Artifact Registry `backend` @ us-west1 with cleanup policy keep-latest-3 /
+  delete-older-than-30d.
+- Service accounts: `backend-runtime` (ZERO roles by design — the service
+  needs no GCP powers) and `github-deployer` (run.admin +
+  artifactregistry.writer + serviceAccountUser on backend-runtime only).
+- WIF: pool `github`, provider `github-oidc`, attribute condition locked to
+  repo `RyanBarclay/RyanBarclay.github.io`. NO service-account keys exist and
+  none may ever be created (`keys create` is forbidden).
+- Deploy workflow: `.github/workflows/deploy-backend.yml` — WIF auth, docker
+  build from repo root, push, `gcloud run deploy` with min-instances=0,
+  **max-instances=2 (the cost ceiling)**, cpu-boost, 512Mi, runtime SA.
+
 ## Open Items
 
-- Backend's first real endpoint (contact form is the default candidate).
-- GCP project setup checklist (billing account + budget alert at $1, WIF pool,
-  deploy SA, Artifact Registry repo + cleanup policy) — belongs to Phase 2.
+- Backend's first real endpoint — deferred until a project needs one
+  (contact form was considered and rejected).
+- First deploy (push/workflow_dispatch) → capture the stable run.app URL →
+  FE wiring: `VITE_API_URL` env files + warm-up ping + CORS verify.
