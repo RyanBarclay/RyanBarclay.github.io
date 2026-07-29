@@ -138,9 +138,17 @@ cache suffices), session replay, PostHog proxy, custom domain.
   build from repo root, push, `gcloud run deploy` with min-instances=0,
   **max-instances=2 (the cost ceiling)**, cpu-boost, 512Mi, runtime SA.
 
+## Deployed State (July 2026)
+
+- **Live**: `https://backend-6q35zrinhq-uw.a.run.app` — /health verified in
+  ~400ms including cold start; CORS confirmed for https://ryanbarclay.ca.
+  First CI deploy succeeded on the first run (WIF auth green).
+- **FE wiring**: `VITE_API_URL` in committed `.env.development`
+  (localhost:8080) / `.env.production` (run.app URL); warm-up ping
+  (`warmUpBackend()` in `src/config/api.ts`, production-only, fires on app
+  mount) + `<link rel="preconnect">` injected via Vite env in index.html.
+
 ## Open Items
 
 - Backend's first real endpoint — deferred until a project needs one
   (contact form was considered and rejected).
-- First deploy (push/workflow_dispatch) → capture the stable run.app URL →
-  FE wiring: `VITE_API_URL` env files + warm-up ping + CORS verify.

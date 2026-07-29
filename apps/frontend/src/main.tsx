@@ -3,9 +3,11 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import AppProvider from "./contexts/AppProvider";
 import { initAnalytics } from "./config/analytics";
+import { warmUpBackend } from "./config/api";
 import "./index.css";
 
 initAnalytics();
+warmUpBackend();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
